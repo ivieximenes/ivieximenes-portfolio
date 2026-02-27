@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ivie Ximenes — Full Stack Developer Sênior</title>
+  <meta name="description" content="Portfolio profissional de Ivie Ximenes — Full Stack Developer Sênior com 15+ anos de experiência em Java, Angular, React e automação com IA." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/sobre.css" />
+  <link rel="stylesheet" href="css/servicos.css" />
+  <link rel="stylesheet" href="css/projetos.css" />
+  <link rel="stylesheet" href="css/curriculo.css" />
+  <link rel="stylesheet" href="css/contrate.css" />
+  <link rel="stylesheet" href="css/contato.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+</head>
+<body>
+
+  <!-- ======= NAVIGATION ======= -->
+  <header class="navbar" id="navbar">
+    <div class="navbar__inner">
+      <a href="#/" class="navbar__logo">
+        <span class="logo-first">Ivie Ximenes</span>
+      </a>
+
+      <nav class="navbar__links" id="navLinks">
+        <a href="#/" class="nav-link" data-route="/">Home</a>
+        <a href="#/sobre" class="nav-link" data-route="/sobre">Sobre</a>
+        <a href="#/servicos" class="nav-link" data-route="/servicos">Serviços</a>
+        <a href="#/projetos" class="nav-link" data-route="/projetos">Projetos</a>
+        <a href="#/curriculo" class="nav-link" data-route="/curriculo">Currículo</a>
+        <a href="#/contrate" class="nav-link" data-route="/contrate">Contrate</a>
+        <a href="#/contato" class="nav-link" data-route="/contato">Contato</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+          <i class="ph ph-sun" id="themeIcon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <div class="drawer" id="drawer">
+    <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">
+      <i class="ph ph-x"></i>
+    </button>
+    <nav class="drawer__links">
+      <a href="#/" class="nav-link" data-route="/">Home</a>
+      <a href="#/sobre" class="nav-link" data-route="/sobre">Sobre</a>
+      <a href="#/servicos" class="nav-link" data-route="/servicos">Serviços</a>
+      <a href="#/projetos" class="nav-link" data-route="/projetos">Projetos</a>
+      <a href="#/curriculo" class="nav-link" data-route="/curriculo">Currículo</a>
+      <a href="#/contrate" class="nav-link" data-route="/contrate">Contrate</a>
+      <a href="#/contato" class="nav-link" data-route="/contato">Contato</a>
+    </nav>
+  </div>
+
+  <!-- ======= MAIN APP ======= -->
+  <main id="app"></main>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__left">
+        <span class="footer__label">VAMOS CONVERSAR</span>
+        <strong class="footer__location"><span class="footer__brasil">Brasil</span> | <span class="footer__brasil">Rio de Janeiro</span> — Remoto</strong>
+        <span class="footer__credit">Site desenvolvido por Ivie Ximenes.</span>
+      </div>
+      <div class="footer__right">
+        <a href="mailto:ivieximenes@gmail.com" class="footer__pill footer__pill--email">
+          <i class="ph ph-envelope"></i> E-mail
+        </a>
+        <a href="https://wa.me/5522981748083" target="_blank" rel="noopener" class="footer__pill footer__pill--whatsapp">
+          <i class="ph ph-whatsapp-logo"></i> WhatsApp
+        </a>
+        <a href="https://www.linkedin.com/in/ivieximenes/" target="_blank" rel="noopener" class="footer__pill footer__pill--linkedin">
+          <i class="ph ph-linkedin-logo"></i> LinkedIn
+        </a>
+        <a href="https://github.com/ivieximenes" target="_blank" rel="noopener" class="footer__pill footer__pill--github">
+          <i class="ph ph-github-logo"></i> GitHub
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp float removido — chat widget ativo -->
+
+  <!-- ======= SCRIPTS ======= -->
+  <script src="js/theme.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/pages/home.js"></script>
+  <script src="js/pages/sobre.js"></script>
+  <script src="js/pages/servicos.js"></script>
+  <script src="js/pages/projetos.js"></script>
+  <script src="js/pages/curriculo.js"></script>
+  <script src="js/pages/contrate.js"></script>
+  <script src="js/pages/contato.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+/* ---- Título destacado ---- */
+.contato-title {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+/* =============================================
+   CONTATO PAGE
+   ============================================= */
+
+.contato {
+  padding: 100px 0 5rem;
+}
+
+.contato .container { max-width: 700px; }
+
+/* ---- Form ---- */
+.contact-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 2.5rem 2.5rem;
+  backdrop-filter: blur(16px);
+  margin-bottom: 2.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-group:last-child { margin-bottom: 0; }
+
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+}
+
+.form-input,
+.form-textarea {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  color: var(--text-primary);
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+  outline: none;
+  width: 100%;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.form-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+}
+
+/* ---- Contact pills row ---- */
+.contact-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.contact-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 50px;
+  font-size: 0.87rem;
+  font-weight: 500;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  transition: all 0.22s ease;
+  backdrop-filter: blur(8px);
+}
+
+.contact-pill:hover { transform: translateY(-2px); }
+
+.contact-pill--email:hover    { border-color: var(--accent-purple); color: var(--accent-purple); background: rgba(168,85,247,0.08); }
+.contact-pill--whatsapp:hover { border-color: #25D366; color: #25D366; background: rgba(37,211,102,0.08); }
+.contact-pill--linkedin:hover { border-color: #0A66C2; color: #0A66C2; background: rgba(10,102,194,0.08); }
+.contact-pill--github:hover   { border-color: var(--text-primary); color: var(--text-primary); background: var(--bg-glass-hover); }
+
+/* Cores dos ícones das marcas nos botões de contato */
+.contact-pill--email i {
+  color: var(--accent-purple);
+}
+.contact-pill--whatsapp i {
+  color: #25D366;
+}
+.contact-pill--linkedin i {
+  color: #0A66C2;
+}
+.contact-pill--github i {
+  color: #181717;
+}
+[data-theme="dark"] .contact-pill--github i {
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .contact-form { padding: 1.75rem 1.25rem; }
+  .form-row { grid-template-columns: 1fr; }
+}

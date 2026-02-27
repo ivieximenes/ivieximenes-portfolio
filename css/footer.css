@@ -6,9 +6,8 @@
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-glass);
   padding: 2rem 0;
-  bottom: 0;
-  display: block;
   width: 100%;
+  margin-top: auto;
 }
 
 .footer__inner {

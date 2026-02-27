@@ -77,7 +77,7 @@ const projects = [
   },
   {
     id: '',
-    title: 'Novo projeto em breve...',
+    title: 'Novos projetos em breve...',
     category: 'todos',
     desc: '',
     image: null,

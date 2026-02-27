@@ -7,6 +7,11 @@
   margin-bottom: 1.2rem;
   text-align: center;
 }
+
+[data-theme="light"] .contato-title {
+  color: #0F0F1A;
+}
+}
 /* =============================================
    CONTATO PAGE
    ============================================= */
@@ -132,6 +137,20 @@
 }
 [data-theme="dark"] .contact-pill--github i {
   color: #fff;
+}
+
+/* ---- Validação de campos ---- */
+.form-input--error,
+.form-textarea.form-input--error {
+  border-color: var(--accent-pink-2) !important;
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
+}
+
+.field-error {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--accent-pink-2);
+  margin-top: 0.25rem;
 }
 
 @media (max-width: 640px) {

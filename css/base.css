@@ -11,6 +11,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -20,6 +21,8 @@ body {
   transition: background-color 0.35s ease, color 0.35s ease;
   min-height: 100vh;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 img { display: block; max-width: 100%; }
@@ -228,7 +231,9 @@ p  {
 
 /* ---- Main content offset (below fixed nav) ---- */
 #app {
-  min-height: calc(100vh - 180px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---- Responsive helpers ---- */

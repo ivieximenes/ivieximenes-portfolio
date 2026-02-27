@@ -248,9 +248,8 @@ function renderCurriculo() {
       <div class="container">
         <div class="curriculo__top">
           <h2>Currículo</h2>
-          <!-- PLACEHOLDER: substitua o href pelo link real do PDF do currículo -->
-          <a href="#" class="btn btn--outline" target="_blank" rel="noopener">
-            <i class="ph ph-download-simple"></i> Download PDF
+          <a href="pdf/cv_ivieximenes_ 2026.pdf" class="btn btn--outline" download="cv_ivieximenes_2026.pdf">
+            <i class="ph ph-download-simple"></i> Download CV
           </a>
         </div>
 

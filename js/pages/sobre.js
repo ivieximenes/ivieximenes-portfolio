@@ -99,7 +99,7 @@ const stackGroups = [
   {
     category: 'Plataformas',
     items: [
-      { name: 'Lumisportal', icon: 'img/logo-lumisportal.png' },
+      { name: 'Lumisportal', icon: 'img/logo-lumis.png' },
     ],
   },
   {
@@ -112,12 +112,9 @@ const stackGroups = [
     ],
   },
   {
-    category: 'Automação & IA',
+    category: 'Automação',
     items: [
-      { name: 'n8n',      icon: 'n8n/n8n-original.svg',       fallback: '🔄' },
-      { name: 'OpenAI',   icon: 'openai/openai-original.svg',  fallback: '🤖' },
-      { name: 'Docker',   icon: 'docker/docker-original.svg'                  },
-      { name: 'Firebase', icon: 'firebase/firebase-original.svg'              },
+      { name: 'n8n',      icon: 'img/logo-n8n.svg',       fallback: '🔄' },
     ],
   },
   {
@@ -159,7 +156,7 @@ function renderSobre() {
       <div class="badge-row">
         ${group.items.map(item => `
           <span class="tech-badge">
-            <img src="${item.name === 'Lumisportal' ? 'img/logo-lumisportal.png' : DEVICON + item.icon}" alt="${item.name}" style="width:18px;height:18px;vertical-align:middle;" onerror="this.style.display='none'">
+            <img src="${item.name === 'Lumisportal' || item.name === 'n8n' ? item.icon : DEVICON + item.icon}" alt="${item.name}" style="width:18px;height:18px;vertical-align:middle;" onerror="this.style.display='none'">
             ${item.name}
           </span>
         `).join('')}

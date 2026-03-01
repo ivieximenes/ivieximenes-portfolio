@@ -3,9 +3,8 @@
    Comunicação via n8n Webhook
    ============================================= */
 
-const CHAT_WEBHOOK        = 'https://flowhub-n8n-webhook.easypanel.ivieximenes.cloud/webhook/portalcontact';
-const CHAT_STATUS_WEBHOOK = 'https://flowhub-n8n-webhook.easypanel.ivieximenes.cloud/webhook/chatstatus';
-const CHAT_POLL_INTERVAL  = 30000; // 30 segundos
+const CHAT_WEBHOOK       = '/api/chat';
+const CHAT_POLL_INTERVAL = 30000; // 30 segundos
 
 // Gera um session ID único por visita
 const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
@@ -64,40 +63,64 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
   const greeting      = document.getElementById('chatGreeting');
   const greetingClose = document.getElementById('chatGreetingClose');
 
-  let isOpen          = false;
-  let isBusy          = false;
-  let welcomed        = false;
-  let inactivityTimer = null;
-  let chatClosed      = false;
+  let isOpen             = false;
+  let isBusy             = false;
+  let welcomed           = false;
+  let inactivityTimer    = null;
+  let chatClosed         = false;
+  let pollEmptyCount     = 0;        // polls consecutivos sem mensagem
+  let isPollingInflight  = false;    // evita requisições GET concorrentes
+  const POLL_PAUSE_AT    = 8;        // pausa após N polls vazios seguidos
 
   // ---- Polling de inatividade ----
+  // Só inicia após a primeira resposta recebida do agente.
+  // Pausa automaticamente após POLL_PAUSE_AT polls vazios consecutivos
+  // para não gerar gargalo em n8n quando o visitante para de interagir.
   function startInactivityPolling() {
     stopInactivityPolling();
+    pollEmptyCount     = 0;
+    isPollingInflight  = false;
     inactivityTimer = setInterval(async () => {
       if (chatClosed) { stopInactivityPolling(); return; }
+      // Pausa se muitos polls vazios seguidos (visitante inativo na aba)
+      if (pollEmptyCount >= POLL_PAUSE_AT) { stopInactivityPolling(); return; }
+      // Evita requisições GET concorrentes — aguarda a anterior terminar
+      if (isPollingInflight) return;
+      isPollingInflight = true;
       try {
-        const res  = await fetch(`${CHAT_STATUS_WEBHOOK}?sessionId=${CHAT_SESSION_ID}`);
-        if (!res.ok) return;
+        const res  = await fetch(`${CHAT_WEBHOOK}?sessionId=${CHAT_SESSION_ID}`);
+        if (!res.ok) { isPollingInflight = false; return; }
         const data = await res.json();
         if (data.message) {
+          pollEmptyCount = 0; // mensagem recebida — reset contador
           appendBubble(data.message, 'bot');
           appendTime(now());
+        } else {
+          pollEmptyCount++;
         }
         if (data.status === 'closed') {
           chatClosed = true;
           stopInactivityPolling();
-          input.disabled   = true;
-          sendBtn.disabled = true;
+          input.disabled    = true;
+          sendBtn.disabled  = true;
           input.placeholder = 'Conversa encerrada.';
         }
       } catch (e) {
         // silencioso — polling não deve quebrar a UI
+      } finally {
+        isPollingInflight = false;
       }
     }, CHAT_POLL_INTERVAL);
   }
 
   function stopInactivityPolling() {
     if (inactivityTimer) { clearInterval(inactivityTimer); inactivityTimer = null; }
+  }
+
+  // Reinicia o polling quando o visitante envia uma nova mensagem
+  function resetPollOnActivity() {
+    pollEmptyCount = 0;
+    if (!inactivityTimer && !chatClosed) startInactivityPolling();
   }
 
   // ---- Fechar o tooltip de boas-vindas ----
@@ -176,7 +199,7 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
     if (isOpen) {
       showWelcome();
       setTimeout(() => input.focus(), 300);
-      if (!chatClosed) startInactivityPolling();
+      // Polling NÃO inicia aqui — só começa após primeira resposta do agente
     } else {
       stopInactivityPolling();
     }
@@ -195,6 +218,7 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
     appendBubble(text, 'user');
     appendTime(now());
     showTyping();
+    resetPollOnActivity(); // cada envio reseta o contador de inatividade
 
     try {
       const res = await fetch(CHAT_WEBHOOK, {
@@ -225,6 +249,8 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
 
       appendBubble(reply, 'bot');
       appendTime(now());
+      // Inicia/mantém polling ativo após receber resposta do agente
+      if (!chatClosed) startInactivityPolling();
 
     } catch (err) {
       removeTyping();

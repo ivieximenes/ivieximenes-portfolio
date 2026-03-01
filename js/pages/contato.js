@@ -8,7 +8,7 @@ function renderContato() {
       <div class="container">
         <div class="page__header">
           <h2 class="contato-title">Vamos conversar</h2>
-          <p>Tem um projeto em mente? Preencha o formulário ou use um dos canais abaixo.</p>
+          <p>Tem um projeto em mente? <br/> Preencha o formulário ou use um dos canais abaixo.</p>
         </div>
 
         <form class="contact-form glass-card" id="contactForm" novalidate>

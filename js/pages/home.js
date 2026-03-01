@@ -12,14 +12,15 @@ function renderHome() {
         <h1 class="home__name">Ivie Ximenes</h1>
         <p class="home__role">Sênior Full Stack Developer</p>
         <p class="home__subtitle">
-          Criando software do início ao fim... backend, frontend,
-          integrações e automação com IA. 
+          Desenvolvendo soluções do início ao fim... <br/>
+          backend, frontend, integrações e automação com IA.
         </p>
+       
         <div class="home__ctas">
           <a href="#/projetos" class="btn btn--primary">
             <i class="ph ph-folder-open"></i> Ver Projetos
           </a>
-          <a href="#/contrate" class="btn btn--outline">
+          <a href="#/contato" class="btn btn--outline">
             <i class="ph ph-handshake"></i> Vamos trabalhar juntos ?
           </a>
         </div>

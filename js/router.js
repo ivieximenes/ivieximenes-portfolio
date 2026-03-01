@@ -8,10 +8,17 @@ const routes = {
   '/servicos':  { render: renderServicos, init: initServicos },
   '/projetos':  { render: renderProjetos, init: initProjetos },
   '/curriculo': { render: renderCurriculo,init: initCurriculo},
-  '/contrate':  { render: renderContrate, init: initContrate },
   '/contato':   { render: renderContato,  init: initContato  },
+  '/contrate':  { render: renderContrate, init: initContrate },
 };
 
+// Dummy implementations to avoid ReferenceError (replace with real ones)
+function renderContrate() {
+  return '<section class="contrate"><h2>Contrate</h2><p>Página de contratação em construção.</p></section>';
+}
+function initContrate() {
+  // Inicialização da página Contrate
+}
 function getRoute() {
   const hash = window.location.hash;
   if (!hash || hash === '#') return '/';

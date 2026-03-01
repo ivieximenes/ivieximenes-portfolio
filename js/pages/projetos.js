@@ -5,7 +5,6 @@
 
 const DEVICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/';
 
-/* ---- Utilitário: badge de tecnologia com ícone ---- */
 function techBadgeHTML(t) {
   const src = t.local ? t.icon : DEVICON_BASE + t.icon;
   return `<span class="tech-badge">
@@ -26,10 +25,10 @@ function renderProjetoCard(p) {
 
   const detailsBtn = p.details
     ? `<button class="project-link project-link--details" data-project-id="${p.id}">
-         <i class="ph ph-eye"></i> Ver Projeto
+         <i class="ph ph-eye"></i> Detalhes
        </button>`
     : `<span class="project-link" style="opacity:0.35;cursor:not-allowed">
-         <i class="ph ph-eye"></i> Ver Projeto
+         <i class="ph ph-eye"></i> Detalhes
        </span>`;
 
   const sourceBtn = p.source

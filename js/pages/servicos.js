@@ -8,11 +8,6 @@ const servicoCategories = [
     subtitle: 'Sites, sistemas e aplicações sob medida.',
     items: [
       {
-        icon: 'ph-globe-hemisphere-west',
-        title: 'Landing Pages e Sites',
-        desc:  'Criação de landing pages e sites institucionais com design responsivo e otimizado para conversão.',
-      },
-      {
         icon: 'ph-devices',
         title: 'Aplicações Web',
         desc:  'Sistemas corporativos, plataformas e dashboards desenvolvidos com Java, Angular, React e Node.js.',
@@ -21,6 +16,11 @@ const servicoCategories = [
         icon: 'ph-code',
         title: 'APIs e Backends',
         desc:  'Desenvolvimento de APIs REST, microsserviços e integrações entre sistemas legados e modernos.',
+      },
+      {
+        icon: 'ph-globe-hemisphere-west',
+        title: 'Landing Pages e Sites',
+        desc:  'Criação de landing pages e sites institucionais com design responsivo e otimizado para conversão.',
       },
     ],
   },
@@ -47,11 +47,6 @@ const servicoCategories = [
         icon: 'ph-chart-line-up',
         title: 'Gestor Financeiro',
         desc:  'Dashboards e relatórios automáticos integrados a ferramentas de contabilidade e faturamento.',
-      },
-      {
-        icon: 'ph-pencil-line',
-        title: 'Gestor de Conteúdo',
-        desc:  'Automação de publicações, agendamentos e criação de conteúdo com integração a plataformas digitais.',
       },
     ],
   },

@@ -91,6 +91,7 @@ const stackGroups = [
       { name: 'EJB 3.0',    icon: 'java/java-original.svg'             },
       { name: 'Struts',     icon: 'apache/apache-original.svg'         },
       { name: 'PHP',        icon: 'php/php-original.svg'               },
+      
     ],
   },
   {
@@ -131,10 +132,12 @@ const stackGroups = [
   {
     category: 'Testes & Qualidade',
     items: [
+      { name: 'Jest',             icon: 'jest/jest-plain.svg'              },
+        { name: 'JUnit',            icon: 'junit/junit-original.svg'          },
+        { name: 'Mockito',          icon: 'mockito/mockito-original.svg'      },
       { name: 'Cypress',          icon: 'cypressio/cypressio-original.svg'              },
       { name: 'Selenium',         icon: 'selenium/selenium-original.svg'                },
       { name: 'Cucumber',         icon: 'cucumber/cucumber-plain.svg'                   },
-      { name: 'Robot Framework',  icon: 'robotframework/robotframework-original.svg'    },
       { name: 'SonarQube',        icon: 'sonarqube/sonarqube-original.svg'              },
     ],
   },
@@ -193,10 +196,10 @@ function renderSobre() {
           </div>
           <p>
             Desenvolvedora Full Stack Sênior com mais de 15 anos de experiência em desenvolvimento de software.
-            Forte atuação em projetos de média e alta complexidade com Java, Angular e React —
-            de sistemas corporativos a automações com IA. Histórico em empresas como
-            Sodexo (Pluxee), Accenture e Lumis, com atuação em clientes como SulAmérica, Oi e Aliansce.
+            Forte atuação em projetos com Java, Angular e React em portais corporativos. Histórico em empresas como
+            Sodexo (Pluxee), Accenture, Lumis, SulAmérica, Oi e Aliansce.
           </p>
+          <!--
           <div class="sobre__stats">
             <div class="sobre__stat">
               <span class="sobre__stat-num">15+</span>
@@ -215,6 +218,7 @@ function renderSobre() {
               <span class="sobre__stat-label">Tecnologias no stack</span>
             </div>
           </div>
+          -->
         </div>
 
         <div class="stacks-grid">${stacksHTML}</div>

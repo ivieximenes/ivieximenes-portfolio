@@ -7,6 +7,20 @@ const DEVICON_CV = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/';
 const cvExperience = [
   {
     title:   'Desenvolvedora Full Stack',
+    company: 'Meta Serviços em Informática',
+    period:  'Alocada na NIO (Antiga Oi)',
+    type:    'Experiência Profissional',
+    stack:   [
+      { name: 'Java',       icon: 'java/java-original.svg'             },
+      { name: 'JavaScript', icon: 'javascript/javascript-original.svg' },
+    ],
+    bullets: [
+      'Desenvolvimento e manutenção de aplicações web utilizando Java, JavaScript e Lumis Portal.',
+      'Participação ativa na definição de escopo, backlog, desenvolvimento e entrega em produção.',
+    ],
+  },
+  {
+    title:   'Desenvolvedora Full Stack',
     company: 'Sodexo / Pluxee',
     period:  '',
     type:    'Experiência Profissional',
@@ -20,20 +34,6 @@ const cvExperience = [
       'Criação e manutenção de testes unitários (JUnit, TestNG, Jasmine).',
       'Integração entre frontend, backend e serviços externos.',
       'Colaboração próxima com times de negócio e QA, garantindo qualidade contínua das entregas.',
-    ],
-  },
-  {
-    title:   'Desenvolvedora Full Stack',
-    company: 'Meta Serviços em Informática',
-    period:  'Alocada na NIO (Antiga Oi)',
-    type:    'Experiência Profissional',
-    stack:   [
-      { name: 'Java',       icon: 'java/java-original.svg'             },
-      { name: 'JavaScript', icon: 'javascript/javascript-original.svg' },
-    ],
-    bullets: [
-      'Desenvolvimento e manutenção de aplicações web utilizando Java, JavaScript e Lumis Portal.',
-      'Participação ativa na definição de escopo, backlog, desenvolvimento e entrega em produção.',
     ],
   },
   {
@@ -52,9 +52,8 @@ const cvExperience = [
     bullets: [
       'Atuação de longo prazo em projetos corporativos de grande porte, utilizando Lumis Portal (EIP/CRM).',
       'Desenvolvimento e manutenção de aplicações web com Java, JavaScript, XML, XSL, Maven e Hibernate.',
-      'Integração com bancos de dados Oracle e MySQL, além de uso de Elasticsearch para buscas e indexação.',
+      'Integração com bancos de dados Oracle e MySQL.',
       'Atuação em grandes portais institucionais, com múltiplas integrações entre sistemas internos e externos.',
-      'Experiência com versionamento (Git, SVN), Jira e servidores de aplicação Tomcat.',
       'Trabalho alocado em clientes: Pluxee (Antiga Sodexo Benefícios), SulAmérica Seguros, Aliansce Shopping, CNSEG.',
     ],
   },
@@ -69,7 +68,6 @@ const cvExperience = [
     bullets: [
       'Atuação em projeto corporativo de grande porte no setor de telecomunicações.',
       'Desenvolvimento e manutenção de soluções utilizando Siebel.',
-      'Integração com sistemas legados e bases corporativas.',
     ],
   },
   {
@@ -82,8 +80,7 @@ const cvExperience = [
     ],
     bullets: [
       'Desenvolvimento de aplicações utilizando Java.',
-      'Atuação em projetos corporativos com Vignette (CRM / CMS).',
-      'Manutenção evolutiva e corretiva de sistemas legados.',
+      'Atuação em projetos corporativos com Vignette.',
     ],
   },
   {
@@ -99,9 +96,6 @@ const cvExperience = [
       'Desenvolvimento de rotinas administrativas em Java.',
       'Utilização dos frameworks Hibernate e EJB 3.',
       'Criação e manutenção de relatórios gerenciais utilizando iReport.',
-      'Integração com bases de dados relacionais.',
-      'Atuação em sistemas corporativos voltados a processos internos.',
-      'Clientes: Previ, SHV, Fapes, Supergasbras.',
     ],
   },
   {
@@ -118,8 +112,6 @@ const cvExperience = [
       'Atuação com Java, utilizando EJB 3.0, Struts 1.3 e Hibernate.',
       'Criação e manutenção de relatórios com Jasper Reports.',
       'Utilização do JBoss como servidor de aplicação.',
-      'Atuação em manutenção evolutiva e corretiva, garantindo estabilidade e confiabilidade do sistema.',
-      'Trabalho em ambiente corporativo estruturado, com foco em qualidade, performance e segurança.',
     ],
   },
   {
@@ -134,23 +126,7 @@ const cvExperience = [
       'Modelagem e estruturação de plano de negócios.',
       'Técnicas de gestão e estratégia.',
     ],
-  },
-  {
-    title:   'Automação de processos e IA',
-    company: 'Projetos Pessoais',
-    period:  '',
-    type:    'Experiência Profissional',
-    stack:   [
-      { name: 'React', icon: 'react/react-original.svg' },
-    ],
-    bullets: [
-      'Desenvolvimento de fluxos de automação com n8n, integrando APIs, bancos de dados e serviços externos.',
-      'Criação de soluções com Inteligência Artificial, incluindo uso de LLMs e automação de processos.',
-      'Implementação de servidores MCP (Model Context Protocol), estruturando integração entre modelos de linguagem e fontes externas de dados.',
-      'Desenvolvimento de interfaces frontend utilizando React para consumo de APIs e visualização de dados.',
-      'Integração entre frontend, backend e automações, com foco em eficiência, escalabilidade e redução de tarefas manuais.',
-    ],
-  },
+  }
 ];
 
 
@@ -249,7 +225,7 @@ function renderCurriculo() {
       <div class="container">
         <div class="curriculo__top">
           <h2>Currículo</h2>
-          <a href="pdf/cv_ivieximenes_ 2026.pdf" class="btn btn--outline" download="cv_ivieximenes_2026.pdf">
+          <a href="pdf/cv_ivieximenes_2026.pdf"  target="_blank"  class="btn btn--outline" download="cv_ivieximenes_2026.pdf">
             <i class="ph ph-download-simple"></i> Download CV
           </a>
         </div>

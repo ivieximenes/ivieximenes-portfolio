@@ -352,6 +352,13 @@
 }
 
 /* Responsive */
+@media (max-width: 768px) {
+  /* Hide greeting tooltip on mobile/tablet */
+  .chat-greeting {
+    display: none !important;
+  }
+}
+
 @media (max-width: 480px) {
   .chat-window {
     right: 1rem;
@@ -363,10 +370,5 @@
   .chat-trigger {
     right: 1rem;
     bottom: 1.25rem;
-  }
-
-  .chat-greeting {
-    right: 1rem;
-    max-width: calc(100vw - 2rem);
   }
 }

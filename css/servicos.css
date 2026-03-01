@@ -1,11 +1,40 @@
 /* =============================================
-   SERVIÇOS PAGE
+   SERVIÇOS PAGE — Grouped layout
    ============================================= */
 
 .servicos {
   padding: 100px 0 5rem;
 }
 
+/* ---- Category sections ---- */
+.servicos-section {
+  margin-bottom: 2.5rem;
+}
+
+.servicos-section:last-child {
+  margin-bottom: 0;
+}
+
+.servicos-section__header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.servicos-section__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 0.25rem;
+}
+
+.servicos-section__subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ---- Card grid ---- */
 .servicos-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -6,145 +6,149 @@ const DEVICON_CV = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/';
 
 const cvExperience = [
   {
-    title:   'Desenvolvedora Full Stack Pleno',
-    company: 'Nio / Oi',
-    period:  '2013 – 2017',
-    type:    'Experiência Profissional',
-    stack:   [
-      { name: 'Java',       icon: 'java/java-original.svg'             },
-      { name: 'Hibernate',  icon: 'hibernate/hibernate-original.svg'   },
-      { name: 'JavaScript', icon: 'javascript/javascript-original.svg' },
-      { name: 'MySQL',      icon: 'mysql/mysql-original.svg'           },
-    ],
-    bullets: [
-      'Desenvolvimento de aplicações web corporativas com Java EE e Hibernate.',
-      'Criação de APIs REST integradas a sistemas de terceiros (SOAP e REST).',
-      'Manutenção e evolução de sistemas legados com modernização de módulos críticos.',
-      'Desenvolvimento de interfaces responsivas com HTML5, CSS3 e JavaScript puro.',
-    ],
-  },
-  {
-    title:   'Desenvolvedora Full Stack Sênior',
+    title:   'Desenvolvedora Full Stack',
     company: 'Sodexo / Pluxee',
-    period:  '2021 – Presente',
+    period:  '',
     type:    'Experiência Profissional',
     stack:   [
-      { name: 'Java',       icon: 'java/java-original.svg'             },
-      { name: 'Spring',     icon: 'spring/spring-original.svg'         },
-      { name: 'React',      icon: 'react/react-original.svg'           },
-      { name: 'Angular',    icon: 'angular/angular-original.svg'       },
-      { name: 'Oracle',     icon: 'oracle/oracle-original.svg'         },
-      { name: 'Docker',     icon: 'docker/docker-original.svg'         },
+      { name: 'Java',    icon: 'java/java-original.svg'       },
+      { name: 'Angular', icon: 'angular/angular-original.svg' },
     ],
     bullets: [
-      'Desenvolvimento de soluções Full Stack em Java/Spring Boot e React/Angular para plataforma de benefícios corporativos.',
-      'Arquitetura e implementação de microsserviços com Spring Cloud, Kafka e Docker.',
-      'Otimização de bases Oracle com ganhos de até 40% em performance de queries críticas.',
-      'Liderança técnica de squad multidisciplinar com entregas ágeis (Scrum/SAFe).',
-      'Integração de fluxos automatizados via n8n e APIs REST com parceiros externos.',
+      'Desenvolvimento Full Stack utilizando Java e Angular.',
+      'Atuação em modernização de sistemas legados em Java, migrando para arquitetura frontend moderna.',
+      'Criação e manutenção de testes unitários (JUnit, TestNG, Jasmine).',
+      'Integração entre frontend, backend e serviços externos.',
+      'Colaboração próxima com times de negócio e QA, garantindo qualidade contínua das entregas.',
     ],
   },
   {
-    title:   'Desenvolvedora Full Stack Pleno',
-    company: 'Lumis',
-    period:  '2013 – 2017',
+    title:   'Desenvolvedora Full Stack',
+    company: 'Meta Serviços em Informática',
+    period:  'Alocada na NIO (Antiga Oi)',
     type:    'Experiência Profissional',
     stack:   [
       { name: 'Java',       icon: 'java/java-original.svg'             },
-      { name: 'Hibernate',  icon: 'hibernate/hibernate-original.svg'   },
       { name: 'JavaScript', icon: 'javascript/javascript-original.svg' },
-      { name: 'MySQL',      icon: 'mysql/mysql-original.svg'           },
     ],
     bullets: [
-      'Desenvolvimento de aplicações web corporativas com Java EE e Hibernate.',
-      'Criação de APIs REST integradas a sistemas de terceiros (SOAP e REST).',
-      'Manutenção e evolução de sistemas legados com modernização de módulos críticos.',
-      'Desenvolvimento de interfaces responsivas com HTML5, CSS3 e JavaScript puro.',
-    ],
-  },
-  {
-    title:   'Desenvolvedora Full Stack Sênior',
-    company: 'Accenture',
-    period:  '2017 – 2021',
-    type:    'Experiência Profissional',
-    stack:   [
-      { name: 'Java',       icon: 'java/java-original.svg'             },
-      { name: 'Spring',     icon: 'spring/spring-original.svg'         },
-      { name: 'Angular',    icon: 'angular/angular-original.svg'       },
-      { name: 'TypeScript', icon: 'typescript/typescript-original.svg' },
-      { name: 'Jenkins',    icon: 'jenkins/jenkins-original.svg'       },
-    ],
-    bullets: [
-      'Atuação em projetos estratégicos para clientes dos setores financeiro e de telecomunicações.',
-      'Desenvolvimento de sistemas corporativos com Java EE / Spring e Angular (v2+).',
-      'Implementação de pipelines CI/CD com Jenkins, GitLab e Azure DevOps.',
-      'Condução de code reviews e mentoria técnica de desenvolvedores juniores.',
-      'Participação em POCs de modernização de sistemas legados para arquitetura de microsserviços.',
+      'Desenvolvimento e manutenção de aplicações web utilizando Java, JavaScript e Lumis Portal.',
+      'Participação ativa na definição de escopo, backlog, desenvolvimento e entrega em produção.',
     ],
   },
   {
     title:   'Desenvolvedora Full Stack',
-    company: 'Dash TI',
-    period:  '2010 – 2013',
+    company: 'Lumis EIP / Lumis Portal',
+    period:  'aprox. 8 anos',
     type:    'Experiência Profissional',
     stack:   [
-      { name: 'Java',   icon: 'java/java-original.svg'    },
-      { name: 'Oracle', icon: 'oracle/oracle-original.svg' },
-      { name: 'Git',    icon: 'git/git-original.svg'      },
+      { name: 'Java',          icon: 'java/java-original.svg'                       },
+      { name: 'JavaScript',    icon: 'javascript/javascript-original.svg'           },
+      { name: 'Hibernate',     icon: 'hibernate/hibernate-original.svg'             },
+      { name: 'Oracle',        icon: 'oracle/oracle-original.svg'                   },
+      { name: 'MySQL',         icon: 'mysql/mysql-original.svg'                     },
+      { name: 'Elasticsearch', icon: 'elasticsearch/elasticsearch-original.svg'     },
     ],
     bullets: [
-      'Desenvolvimento e manutenção de sistemas internos de gestão de seguros em Java.',
-      'Escrita de procedures e consultas SQL otimizadas em Oracle Database.',
-      'Suporte e manutenção evolutiva em ambiente de missão crítica e alta disponibilidade.',
+      'Atuação de longo prazo em projetos corporativos de grande porte, utilizando Lumis Portal (EIP/CRM).',
+      'Desenvolvimento e manutenção de aplicações web com Java, JavaScript, XML, XSL, Maven e Hibernate.',
+      'Integração com bancos de dados Oracle e MySQL, além de uso de Elasticsearch para buscas e indexação.',
+      'Atuação em grandes portais institucionais, com múltiplas integrações entre sistemas internos e externos.',
+      'Experiência com versionamento (Git, SVN), Jira e servidores de aplicação Tomcat.',
+      'Trabalho alocado em clientes: Pluxee (Antiga Sodexo Benefícios), SulAmérica Seguros, Aliansce Shopping, CNSEG.',
     ],
   },
-  ,
+  {
+    title:   'Desenvolvedora Siebel',
+    company: 'Accenture do Brasil',
+    period:  'Projeto Oi',
+    type:    'Experiência Profissional',
+    stack:   [
+      { name: 'Java', icon: 'java/java-original.svg' },
+    ],
+    bullets: [
+      'Atuação em projeto corporativo de grande porte no setor de telecomunicações.',
+      'Desenvolvimento e manutenção de soluções utilizando Siebel.',
+      'Integração com sistemas legados e bases corporativas.',
+    ],
+  },
+  {
+    title:   'Desenvolvedora Backend',
+    company: 'DashTI',
+    period:  '',
+    type:    'Experiência Profissional',
+    stack:   [
+      { name: 'Java', icon: 'java/java-original.svg' },
+    ],
+    bullets: [
+      'Desenvolvimento de aplicações utilizando Java.',
+      'Atuação em projetos corporativos com Vignette (CRM / CMS).',
+      'Manutenção evolutiva e corretiva de sistemas legados.',
+    ],
+  },
   {
     title:   'Desenvolvedora Full Stack',
-    company: 'Mittech',
-    period:  '2010 – 2013',
+    company: 'Mittech Soluções',
+    period:  '',
     type:    'Experiência Profissional',
     stack:   [
-      { name: 'Java',   icon: 'java/java-original.svg'    },
-      { name: 'Oracle', icon: 'oracle/oracle-original.svg' },
-      { name: 'Git',    icon: 'git/git-original.svg'      },
+      { name: 'Java',      icon: 'java/java-original.svg'           },
+      { name: 'Hibernate', icon: 'hibernate/hibernate-original.svg' },
     ],
     bullets: [
-      'Desenvolvimento e manutenção de sistemas internos de gestão de seguros em Java.',
-      'Escrita de procedures e consultas SQL otimizadas em Oracle Database.',
-      'Suporte e manutenção evolutiva em ambiente de missão crítica e alta disponibilidade.',
+      'Desenvolvimento de rotinas administrativas em Java.',
+      'Utilização dos frameworks Hibernate e EJB 3.',
+      'Criação e manutenção de relatórios gerenciais utilizando iReport.',
+      'Integração com bases de dados relacionais.',
+      'Atuação em sistemas corporativos voltados a processos internos.',
+      'Clientes: Previ, SHV, Fapes, Supergasbras.',
     ],
   },
   {
-    title:   'Desenvolvedora Full Stack',
-    company: 'FattoriaWEB',
-    period:  '2010 – 2013',
+    title:   'Desenvolvedora Backend',
+    company: 'Fattoria Web',
+    period:  'Alocação no CREA-RJ',
     type:    'Experiência Profissional',
     stack:   [
-      { name: 'Java',   icon: 'java/java-original.svg'    },
-      { name: 'Oracle', icon: 'oracle/oracle-original.svg' },
-      { name: 'Git',    icon: 'git/git-original.svg'      },
+      { name: 'Java',      icon: 'java/java-original.svg'           },
+      { name: 'Hibernate', icon: 'hibernate/hibernate-original.svg' },
     ],
     bullets: [
-      'Desenvolvimento e manutenção de sistemas internos de gestão de seguros em Java.',
-      'Escrita de procedures e consultas SQL otimizadas em Oracle Database.',
-      'Suporte e manutenção evolutiva em ambiente de missão crítica e alta disponibilidade.',
+      'Desenvolvimento de sistema web de grande porte para órgão público, com alto volume de regras de negócio.',
+      'Atuação com Java, utilizando EJB 3.0, Struts 1.3 e Hibernate.',
+      'Criação e manutenção de relatórios com Jasper Reports.',
+      'Utilização do JBoss como servidor de aplicação.',
+      'Atuação em manutenção evolutiva e corretiva, garantindo estabilidade e confiabilidade do sistema.',
+      'Trabalho em ambiente corporativo estruturado, com foco em qualidade, performance e segurança.',
     ],
   },
   {
-    title:   'Desenvolvedora Front-end',
-    company: 'Odontolife',
-    period:  '2010 – 2013',
+    title:   'Empreendedora — Programa PAFE',
+    company: 'Startup Rio 2019 / FAPERJ',
+    period:  '2019',
+    type:    'Experiência Profissional',
+    stack:   [],
+    bullets: [
+      'Participação com projeto \'Rei da Mesa\' selecionado entre até 100 propostas para o programa.',
+      'Validação de ideia e produto.',
+      'Modelagem e estruturação de plano de negócios.',
+      'Técnicas de gestão e estratégia.',
+    ],
+  },
+  {
+    title:   'Automação de processos e IA',
+    company: 'Projetos Pessoais',
+    period:  '',
     type:    'Experiência Profissional',
     stack:   [
-      { name: 'Java',   icon: 'java/java-original.svg'    },
-      { name: 'Oracle', icon: 'oracle/oracle-original.svg' },
-      { name: 'Git',    icon: 'git/git-original.svg'      },
+      { name: 'React', icon: 'react/react-original.svg' },
     ],
     bullets: [
-      'Desenvolvimento e manutenção de sistemas internos de gestão de seguros em Java.',
-      'Escrita de procedures e consultas SQL otimizadas em Oracle Database.',
-      'Suporte e manutenção evolutiva em ambiente de missão crítica e alta disponibilidade.',
+      'Desenvolvimento de fluxos de automação com n8n, integrando APIs, bancos de dados e serviços externos.',
+      'Criação de soluções com Inteligência Artificial, incluindo uso de LLMs e automação de processos.',
+      'Implementação de servidores MCP (Model Context Protocol), estruturando integração entre modelos de linguagem e fontes externas de dados.',
+      'Desenvolvimento de interfaces frontend utilizando React para consumo de APIs e visualização de dados.',
+      'Integração entre frontend, backend e automações, com foco em eficiência, escalabilidade e redução de tarefas manuais.',
     ],
   },
 ];
@@ -153,26 +157,28 @@ const cvExperience = [
 // Mapeamento de empresas para ícones (SVG ou devicon)
 const COMPANY_ICONS = {
   'Sodexo / Pluxee': 'img/logo-pluxee.png',
-  'Accenture': 'img/logo-accenture.png',
-  'Nio / Oi': 'img/logo-nio.svg', // Trabalhou na Oi (Nio)
-  'Lumis': 'img/logo-lumis.png',
-  'Dash TI': 'img/logo-dashti.svg',
-  'Mittech': 'img/logo-mittech.svg',
-  'FattoriaWEB': 'img/logo-fattoriaweb.svg',
-  'Unigranrio': 'img/logo-unigranrio.webp', 
+  'Meta Serviços em Informática': 'img/logo-nio.svg',
+  'Lumis EIP / Lumis Portal': 'img/logo-lumis.png',
+  'Accenture do Brasil': 'img/logo-accenture.png',
+  'DashTI': 'img/logo-dashti.svg',
+  'Mittech Soluções': 'img/logo-mittech.svg',
+  'Fattoria Web': 'img/logo-fattoriaweb.svg',
+  'Startup Rio 2019 / FAPERJ': '',
+  'Projetos Pessoais': '',
+  'Unigranrio': 'img/logo-unigranrio.webp',
   'Scrum Study': 'img/logo-scrumstudy.png',
 };
 
 const cvEducation = [
   {
-    title:  'Graduação em Sistemas de Informação',
-    school: '',
-    company: 'Unigranrio', 
+    title:  'Sistemas de Informação',
+    school: 'Universidade do Grande Rio — 2014',
+    company: 'Unigranrio',
   },
   {
     title:  'Scrum Fundamentals Certified (SFC)',
-    school: '',
-    company: 'Scrum Study', 
+    school: 'Credential ID: 855545',
+    company: 'Scrum Study',
   },
 ];
 
@@ -189,29 +195,30 @@ function renderTimelineItem(entry, i) {
 
   const bulletsHTML = entry.bullets.map(b => `<li>${b}</li>`).join('');
 
-  // Renderiza ícone + nome da empresa no lugar do período, em formato badge/pill
+  // Logo inline ao lado do nome da empresa
   const iconPath = COMPANY_ICONS[entry.company] || '';
-  const companyLogoHTML = iconPath
-    ? `<div class="company-badge">
-         <img src="${iconPath}" alt="${entry.company}" class="company-badge-icon" data-company="${entry.company}" onerror="this.style.display='none'">
-         <span>${entry.company}</span>
-       </div>`
-    : `<div class="timeline-period">${entry.period}</div>`;
+  const inlineLogoHTML = iconPath
+    ? `<img src="${iconPath}" alt="${entry.company}" class="company-inline-icon" data-company="${entry.company}" onerror="this.style.display='none'">`
+    : '';
+
+  const periodHTML = entry.period
+    ? `<div class="timeline-period">${entry.period}</div>`
+    : '';
 
   return `
     <div class="timeline-item" data-cv-index="${i}">
       <div class="timeline-card">
         <div class="timeline-header">
           <div class="timeline-meta">
-            <div class="timeline-company">${entry.company}</div>
+            <div class="timeline-company">${inlineLogoHTML}${entry.company}</div>
             <div class="timeline-title">${entry.title}</div>
-            ${companyLogoHTML}
+            ${periodHTML}
+            ${badgesHTML}
           </div>
           <i class="ph ph-caret-down timeline-chevron"></i>
         </div>
         <div class="timeline-body">
           <div class="timeline-divider"></div>
-          ${badgesHTML}
           <ul>${bulletsHTML}</ul>
         </div>
       </div>
@@ -226,19 +233,13 @@ function renderCurriculo() {
   // Renderiza o ícone da empresa em formato badge padronizado
   const eduHTML = cvEducation.map(e => {
     const iconPath = COMPANY_ICONS[e.company] || '';
-    const badgeHTML = iconPath
-      ? `<div class="company-badge" style="margin-top: 0.5rem;">
-           <img src="${iconPath}" alt="${e.company}" class="company-badge-icon" data-company="${e.company}" onerror="this.style.display='none'">
-           <span>${e.company}</span>
-         </div>`
+    const inlineLogoHTML = iconPath
+      ? `<img src="${iconPath}" alt="${e.company}" class="company-inline-icon" data-company="${e.company}" onerror="this.style.display='none'">`
       : '';
     return `
       <div class="edu-card reveal">
-        <div class="edu-card__title">${e.title}</div>
-        <div class="edu-card__sub">
-          ${e.school}
-          ${badgeHTML}
-        </div>
+        <div class="edu-card__title">${inlineLogoHTML}${e.title}</div>
+        <div class="edu-card__sub">${e.school}</div>
       </div>
     `;
   }).join('');

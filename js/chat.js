@@ -3,7 +3,9 @@
    Comunicação via n8n Webhook
    ============================================= */
 
-const CHAT_WEBHOOK = 'https://flowhub-n8n-webhook.easypanel.ivieximenes.cloud/webhook/portalcontact';
+const CHAT_WEBHOOK        = 'https://flowhub-n8n-webhook.easypanel.ivieximenes.cloud/webhook/portalcontact';
+const CHAT_STATUS_WEBHOOK = 'https://flowhub-n8n-webhook.easypanel.ivieximenes.cloud/webhook/chatstatus';
+const CHAT_POLL_INTERVAL  = 30000; // 30 segundos
 
 // Gera um session ID único por visita
 const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
@@ -62,9 +64,41 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
   const greeting      = document.getElementById('chatGreeting');
   const greetingClose = document.getElementById('chatGreetingClose');
 
-  let isOpen    = false;
-  let isBusy    = false;
-  let welcomed  = false;
+  let isOpen          = false;
+  let isBusy          = false;
+  let welcomed        = false;
+  let inactivityTimer = null;
+  let chatClosed      = false;
+
+  // ---- Polling de inatividade ----
+  function startInactivityPolling() {
+    stopInactivityPolling();
+    inactivityTimer = setInterval(async () => {
+      if (chatClosed) { stopInactivityPolling(); return; }
+      try {
+        const res  = await fetch(`${CHAT_STATUS_WEBHOOK}?sessionId=${CHAT_SESSION_ID}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.message) {
+          appendBubble(data.message, 'bot');
+          appendTime(now());
+        }
+        if (data.status === 'closed') {
+          chatClosed = true;
+          stopInactivityPolling();
+          input.disabled   = true;
+          sendBtn.disabled = true;
+          input.placeholder = 'Conversa encerrada.';
+        }
+      } catch (e) {
+        // silencioso — polling não deve quebrar a UI
+      }
+    }, CHAT_POLL_INTERVAL);
+  }
+
+  function stopInactivityPolling() {
+    if (inactivityTimer) { clearInterval(inactivityTimer); inactivityTimer = null; }
+  }
 
   // ---- Fechar o tooltip de boas-vindas ----
   function hideGreeting() {
@@ -126,9 +160,9 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
     }, 350);
   }
 
-  // ---- Auto-show tooltip ao carregar a página ----
+  // ---- Auto-show tooltip ao carregar a página (somente desktop) ----
   setTimeout(() => {
-    if (!isOpen) {
+    if (!isOpen && window.innerWidth > 768) {
       greeting.classList.add('is-visible');
     }
   }, 1200);
@@ -142,6 +176,9 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
     if (isOpen) {
       showWelcome();
       setTimeout(() => input.focus(), 300);
+      if (!chatClosed) startInactivityPolling();
+    } else {
+      stopInactivityPolling();
     }
   });
 
@@ -223,6 +260,7 @@ const CHAT_SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
       isOpen = false;
       trigger.classList.remove('is-open');
       window_.classList.remove('is-open');
+      stopInactivityPolling();
     }
   });
 

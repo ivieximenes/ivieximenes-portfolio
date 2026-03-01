@@ -113,10 +113,29 @@
 }
 
 .timeline-company {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-secondary);
   margin-bottom: 0.25rem;
+}
+
+.company-inline-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 3px;
+}
+
+[data-theme="dark"] .company-inline-icon[data-company="Sodexo / Pluxee"] {
+  filter: brightness(0) invert(1);
+}
+
+.timeline-meta .badge-row {
+  margin-top: 0.5rem;
 }
 
 .timeline-title {
@@ -233,6 +252,9 @@
 }
 
 .edu-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-secondary);

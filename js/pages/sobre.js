@@ -79,61 +79,77 @@ const experiencias = [
 
 const stackGroups = [
   {
-    category: 'Backend',
+    category: 'Linguagens & Frameworks',
     items: [
       { name: 'Java',       icon: 'java/java-original.svg'             },
-      { name: 'Spring',     icon: 'spring/spring-original.svg'         },
-      { name: 'Hibernate',  icon: 'hibernate/hibernate-original.svg'   },
-      { name: 'Node.js',    icon: 'nodejs/nodejs-original.svg'         },
-    ],
-  },
-  {
-    category: 'Frontend',
-    items: [
+      { name: 'JavaScript', icon: 'javascript/javascript-original.svg' },
+      { name: 'TypeScript', icon: 'typescript/typescript-original.svg' },
       { name: 'Angular',    icon: 'angular/angular-original.svg'       },
       { name: 'React',      icon: 'react/react-original.svg'           },
-      { name: 'TypeScript', icon: 'typescript/typescript-original.svg' },
-      { name: 'JavaScript', icon: 'javascript/javascript-original.svg' },
+      { name: 'Spring MVC', icon: 'spring/spring-original.svg'         },
+      { name: 'Hibernate',  icon: 'hibernate/hibernate-original.svg'   },
+      { name: 'EJB 3.0',    icon: 'java/java-original.svg'             },
+      { name: 'Struts',     icon: 'apache/apache-original.svg'         },
+      { name: 'PHP',        icon: 'php/php-original.svg'               },
     ],
   },
   {
-    category: 'Plataformas',
+    category: 'Banco de Dados & Busca',
     items: [
-      { name: 'Lumisportal', icon: 'img/logo-lumis.png' },
-    ],
-  },
-  {
-    category: 'Dados',
-    items: [
-      { name: 'Oracle',        icon: 'oracle/oracle-original.svg'           },
-      { name: 'MySQL',         icon: 'mysql/mysql-original.svg'             },
-      { name: 'Supabase',      icon: 'supabase/supabase-original.svg'       },
+      { name: 'Oracle',        icon: 'oracle/oracle-original.svg'               },
+      { name: 'MySQL',         icon: 'mysql/mysql-original.svg'                 },
+      { name: 'Supabase',      icon: 'supabase/supabase-original.svg'           },
       { name: 'Elasticsearch', icon: 'elasticsearch/elasticsearch-original.svg' },
     ],
   },
   {
-    category: 'Automação',
+    category: 'DevOps & Versionamento',
     items: [
-      { name: 'n8n',      icon: 'img/logo-n8n.svg',       fallback: '🔄' },
+      { name: 'Docker',  icon: 'docker/docker-original.svg'          },
+      { name: 'Git',     icon: 'git/git-original.svg'                },
+      { name: 'SVN',     icon: 'subversion/subversion-original.svg'  },
+      { name: 'Jenkins', icon: 'jenkins/jenkins-original.svg'        },
+      { name: 'GitLab',  icon: 'gitlab/gitlab-original.svg'          },
     ],
   },
   {
-    category: 'DevOps',
+    category: 'Ferramentas & Plataformas',
     items: [
-      { name: 'Docker',  icon: 'docker/docker-original.svg'    },
-      { name: 'Git',     icon: 'git/git-original.svg'          },
-      { name: 'Jenkins', icon: 'jenkins/jenkins-original.svg'  },
-      { name: 'GitLab',  icon: 'gitlab/gitlab-original.svg'    },
-      { name: 'Azure',   icon: 'azure/azure-original.svg'      },
+      { name: 'Maven',  icon: 'maven/maven-original.svg'   },
+      { name: 'Tomcat', icon: 'tomcat/tomcat-original.svg' },
+      { name: 'Jira',   icon: 'jira/jira-original.svg'     },
+      { name: 'JBoss',  icon: 'jboss/jboss-original.svg'   },
     ],
   },
   {
-    category: 'Testes',
+    category: 'APIs & Integrações',
     items: [
-      { name: 'Cypress',  icon: 'cypressio/cypressio-original.svg'    },
-      { name: 'Selenium', icon: 'selenium/selenium-original.svg'      },
-      { name: 'Cucumber', icon: 'cucumber/cucumber-plain.svg'         },
-      { name: 'Jest',     icon: 'jest/jest-plain.svg'                 },
+      { name: 'Swagger', icon: 'swagger/swagger-original.svg'   },
+      { name: 'Postman', icon: 'postman/postman-original.svg'   },
+    ],
+  },
+  {
+    category: 'Testes & Qualidade',
+    items: [
+      { name: 'Cypress',          icon: 'cypressio/cypressio-original.svg'              },
+      { name: 'Selenium',         icon: 'selenium/selenium-original.svg'                },
+      { name: 'Cucumber',         icon: 'cucumber/cucumber-plain.svg'                   },
+      { name: 'Robot Framework',  icon: 'robotframework/robotframework-original.svg'    },
+      { name: 'SonarQube',        icon: 'sonarqube/sonarqube-original.svg'              },
+    ],
+  },
+  {
+    category: 'Sistemas & Portais',
+    items: [
+      { name: 'Lumis Portal', icon: 'img/logo-lumis.png', local: true },
+      { name: 'Siebel',       icon: 'img/logo-siebel.png', local: true },
+      { name: 'Vignette',     icon: 'img/logo-vignette.png', local: true },
+    ],
+  },
+  {
+    category: 'Automação & IA',
+    items: [
+      { name: 'n8n', icon: 'img/logo-n8n.svg', local: true },
     ],
   },
 ];
@@ -156,7 +172,7 @@ function renderSobre() {
       <div class="badge-row">
         ${group.items.map(item => `
           <span class="tech-badge">
-            <img src="${item.name === 'Lumisportal' || item.name === 'n8n' ? item.icon : DEVICON + item.icon}" alt="${item.name}" style="width:18px;height:18px;vertical-align:middle;" onerror="this.style.display='none'">
+            <img src="${item.local ? item.icon : DEVICON + item.icon}" alt="${item.name}" style="width:18px;height:18px;vertical-align:middle;" onerror="this.style.display='none'">
             ${item.name}
           </span>
         `).join('')}
@@ -176,26 +192,27 @@ function renderSobre() {
             <img src="img/ivieximenes.jpg" alt="Foto de perfil" class="sobre__foto">
           </div>
           <p>
-            Desenvolvedor Full Stack com mais de 15 anos construindo software do início ao fim com
-            backend robusto, frontends modernos, integrações e automação com IA.
-            Já passei por seguradoras, consultorias globais e plataformas de benefícios.
+            Desenvolvedora Full Stack Sênior com mais de 15 anos de experiência em desenvolvimento de software.
+            Forte atuação em projetos de média e alta complexidade com Java, Angular e React —
+            de sistemas corporativos a automações com IA. Histórico em empresas como
+            Sodexo (Pluxee), Accenture e Lumis, com atuação em clientes como SulAmérica, Oi e Aliansce.
           </p>
           <div class="sobre__stats">
             <div class="sobre__stat">
               <span class="sobre__stat-num">15+</span>
-              <span class="sobre__stat-label">Anos de experiência comprovada</span>
+              <span class="sobre__stat-label">Anos de experiência</span>
             </div>
             <div class="sobre__stat">
-              <span class="sobre__stat-num">14+</span>
-              <span class="sobre__stat-label">Participações em empresas médio e grande porte</span>
-            </div>
-            <div class="sobre__stat">
-              <span class="sobre__stat-num">30+</span>
-              <span class="sobre__stat-label">Projetos entregues</span>
+              <span class="sobre__stat-num">7+</span>
+              <span class="sobre__stat-label">Empresas onde atuou</span>
             </div>
             <div class="sobre__stat">
               <span class="sobre__stat-num">10+</span>
-              <span class="sobre__stat-label">Tecnologias</span>
+              <span class="sobre__stat-label">Clientes corporativos</span>
+            </div>
+            <div class="sobre__stat">
+              <span class="sobre__stat-num">30+</span>
+              <span class="sobre__stat-label">Tecnologias no stack</span>
             </div>
           </div>
         </div>

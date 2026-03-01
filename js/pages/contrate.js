@@ -1,54 +1,54 @@
 /* =============================================
-   CONTRATE PAGE — Pricing / Hire Me
+   CONTRATE PAGE — Hire Me
    ============================================= */
 
 const pricingPlans = [
   {
-    id:       'freelance',
-    title:    'Freelance / Sob Demanda',
+    id:       'demanda',
+    title:    'Sob Demanda',
     price:    'Por hora',
-    desc:     'Ideal para ajustes rápidos, manutenções ou automações pontuais.',
+    desc:     'Para tarefas pontuais, ajustes, automações ou suporte técnico contínuo.',
     featured: false,
     features: [
-      'Ajustes no front-end/back-end',
-      'Criação de automações no n8n',
+      'Ajustes e melhorias front-end/back-end',
+      'Automações com n8n e IA',
       'Integrações de API',
+      'Chatbots e agentes inteligentes',
       'Suporte técnico',
     ],
   },
   {
-    id:       'completo',
-    title:    'Projeto Completo',
+    id:       'dedicado',
+    title:    'Projeto Dedicado',
     price:    'Preço Fixo',
-    desc:     'Do planejamento ao deploy. Perfeito para novos aplicativos, sites e plataformas.',
-    featured: true,
+    desc:     'Do levantamento de requisitos ao deploy — ideal para novos sistemas, sites e plataformas.',
+    featured: false,
     features: [
+      'Levantamento de requisitos',
       'Design de Interface (UI/UX)',
-      'Desenvolvimento Front-end',
-      'Desenvolvimento Back-end',
-      'Banco de dados',
-      'Deploy e configuração de infra',
+      'Desenvolvimento Full Stack',
+      'Banco de dados e infraestrutura',
+      'Acompanhamento pós-entrega',
     ],
   },
   {
     id:       'consultoria',
-    title:    'Consultoria IA & Automação',
+    title:    'Consultoria Técnica',
     price:    'A Combinar',
-    desc:     'Consultoria estratégica para otimizar os processos da sua empresa.',
+    desc:     'Análise estratégica para otimizar processos, arquitetura e uso de IA na sua empresa.',
     featured: false,
     features: [
-      'Análise de processos',
+      'Análise de processos e arquitetura',
       'Engenharia de Prompts (LLMs)',
-      'Arquitetura de soluções',
-      'Treinamento de equipe',
+      'Modernização de sistemas legados',
+      'Mentoria e treinamento de equipe',
     ],
   },
 ];
 
 function renderContrate() {
   const cardsHTML = pricingPlans.map(plan => `
-    <div class="pricing-card ${plan.featured ? 'featured' : ''} reveal">
-      ${plan.featured ? '<div class="pricing-ribbon">Recomendado</div>' : ''}
+    <div class="pricing-card reveal">
       <h3 class="pricing-card__title">${plan.title}</h3>
       <p class="pricing-card__price">${plan.price}</p>
       <p class="pricing-card__desc">${plan.desc}</p>
@@ -60,8 +60,8 @@ function renderContrate() {
           </li>
         `).join('')}
       </ul>
-      <a href="#/contato" class="btn ${plan.featured ? 'btn--primary' : 'btn--outline'}">
-        Solicitar Orçamento
+      <a href="#/contato" class="btn btn--outline">
+        Vamos conversar
       </a>
     </div>
   `).join('');
@@ -70,8 +70,7 @@ function renderContrate() {
     <section class="contrate page">
       <div class="container">
         <div class="page__header">
-          <h2>Vamos trabalhar juntos ?</h2>
-          
+          <h2>Vamos trabalhar juntos?</h2>
         </div>
         <div class="pricing-grid">${cardsHTML}</div>
       </div>

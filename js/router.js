@@ -2,14 +2,16 @@
    ROUTER — Hash-based SPA Router
    ============================================= */
 
+const BASE_TITLE = 'Ivie Ximenes — Sênior Full Stack Developer';
+
 const routes = {
-  '/':          { render: renderHome,     init: initHome     },
-  '/sobre':     { render: renderSobre,    init: initSobre    },
-  '/servicos':  { render: renderServicos, init: initServicos },
-  '/projetos':  { render: renderProjetos, init: initProjetos },
-  '/curriculo': { render: renderCurriculo,init: initCurriculo},
-  '/contato':   { render: renderContato,  init: initContato  },
-  '/contrate':  { render: renderContrate, init: initContrate },
+  '/':          { render: renderHome,      init: initHome,      title: `Home | ${BASE_TITLE}`      },
+  '/sobre':     { render: renderSobre,     init: initSobre,     title: `Sobre | ${BASE_TITLE}`     },
+  '/servicos':  { render: renderServicos,  init: initServicos,  title: `Serviços | ${BASE_TITLE}`  },
+  '/projetos':  { render: renderProjetos,  init: initProjetos,  title: `Projetos | ${BASE_TITLE}`  },
+  '/curriculo': { render: renderCurriculo, init: initCurriculo, title: `Currículo | ${BASE_TITLE}`  },
+  '/contato':   { render: renderContato,   init: initContato,   title: `Contato | ${BASE_TITLE}`   },
+  '/contrate':  { render: renderContrate,  init: initContrate,  title: `Contrate | ${BASE_TITLE}`  },
 };
 
 // Dummy implementations to avoid ReferenceError (replace with real ones)
@@ -55,25 +57,29 @@ function navigate() {
     initScrollReveal();
 
     // ---- Analytics: Virtual Pageview ----
+    // Atualiza o título da aba/documento com o título da rota atual
+    document.title = route.title || document.title;
     const pageTitle = document.title;
     const pagePath  = path === '/' ? '/' : path;
+
+    const cleanLocation = window.location.origin + pagePath;
 
     // GA4 — envia pageview virtual a cada navegação
     if (typeof gtag === 'function') {
       gtag('event', 'page_view', {
         page_title:    pageTitle,
         page_path:     pagePath,
-        page_location: window.location.href,
+        page_location: cleanLocation,
       });
     }
 
     // GTM — empurra evento no dataLayer para captura via Tag Manager
     if (window.dataLayer) {
       window.dataLayer.push({
-        event:      'virtualPageview',
-        pagePath:    pagePath,
-        pageTitle:   pageTitle,
-        pageUrl:     window.location.href,
+        event:         'virtualPageview',
+        page_path:     pagePath,
+        page_title:    pageTitle,
+        page_location: cleanLocation,
       });
     }
 

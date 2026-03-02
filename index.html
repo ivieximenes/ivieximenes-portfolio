@@ -26,7 +26,8 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-C0KMZJV804');
+    // send_page_view: false — pageviews são gerenciados pelo router SPA
+    gtag('config', 'G-C0KMZJV804', { send_page_view: false });
   </script>
   <!-- End Google Analytics 4 -->
 

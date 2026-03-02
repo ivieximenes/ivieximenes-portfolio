@@ -60,7 +60,7 @@ function renderContrate() {
           </li>
         `).join('')}
       </ul>
-      <a href="#/contato" class="btn btn--outline">
+      <a href="/contato" class="btn btn--outline">
         Vamos conversar
       </a>
     </div>

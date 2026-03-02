@@ -3,10 +3,7 @@
    ============================================= */
 
 (function () {
-  // Ensure a hash exists so the router always has a route to render
-  if (!window.location.hash || window.location.hash === '#') {
-    window.location.hash = '#/';
-  }
+  // ...existing code...
 
   // Boot all modules
   initTheme();

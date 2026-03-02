@@ -1,6 +1,6 @@
 /* =============================================
-   ROUTER — Hash-based SPA Router
-   ============================================= */
+  ROUTER — History API SPA Router (sem hash)
+  ============================================= */
 
 const BASE_TITLE = 'Ivie Ximenes — Sênior Full Stack Developer';
 
@@ -22,9 +22,14 @@ function initContrate() {
   // Inicialização da página Contrate
 }
 function getRoute() {
-  const hash = window.location.hash;
-  if (!hash || hash === '#') return '/';
-  return hash.replace('#', '') || '/';
+  const p = window.location.pathname;
+  // Fallback para rotas desconhecidas
+  return routes[p] ? p : '/';
+}
+
+function goTo(path) {
+  history.pushState(null, '', path);
+  navigate();
 }
 
 function navigate() {
@@ -33,8 +38,8 @@ function navigate() {
   const app   = document.getElementById('app');
 
   // Fade out
-  app.style.opacity = '0';
-  app.style.transform = 'translateY(8px)';
+  app.style.opacity    = '0';
+  app.style.transform  = 'translateY(8px)';
   app.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
 
   setTimeout(() => {
@@ -44,7 +49,7 @@ function navigate() {
     window.scrollTo({ top: 0, behavior: 'instant' });
 
     // Fade in
-    app.style.opacity = '1';
+    app.style.opacity   = '1';
     app.style.transform = 'translateY(0)';
 
     // Run page init
@@ -57,32 +62,33 @@ function navigate() {
     initScrollReveal();
 
     // ---- Analytics: Virtual Pageview ----
-    // Atualiza o título da aba/documento com o título da rota atual
+    // Atualiza o título ANTES de disparar o evento
     document.title = route.title || document.title;
-    const pageTitle = document.title;
-    const pagePath  = path === '/' ? '/' : path;
+    // Aguarda o DOM estar pronto para garantir que o título está correto
+    setTimeout(() => {
+      const pageTitle    = document.title;
+      const pagePath     = path;
+      const cleanLocation = window.location.origin + pagePath;
 
-    const cleanLocation = window.location.origin + pagePath;
+      // GA4 — pageview virtual a cada navegação (sem hash, path limpo)
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_view', {
+          page_title:    pageTitle,
+          page_path:     pagePath,
+          page_location: cleanLocation,
+        });
+      }
 
-    // GA4 — envia pageview virtual a cada navegação
-    if (typeof gtag === 'function') {
-      gtag('event', 'page_view', {
-        page_title:    pageTitle,
-        page_path:     pagePath,
-        page_location: cleanLocation,
-      });
-    }
-
-    // GTM — empurra evento no dataLayer para captura via Tag Manager
-    if (window.dataLayer) {
-      window.dataLayer.push({
-        event:         'virtualPageview',
-        page_path:     pagePath,
-        page_title:    pageTitle,
-        page_location: cleanLocation,
-      });
-    }
-
+      // GTM — dataLayer para captura via Tag Manager
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event:         'virtualPageview',
+          page_path:     pagePath,
+          page_title:    pageTitle,
+          page_location: cleanLocation,
+        });
+      }
+    }, 0);
   }, 200);
 }
 
@@ -103,6 +109,19 @@ function initScrollReveal() {
 }
 
 function initRouter() {
-  window.addEventListener('hashchange', navigate);
-  navigate(); // initial load
+  // Intercepta cliques em links internos para navegação SPA
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    // Ignora links externos, âncoras puras e mailto/tel
+    if (!href || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+    e.preventDefault();
+    goTo(href);
+  });
+
+  // Botão voltar/avançar do navegador
+  window.addEventListener('popstate', navigate);
+
+  navigate(); // carregamento inicial
 }

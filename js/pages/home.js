@@ -17,10 +17,10 @@ function renderHome() {
         </p>
        
         <div class="home__ctas">
-          <a href="#/projetos" class="btn btn--primary">
+          <a href="/projetos" class="btn btn--primary">
             <i class="ph ph-folder-open"></i> Ver Projetos
           </a>
-          <a href="#/contato" class="btn btn--outline">
+          <a href="/contato" class="btn btn--outline">
             <i class="ph ph-handshake"></i> Vamos trabalhar juntos ?
           </a>
         </div>

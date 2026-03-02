@@ -54,6 +54,29 @@ function navigate() {
     // Scroll reveal
     initScrollReveal();
 
+    // ---- Analytics: Virtual Pageview ----
+    const pageTitle = document.title;
+    const pagePath  = path === '/' ? '/' : path;
+
+    // GA4 — envia pageview virtual a cada navegação
+    if (typeof gtag === 'function') {
+      gtag('event', 'page_view', {
+        page_title:    pageTitle,
+        page_path:     pagePath,
+        page_location: window.location.href,
+      });
+    }
+
+    // GTM — empurra evento no dataLayer para captura via Tag Manager
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event:      'virtualPageview',
+        pagePath:    pagePath,
+        pageTitle:   pageTitle,
+        pageUrl:     window.location.href,
+      });
+    }
+
   }, 200);
 }
 

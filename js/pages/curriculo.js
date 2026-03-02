@@ -133,7 +133,7 @@ const cvExperience = [
 // Mapeamento de empresas para ícones (SVG ou devicon)
 const COMPANY_ICONS = {
   'Sodexo / Pluxee': 'img/logo-pluxee.png',
-  'Meta Serviços em Informática': 'img/logo-nio.svg',
+  'Meta Serviços em Informática': 'img/logo_meta.svg',
   'Lumis EIP / Lumis Portal': 'img/logo-lumis.png',
   'Accenture do Brasil': 'img/logo-accenture.png',
   'DashTI': 'img/logo-dashti.svg',

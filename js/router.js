@@ -5,13 +5,17 @@
 const BASE_TITLE = 'Ivie Ximenes — Sênior Full Stack Developer';
 
 const routes = {
-  '/':          { render: renderHome,      init: initHome,      title: `Home | ${BASE_TITLE}`      },
-  '/sobre':     { render: renderSobre,     init: initSobre,     title: `Sobre | ${BASE_TITLE}`     },
-  '/servicos':  { render: renderServicos,  init: initServicos,  title: `Serviços | ${BASE_TITLE}`  },
-  '/projetos':  { render: renderProjetos,  init: initProjetos,  title: `Projetos | ${BASE_TITLE}`  },
-  '/curriculo': { render: renderCurriculo, init: initCurriculo, title: `Currículo | ${BASE_TITLE}`  },
-  '/contato':   { render: renderContato,   init: initContato,   title: `Contato | ${BASE_TITLE}`   },
-  '/contrate':  { render: renderContrate,  init: initContrate,  title: `Contrate | ${BASE_TITLE}`  },
+  '/':                         { render: renderHome,             init: initHome,             title: `Home | ${BASE_TITLE}`                      },
+  '/sobre':                    { render: renderSobre,            init: initSobre,            title: `Sobre | ${BASE_TITLE}`                     },
+  '/servicos':                 { render: renderServicos,         init: initServicos,         title: `Serviços | ${BASE_TITLE}`                  },
+  '/projetos':                 { render: renderProjetos,         init: initProjetos,         title: `Projetos | ${BASE_TITLE}`                  },
+  '/curriculo':                { render: renderCurriculo,        init: initCurriculo,        title: `Currículo | ${BASE_TITLE}`                 },
+  '/contato':                  { render: renderContato,          init: initContato,          title: `Contato | ${BASE_TITLE}`                   },
+  '/contrate':                 { render: renderContrate,         init: initContrate,         title: `Contrate | ${BASE_TITLE}`                  },
+  '/blog':                     { render: renderBlogList,         init: initBlogList,         title: `Blog | ${BASE_TITLE}`                      },
+  '/blog/:slug':               { render: renderBlogPost,         init: initBlogPost,         title: `Blog | ${BASE_TITLE}`                      },
+  '/ferramentas':              { render: renderFerramentas,      init: initFerramentas,      title: `Ferramentas Gratuitas | ${BASE_TITLE}`     },
+  '/ferramentas/diagnostico':  { render: renderToolDiagnostico,  init: initToolDiagnostico,  title: `Diagnóstico Digital | ${BASE_TITLE}`       },
 };
 
 // Dummy implementations to avoid ReferenceError (replace with real ones)
@@ -23,8 +27,12 @@ function initContrate() {
 }
 function getRoute() {
   const p = window.location.pathname;
-  // Fallback para rotas desconhecidas
-  return routes[p] ? p : '/';
+  if (routes[p]) return p;
+  // Dynamic routes
+  if (p.match(/^\/blog\/.+/))          return '/blog/:slug';
+  if (p.match(/^\/ferramentas\/.+/))   return '/ferramentas/diagnostico';
+  // Fallback
+  return '/';
 }
 
 function goTo(path) {

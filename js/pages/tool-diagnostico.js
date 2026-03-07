@@ -1,983 +1,1040 @@
 /* =============================================
-   TOOL: DIAGNÃ“STICO DE PRESENÃ‡A DIGITAL
-   Step machine: form â†’ verify â†’ loading â†’ result
+   TOOL: DIAGNÓSTICO DE PRESENÇA DIGITAL
    ============================================= */
-
-/* ---- Module-level state ---- */
-let _diagState = {
-  step:      'form',   // 'form' | 'verify' | 'loading' | 'result'
-  url:       '',
-  nicho:     '',
-  cidade:    '',
-  email:     '',
-  error:     '',
-  resultHtml: '',
-  resultData: null,   // parsed JSON from n8n
-  resendCooldown: 0,  // seconds remaining
-  resendTimer:    null,
+let _ds = {
+  step:'form', url:'', nicho:'', cidade:'', email:'',
+  error:'', resultHtml:'', resultData:null,
+  resendCooldown:0, resendTimer:null,
 };
+function _setDS(p){Object.assign(_ds,p);}
 
-function _setDiagState(patch) {
-  Object.assign(_diagState, patch);
+function renderToolDiagnostico(){
+  return `<section class="tool-page">
+    <div class="tool-page__back">
+      <a href="/ferramentas" class="tool-page__back-link" data-route="/ferramentas">
+        <i class="ph ph-arrow-left"></i> Ferramentas
+      </a>
+    </div>
+    <div id="diag-container"></div>
+  </section>`;
 }
 
-/* ---- Root render ---- */
-function renderToolDiagnostico() {
-  return `
-    <section class="tool-page">
-      <div class="tool-page__back">
-        <a href="/ferramentas" class="tool-page__back-link" data-route="/ferramentas">
-          <i class="ph ph-arrow-left"></i> Ferramentas
-        </a>
-      </div>
-      <div id="diag-container"></div>
-    </section>
-  `;
+function initToolDiagnostico(){
+  if(_ds.resendTimer) clearInterval(_ds.resendTimer);
+  _ds={step:'form',url:'',nicho:'',cidade:'',email:'',error:'',resultHtml:'',resultData:null,resendCooldown:0,resendTimer:null};
+  _renderDS();
 }
 
-function initToolDiagnostico() {
-  // Reset state on page load
-  if (_diagState.resendTimer) clearInterval(_diagState.resendTimer);
-  _diagState = {
-    step: 'form', url: '', nicho: '', cidade: '', email: '', error: '', resultHtml: '', resultData: null,
-    resendCooldown: 0, resendTimer: null,
+function _renderDS(){
+  const c=document.getElementById('diag-container');
+  if(!c) return;
+  const m={
+    form:   ()=>{c.innerHTML=_formHTML();   _formListeners();  },
+    verify: ()=>{c.innerHTML=_verifyHTML(); _verifyListeners();},
+    loading:()=>{c.innerHTML=_loadingHTML();_loadingAnim();    },
+    result: ()=>{c.innerHTML=_resultHTML(); _resultListeners();},
   };
-  _renderDiagStep();
+  (m[_ds.step]||m.form)();
 }
 
-/* ---- Step renderer ---- */
-function _renderDiagStep() {
-  const container = document.getElementById('diag-container');
-  if (!container) return;
-
-  switch (_diagState.step) {
-    case 'form':    container.innerHTML = _diagFormHTML();    _attachDiagFormListeners();    break;
-    case 'verify':  container.innerHTML = _diagVerifyHTML();  _attachDiagVerifyListeners();  break;
-    case 'loading': container.innerHTML = _diagLoadingHTML(); _animateDiagLoading(); break;
-    case 'result':  container.innerHTML = _diagResultHTML();  _attachDiagResultListeners();  break;
-  }
+/* ---- Steps indicator ---- */
+function _steps(active){
+  const list=[{k:'form',l:'Dados',i:'ph-globe'},{k:'verify',l:'E-mail',i:'ph-envelope-simple'},{k:'result',l:'Relatório',i:'ph-chart-bar'}];
+  const ai=list.findIndex(s=>s.k===active);
+  return `<div class="tool-steps">${list.map((s,i)=>`
+    <div class="tool-step${i<ai?' tool-step--done':''}${i===ai?' tool-step--active':''}">
+      <div class="tool-step__icon">${i<ai?'<i class="ph ph-check-bold"></i>':`<i class="ph ${s.i}"></i>`}</div>
+      <span>${s.l}</span>
+    </div>${i<list.length-1?`<div class="tool-step__line${i<ai?' tool-step__line--done':''}"></div>`:''}
+  `).join('')}</div>`;
 }
 
-/* ---- Step indicator ---- */
-function _stepIndicator(active) {
-  const steps = [
-    { key: 'form',   label: 'Dados',       icon: 'ph-globe'           },
-    { key: 'verify', label: 'E-mail',      icon: 'ph-envelope-simple' },
-    { key: 'result', label: 'Resultado',   icon: 'ph-chart-bar'       },
-  ];
-  const activeIdx = steps.findIndex(s => s.key === active);
-  return `
-    <div class="tool-steps">
-      ${steps.map((s, i) => `
-        <div class="tool-step ${i < activeIdx ? 'tool-step--done' : ''} ${i === activeIdx ? 'tool-step--active' : ''}">
-          <div class="tool-step__icon">
-            ${i < activeIdx ? '<i class="ph ph-check-bold"></i>' : `<i class="ph ${s.icon}"></i>`}
-          </div>
-          <span>${s.label}</span>
-        </div>
-        ${i < steps.length - 1 ? `<div class="tool-step__line ${i < activeIdx ? 'tool-step__line--done' : ''}"></div>` : ''}
-      `).join('')}
+/* ===== STEP 1: FORM ===== */
+function _formHTML(){
+  return `<div class="tool-card-page">
+    ${_steps('form')}
+    <div class="tool-card-page__header">
+      <div class="tool-card-page__icon"><i class="ph ph-magnifying-glass-plus"></i></div>
+      <h1 class="tool-card-page__title">Diagnóstico de Presença Digital</h1>
+      <p class="tool-card-page__desc">Analise velocidade, SEO, segurança e potencial de mercado do seu site — relatório completo e automatizado, grátis.</p>
     </div>
-  `;
-}
-
-/* ==========================================
-   STEP 1 â€” FORM
-   ========================================== */
-
-function _diagFormHTML() {
-  return `
-    <div class="tool-card-page">
-      ${_stepIndicator('form')}
-
-      <div class="tool-card-page__header">
-        <div class="tool-card-page__icon">
-          <i class="ph ph-magnifying-glass-plus"></i>
-        </div>
-        <h1 class="tool-card-page__title">DiagnÃ³stico de PresenÃ§a Digital</h1>
-        <p class="tool-card-page__desc">
-          Informe o site a ser analisado e seu e-mail para receber o cÃ³digo de acesso.
-          O relatÃ³rio inclui dados de velocidade, SEO, acessibilidade, concorrentes locais e potencial de mercado.
-        </p>
-      </div>
-
-      <div class="tool-card-page__notice">
-        <i class="ph ph-warning"></i>
-        <p>O diagnÃ³stico Ã© gerado por automaÃ§Ã£o e pode exigir validaÃ§Ã£o manual. Recomenda-se sempre verificar os dados no contexto real do negÃ³cio.</p>
-      </div>
-
-      ${_diagState.error ? `<div class="tool-error"><i class="ph ph-x-circle"></i> ${_diagState.error}</div>` : ''}
-
+    <div class="diag-trust-badges">
+      <span><i class="ph ph-check-circle"></i> Gratuito</span>
+      <span><i class="ph ph-clock"></i> ~2 minutos</span>
+      <span><i class="ph ph-shield-check"></i> Sem compromisso</span>
+    </div>
+    ${_ds.error?`<div class="tool-error"><i class="ph ph-x-circle"></i> ${_ds.error}</div>`:''}
+    <div class="tool-form-card">
       <form id="diag-form" class="tool-form" novalidate>
-        <div class="tool-form__field">
-          <label for="diag-url">URL da landing page a analisar</label>
-          <div class="tool-form__input-wrap">
-            <i class="ph ph-globe"></i>
-            <input
-              type="url"
-              id="diag-url"
-              name="url"
-              placeholder="https://seusite.com.br"
-              value="${_diagState.url}"
-              autocomplete="url"
-              required
-            />
-          </div>
-          <span class="tool-form__hint">Inclua https:// ou http://</span>
-        </div>
-
-        <div class="tool-form__row">
-          <div class="tool-form__field">
-            <label for="diag-nicho">Nicho / Segmento</label>
-            <div class="tool-form__input-wrap">
-              <i class="ph ph-tag"></i>
-              <input
-                type="text"
-                id="diag-nicho"
-                name="nicho"
-                placeholder="Ex: ClÃ­nica odontolÃ³gica"
-                value="${_diagState.nicho}"
-                required
-              />
+        <div class="tool-form-section">
+          <h3 class="tool-form-section__title"><i class="ph ph-globe"></i> Informações do Site</h3>
+          <div class="tool-form-field">
+            <label for="d-url" class="tool-form-label">URL do site</label>
+            <div class="tool-form-input-wrap">
+              <i class="ph ph-globe"></i>
+              <input type="url" id="d-url" class="tool-form-input" placeholder="https://seusite.com.br" value="${_ds.url}" required>
             </div>
+            <span class="tool-form-hint">Inclua https:// ou http://</span>
           </div>
-
-          <div class="tool-form__field">
-            <label for="diag-cidade">Cidade</label>
-            <div class="tool-form__input-wrap">
-              <i class="ph ph-map-pin"></i>
-              <input
-                type="text"
-                id="diag-cidade"
-                name="cidade"
-                placeholder="Ex: Rio de Janeiro"
-                value="${_diagState.cidade}"
-                required
-              />
+        </div>
+        <div class="tool-form-section">
+          <h3 class="tool-form-section__title"><i class="ph ph-building"></i> Dados do Negócio</h3>
+          <div class="tool-form-row">
+            <div class="tool-form-field">
+              <label for="d-nicho" class="tool-form-label">Nicho / Segmento</label>
+              <div class="tool-form-input-wrap">
+                <i class="ph ph-tag"></i>
+                <input type="text" id="d-nicho" class="tool-form-input" placeholder="Ex: Clínica odontológica" value="${_ds.nicho}" required>
+              </div>
+            </div>
+            <div class="tool-form-field">
+              <label for="d-cidade" class="tool-form-label">Cidade</label>
+              <div class="tool-form-input-wrap">
+                <i class="ph ph-map-pin"></i>
+                <input type="text" id="d-cidade" class="tool-form-input" placeholder="Ex: Rio de Janeiro" value="${_ds.cidade}" required>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="tool-form__field">
-          <label for="diag-email">Seu e-mail</label>
-          <div class="tool-form__input-wrap">
-            <i class="ph ph-envelope-simple"></i>
-            <input
-              type="email"
-              id="diag-email"
-              name="email"
-              placeholder="voce@empresa.com"
-              value="${_diagState.email}"
-              autocomplete="email"
-              required
-            />
-          </div>
-          <span class="tool-form__hint">Enviaremos um cÃ³digo de 6 dÃ­gitos para confirmar seu acesso.</span>
-        </div>
-
-        <button type="submit" class="btn btn--primary btn--full" id="diag-submit">
-          <i class="ph ph-paper-plane-tilt"></i> Enviar cÃ³digo de acesso
-        </button>
-
-        <p class="tool-form__terms">
-          Ao continuar, vocÃª concorda que seu e-mail serÃ¡ usado apenas para controle de acesso.
-          Limite: 1 diagnÃ³stico por dia.
-        </p>
-      </form>
-    </div>
-  `;
-}
-
-function _attachDiagFormListeners() {
-  const form   = document.getElementById('diag-form');
-  const submit = document.getElementById('diag-submit');
-  if (!form) return;
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const url    = document.getElementById('diag-url').value.trim();
-    const nicho  = document.getElementById('diag-nicho').value.trim();
-    const cidade = document.getElementById('diag-cidade').value.trim();
-    const email  = document.getElementById('diag-email').value.trim();
-
-    // Basic validation
-    if (!url || !url.startsWith('http')) {
-      _setDiagState({ error: 'Informe uma URL vÃ¡lida (comeÃ§ando com https:// ou http://).' });
-      _renderDiagStep();
-      return;
-    }
-    if (!nicho) {
-      _setDiagState({ error: 'Informe o nicho ou segmento do negÃ³cio.' });
-      _renderDiagStep();
-      return;
-    }
-    if (!cidade) {
-      _setDiagState({ error: 'Informe a cidade.' });
-      _renderDiagStep();
-      return;
-    }
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      _setDiagState({ error: 'Informe um e-mail vÃ¡lido.' });
-      _renderDiagStep();
-      return;
-    }
-
-    submit.disabled = true;
-    submit.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i> Enviando...';
-
-    try {
-      const res = await fetch('/api/diagnostico', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send_code', email }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        _setDiagState({ error: data.error || 'NÃ£o foi possÃ­vel enviar o cÃ³digo. Tente novamente.' });
-        _renderDiagStep();
-        return;
-      }
-
-      _setDiagState({ url, nicho, cidade, email, error: '', step: 'verify', resendCooldown: 60 });
-      _renderDiagStep();
-      _startResendTimer();
-
-    } catch {
-      _setDiagState({ error: 'Erro de conexÃ£o. Verifique sua internet e tente novamente.' });
-      _renderDiagStep();
-    }
-  });
-}
-
-/* ==========================================
-   STEP 2 â€” VERIFY
-   ========================================== */
-
-function _diagVerifyHTML() {
-  const masked = _diagState.email.replace(/(.{2})(.*)(@.*)/, (_, a, b, c) => a + '*'.repeat(b.length) + c);
-  const canResend = _diagState.resendCooldown <= 0;
-
-  return `
-    <div class="tool-card-page">
-      ${_stepIndicator('verify')}
-
-      <div class="tool-card-page__header">
-        <div class="tool-card-page__icon tool-card-page__icon--verify">
-          <i class="ph ph-envelope-open"></i>
-        </div>
-        <h1 class="tool-card-page__title">Verifique seu e-mail</h1>
-        <p class="tool-card-page__desc">
-          Enviamos um cÃ³digo de <strong>6 dÃ­gitos</strong> para <strong>${masked}</strong>.
-          Verifique sua caixa de entrada (e o spam).
-        </p>
-      </div>
-
-      ${_diagState.error ? `<div class="tool-error"><i class="ph ph-x-circle"></i> ${_diagState.error}</div>` : ''}
-
-      <form id="verify-form" class="tool-form" novalidate>
-        <div class="tool-form__field">
-          <label for="diag-code">CÃ³digo de verificaÃ§Ã£o</label>
-          <div class="tool-form__input-wrap">
-            <i class="ph ph-password"></i>
-            <input
-              type="text"
-              id="diag-code"
-              name="code"
-              placeholder="000000"
-              maxlength="6"
-              inputmode="numeric"
-              pattern="[0-9]{6}"
-              autocomplete="one-time-code"
-              required
-            />
+        <div class="tool-form-section">
+          <h3 class="tool-form-section__title"><i class="ph ph-envelope-simple"></i> Contato</h3>
+          <div class="tool-form-field">
+            <label for="d-email" class="tool-form-label">Seu e-mail</label>
+            <div class="tool-form-input-wrap">
+              <i class="ph ph-envelope-simple"></i>
+              <input type="email" id="d-email" class="tool-form-input" placeholder="voce@empresa.com" value="${_ds.email}" required>
+            </div>
+            <span class="tool-form-hint">Enviaremos um código para confirmar o acesso.</span>
           </div>
         </div>
-
-        <button type="submit" class="btn btn--primary btn--full" id="verify-submit">
-          <i class="ph ph-check-circle"></i> Confirmar e iniciar anÃ¡lise
-        </button>
-
-        <div class="tool-form__resend">
-          <button type="button" id="resend-btn" class="tool-form__resend-btn ${canResend ? '' : 'disabled'}" ${canResend ? '' : 'disabled'}>
-            ${canResend
-              ? '<i class="ph ph-arrow-clockwise"></i> Reenviar cÃ³digo'
-              : `<i class="ph ph-clock"></i> Reenviar em ${_diagState.resendCooldown}s`
-            }
+        <div class="tool-form-actions">
+          <button type="submit" class="btn btn--primary btn--full btn--lg" id="diag-submit">
+            <i class="ph ph-paper-plane-tilt"></i> Analisar gratuitamente
           </button>
-          <button type="button" id="back-btn" class="tool-form__back-btn">
-            <i class="ph ph-arrow-left"></i> Alterar e-mail
-          </button>
+          <p class="tool-form-terms">Limite: 1 diagnóstico gratuito por dia. Dados usados apenas para controle de acesso.</p>
         </div>
       </form>
     </div>
-  `;
-}
-
-function _attachDiagVerifyListeners() {
-  const form         = document.getElementById('verify-form');
-  const submitBtn    = document.getElementById('verify-submit');
-  const resendBtn    = document.getElementById('resend-btn');
-  const backBtn      = document.getElementById('back-btn');
-  const codeInput    = document.getElementById('diag-code');
-
-  // Auto-format: digits only, max 6
-  codeInput?.addEventListener('input', () => {
-    codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
-  });
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const code = codeInput.value.trim();
-    if (code.length !== 6) {
-      _setDiagState({ error: 'O cÃ³digo deve ter 6 dÃ­gitos.' });
-      _renderDiagStep();
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i> Verificando...';
-
-    _setDiagState({ step: 'loading', error: '' });
-    _renderDiagStep();
-
-    try {
-      const res = await fetch('/api/diagnostico', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'run',
-          email:  _diagState.email,
-          code,
-          url:    _diagState.url,
-          nicho:  _diagState.nicho,
-          cidade: _diagState.cidade,
-        }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        _setDiagState({ step: 'verify', error: data.error || 'CÃ³digo invÃ¡lido ou expirado. Tente novamente.' });
-        _renderDiagStep();
-        return;
-      }
-
-      // Parse result: n8n may return array [{...}] or object {...}
-      let parsedData = null;
-      let fallbackHtml = '';
-      const raw = data.result ?? data.html ?? null;
-      if (raw !== null && typeof raw === 'object') {
-        parsedData = Array.isArray(raw) ? (raw[0] || null) : raw;
-      } else if (typeof raw === 'string') {
-        try {
-          const parsed = JSON.parse(raw);
-          parsedData = Array.isArray(parsed) ? (parsed[0] || null) : parsed;
-        } catch { fallbackHtml = raw; }
-      }
-      _setDiagState({ step: 'result', resultHtml: fallbackHtml, resultData: parsedData });
-      _renderDiagStep();
-
-    } catch {
-      _setDiagState({ step: 'verify', error: 'Erro de conexÃ£o. Tente novamente.' });
-      _renderDiagStep();
-    }
-  });
-
-  resendBtn?.addEventListener('click', async () => {
-    if (_diagState.resendCooldown > 0) return;
-    resendBtn.disabled = true;
-    resendBtn.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i> Enviando...';
-
-    try {
-      const res = await fetch('/api/diagnostico', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send_code', email: _diagState.email }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        _setDiagState({ error: data.error || 'NÃ£o foi possÃ­vel reenviar o cÃ³digo.' });
-      } else {
-        _setDiagState({ error: '', resendCooldown: 60 });
-        _startResendTimer();
-      }
-    } catch {
-      _setDiagState({ error: 'Erro ao reenviar. Tente novamente.' });
-    }
-    _renderDiagStep();
-  });
-
-  backBtn?.addEventListener('click', () => {
-    if (_diagState.resendTimer) clearInterval(_diagState.resendTimer);
-    _setDiagState({ step: 'form', error: '', resendCooldown: 0 });
-    _renderDiagStep();
-  });
-}
-
-function _startResendTimer() {
-  if (_diagState.resendTimer) clearInterval(_diagState.resendTimer);
-  _diagState.resendTimer = setInterval(() => {
-    _diagState.resendCooldown = Math.max(0, _diagState.resendCooldown - 1);
-    // Update button text in-place without full re-render
-    const btn = document.getElementById('resend-btn');
-    if (btn) {
-      if (_diagState.resendCooldown <= 0) {
-        clearInterval(_diagState.resendTimer);
-        btn.disabled = false;
-        btn.classList.remove('disabled');
-        btn.innerHTML = '<i class="ph ph-arrow-clockwise"></i> Reenviar cÃ³digo';
-      } else {
-        btn.innerHTML = `<i class="ph ph-clock"></i> Reenviar em ${_diagState.resendCooldown}s`;
-      }
-    }
-  }, 1000);
-}
-
-/* ==========================================
-   STEP 3 â€” LOADING
-   ========================================== */
-
-function _diagLoadingHTML() {
-  return `
-    <div class="tool-card-page tool-card-page--loading">
-      <div class="tool-loading">
-        <div class="tool-loading__orb"></div>
-        <h2 class="tool-loading__title">Analisando seu site</h2>
-        <p class="tool-loading__sub">Isso pode levar atÃ© 30 segundos.<br>Coletando dados de velocidade, SEO e concorrentes...</p>
-        <div class="tool-loading__steps">
-          <div class="tool-loading__item active" id="lstep-1">
-            <i class="ph ph-circle-notch ph-spin"></i>
-            <span>Google PageSpeed Insights</span>
-          </div>
-          <div class="tool-loading__item" id="lstep-2">
-            <i class="ph ph-circle-notch"></i>
-            <span>SEO &amp; Acessibilidade</span>
-          </div>
-          <div class="tool-loading__item" id="lstep-3">
-            <i class="ph ph-circle-notch"></i>
-            <span>Concorrentes no Google Maps</span>
-          </div>
-          <div class="tool-loading__item" id="lstep-4">
-            <i class="ph ph-circle-notch"></i>
-            <span>Estimativa de potencial de mercado</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/* ==========================================
-   LOADING ANIMATION
-   ========================================== */
-
-function _animateDiagLoading() {
-  const delaysMs = [0, 8000, 18000, 30000];
-  delaysMs.forEach((delay, i) => {
-    setTimeout(() => {
-      const item = document.getElementById(`lstep-${i + 1}`);
-      if (!item) return;
-      item.classList.add('active');
-      const icon = item.querySelector('i.ph');
-      if (icon) {
-        icon.classList.remove('ph-circle-notch');
-        icon.classList.add('ph-circle-notch', 'ph-spin');
-      }
-    }, delay);
-  });
-}
-
-/* ==========================================
-   STEP 4 â€” RESULT
-   ========================================== */
-
-function _scoreColor(score) {
-  if (score >= 70) return '#22C55E';
-  if (score >= 40) return '#F97316';
-  return '#EF4444';
-}
-
-function _scoreLabel(score) {
-  if (score >= 70) return 'Bom';
-  if (score >= 40) return 'AtenÃ§Ã£o';
-  return 'CrÃ­tico';
-}
-
-function _urgencyColor(level) {
-  const map = { 'CRÃTICO': '#EF4444', 'ALTO': '#F97316', 'MÃ‰DIO': '#EAB308', 'BAIXO': '#22C55E' };
-  return map[(level || '').toUpperCase()] || '#A855F7';
-}
-
-function _priorColor(p) {
-  if ((p || '').toLowerCase() === 'alta')   return { color: '#EF4444', bg: 'rgba(239,68,68,0.1)' };
-  if ((p || '').toLowerCase() === 'mÃ©dia')  return { color: '#F97316', bg: 'rgba(249,115,22,0.1)' };
-  return                                           { color: '#EAB308', bg: 'rgba(234,179,8,0.1)' };
-}
-
-function _fmtBRL(v) {
-  return v != null ? 'R$ ' + Number(v).toLocaleString('pt-BR') : 'â€”';
-}
-
-
-/* ==========================================
-   RESULT â€” HELPERS
-   ========================================== */
-
-function _diagScrollTo(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const offset = 20;
-    const y = el.getBoundingClientRect().top + window.scrollY - offset;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: y, behavior: prefersReduced ? 'auto' : 'smooth' });
-}
-
-/* ---- Tab switcher ---- */
-function _switchDiagTab(tabId) {
-    document.querySelectorAll('.dr-tab').forEach(t => t.classList.remove('dr-tab--active'));
-    document.querySelectorAll('.dr-tab-panel').forEach(p => { p.style.display = 'none'; });
-    const btn = document.querySelector(`.dr-tab[data-tab="${tabId}"]`);
-    const panel = document.getElementById('dr-panel-' + tabId);
-    if (btn) btn.classList.add('dr-tab--active');
-    if (panel) panel.style.display = 'block';
-}
-
-function _psiColor(v) {
-    if (v >= 90) return '#22C55E';
-    if (v >= 50) return '#F97316';
-    return '#EF4444';
-}
-
-function _mdToHtml(text) {
-    if (!text) return '';
-    let t = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    t = t.replace(/```[\w]*\r?\n([\s\S]*?)```/g, '</p><pre class="dr-code"><code>$1</code></pre><p>');
-    t = t.replace(/`([^`\n]+)`/g, '<code class="dr-icode">$1</code>');
-    t = t.replace(/^### (.+)$/gm, '</p><h4 class="dr-h4">$1</h4><p>');
-    t = t.replace(/^## (.+)$/gm, '</p><h3 class="dr-h3">$1</h3><p>');
-    t = t.replace(/^# (.+)$/gm, '</p><h2 class="dr-h2">$1</h2><p>');
-    t = t.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
-    t = t.replace(/\r?\n\r?\n/g, '</p><p>');
-    t = t.replace(/\r?\n/g, '<br>');
-    return '<div class="dr-prose"><p>' + t + '</p></div>';
-}
-
-/* ---- Parse scoring rubric strings ---- */
-function _parseScoreRubric(detailStr) {
-    if (!detailStr) return [];
-    return detailStr.split(' | ').map(part => {
-        const m = part.match(/^\+(\d+)\s+(.+)$/);
-        return m ? { pts: parseInt(m[1], 10), label: m[2].trim() } : null;
-    }).filter(Boolean);
-}
-
-/* ---- Persuasive issue card ---- */
-function _persuasiveIssueCard(item) {
-    const p = _priorColor(item.prior);
-    return `
-    <div class="dr-issue dr-issue--expanded">
-      <div class="dr-issue__header">
-        <span class="dr-issue__pri" style="color:${p.color};background:${p.bg}">${item.prior || 'Baixa'}</span>
-        <strong>${item.item}</strong>
-      </div>
-      ${item.desc ? `
-      <div class="dr-issue__detail">
-        <div class="dr-issue__row">
-          <i class="ph ph-warning-circle" aria-hidden="true" style="color:#EF4444"></i>
-          <div><span class="dr-issue__tag">Problema</span><p>${item.desc}</p></div>
-        </div>
-        <div class="dr-issue__row">
-          <i class="ph ph-trend-up" aria-hidden="true" style="color:#22C55E"></i>
-          <div><span class="dr-issue__tag">BenefÃ­cio ao corrigir</span><p>${_getIssueBenefit(item.item)}</p></div>
-        </div>
-        <div class="dr-issue__row">
-          <i class="ph ph-chart-line-up" aria-hidden="true" style="color:var(--accent-purple)"></i>
-          <div><span class="dr-issue__tag">Impacto no negÃ³cio</span><p>${_getIssueImpact(item.item)}</p></div>
-        </div>
-      </div>` : ''}
-    </div>`;
-}
-
-/* ---- Persuasive positive card ---- */
-function _persuasivePositiveCard(item) {
-    return `
-    <li class="dr-positive--expanded">
-      <div class="dr-positive__header">
-        <i class="ph ph-check-fat" aria-hidden="true"></i>
-        <strong>${item.item}</strong>
-      </div>
-      ${item.desc ? `
-      <div class="dr-positive__detail">
-        <div class="dr-issue__row">
-          <i class="ph ph-seal-check" aria-hidden="true" style="color:#22C55E"></i>
-          <div><span class="dr-issue__tag">Por que isso importa</span><p>${item.desc}</p></div>
-        </div>
-        <div class="dr-issue__row">
-          <i class="ph ph-star" aria-hidden="true" style="color:var(--accent-purple)"></i>
-          <div><span class="dr-issue__tag">Vantagem competitiva</span><p>${_getPositiveBenefit(item.item)}</p></div>
-        </div>
-      </div>` : ''}
-    </li>`;
-}
-
-/* ---- Benefit/Impact generators ---- */
-function _getIssueBenefit(name) {
-    const n = (name || '').toLowerCase();
-    if (n.includes('meta desc')) return 'Uma meta description otimizada aumenta o CTR nos resultados do Google, atraindo mais visitantes qualificados sem custo adicional com anÃºncios.';
-    if (n.includes('h1')) return 'Corrigir a hierarquia de H1 ajuda o Google a entender o tema principal da pÃ¡gina, melhorando o posicionamento para palavras-chave relevantes.';
-    if (n.includes('canonical')) return 'A tag canonical consolida a autoridade da pÃ¡gina em uma Ãºnica URL, evitando que o Google divida o "crÃ©dito" entre versÃµes duplicadas.';
-    if (n.includes('schema')) return 'Com Schema Markup, seu site pode aparecer com rich snippets (estrelas, FAQ, horÃ¡rios) no Google, ocupando mais espaÃ§o visual e se destacando dos concorrentes.';
-    if (n.includes('alt')) return 'Imagens com ALT descritivo aparecem no Google Imagens e melhoram a acessibilidade â€” critÃ©rio cada vez mais valorizado pelo algoritmo do Google.';
-    if (n.includes('nap')) return 'NAP consistente (Nome, EndereÃ§o, Telefone) Ã© um dos trÃªs principais fatores de ranqueamento no Google Maps, fundamental para captar clientes locais.';
-    if (n.includes('cidade') || n.includes('nicho')) return 'Incluir cidade e nicho no title Ã© a otimizaÃ§Ã£o on-page mais impactante para SEO local. Sem isso, o Google nÃ£o associa seu site Ã  busca regional.';
-    if (n.includes('script')) return 'Reduzir scripts bloqueantes melhora o Core Web Vitals (LCP, FCP), fatores diretos de ranqueamento desde 2021 (Google Page Experience Update).';
-    if (n.includes('robots')) return 'O robots.txt orienta os bots sobre quais pÃ¡ginas indexar, evitando desperdÃ­cio de crawl budget e garantindo que pÃ¡ginas importantes sejam rastreadas.';
-    if (n.includes('sitemap')) return 'O sitemap.xml acelera a indexaÃ§Ã£o de novas pÃ¡ginas pelo Google em atÃ© 4x (dados do Google Search Console), essencial apÃ³s atualizaÃ§Ãµes.';
-    if (n.includes('header') || n.includes('seguranÃ§a')) return 'Headers de seguranÃ§a protegem contra ataques XSS e clickjacking. Navegadores modernos sinalizam sites inseguros, reduzindo a confianÃ§a.';
-    return 'Resolver este problema pode melhorar diretamente seu posicionamento nos resultados de busca e a experiÃªncia do visitante.';
-}
-
-function _getIssueImpact(name) {
-    const n = (name || '').toLowerCase();
-    if (n.includes('meta desc')) return 'Cada visitante que nÃ£o clica por falta de descriÃ§Ã£o atraente Ã© um potencial cliente perdido para um concorrente com presenÃ§a digital melhor otimizada.';
-    if (n.includes('h1')) return 'MÃºltiplos H1 confundem os motores de busca â€” seu site pode ranquear para termos genÃ©ricos ao invÃ©s das palavras-chave que trazem clientes.';
-    if (n.includes('canonical')) return 'Sem canonical, o Google pode classificar uma versÃ£o menos otimizada da sua pÃ¡gina, reduzindo sua visibilidade para buscas relevantes.';
-    if (n.includes('schema')) return 'Concorrentes com rich snippets ocupam atÃ© 2x mais espaÃ§o visual nos resultados do Google, naturalmente atraindo mais cliques.';
-    if (n.includes('alt')) return 'AlÃ©m do impacto em SEO, a falta de ALT pode gerar problemas legais de acessibilidade (WCAG) e afasta visitantes com deficiÃªncia visual.';
-    if (n.includes('nap')) return 'Sem NAP completo, o Google nÃ£o pode validar a localizaÃ§Ã£o do negÃ³cio, prejudicando o posicionamento no Google Maps.';
-    if (n.includes('cidade') || n.includes('nicho')) return 'Quando alguÃ©m busca pelo seu serviÃ§o na sua cidade, seu site compete com concorrentes que jÃ¡ usam essas palavras-chave. Sem elas no title, seu site fica invisÃ­vel.';
-    if (n.includes('script')) return 'Sites lentos tÃªm atÃ© 32% mais chance de perder visitantes (Google/SOASTA, 2017). Cada segundo de atraso afeta a taxa de conversÃ£o.';
-    if (n.includes('robots')) return 'Sem orientaÃ§Ã£o de crawl, o Google pode gastar budget rastreando pÃ¡ginas irrelevantes (admin, login) ao invÃ©s do conteÃºdo que atrai clientes.';
-    if (n.includes('sitemap')) return 'Sem sitemap, novas pÃ¡ginas podem levar semanas para aparecer no Google, mantendo conteÃºdo desatualizado nos resultados.';
-    if (n.includes('header') || n.includes('seguranÃ§a')) return 'O selo "NÃ£o seguro" no navegador pode afastar imediatamente visitantes, especialmente em serviÃ§os que exigem confianÃ§a.';
-    return 'Ignorar esse problema pode resultar em menos visibilidade online e perda de oportunidades para concorrentes mais bem posicionados.';
-}
-
-function _getPositiveBenefit(name) {
-    const n = (name || '').toLowerCase();
-    if (n.includes('https')) return 'Seu site jÃ¡ atende ao fator de ranqueamento de seguranÃ§a do Google, transmitindo confianÃ§a imediata ao visitante.';
-    if (n.includes('celular') || n.includes('mobile')) return 'Com o Mobile-First Indexing do Google, ter um site responsivo Ã© essencial. VocÃª estÃ¡ Ã  frente de concorrentes com layouts fixos.';
-    if (n.includes('whatsapp')) return 'O WhatsApp Ã© o canal preferido por 9 em cada 10 brasileiros. Ter um botÃ£o direto facilita a conversÃ£o imediata do visitante em contato.';
-    return 'Este Ã© um diferencial competitivo que posiciona seu site Ã  frente de concorrentes que ainda nÃ£o implementaram essa melhoria.';
-}
-
-function _navGauge(score, label, href) {
-    const r = 34, sw = 5, circ = 2 * Math.PI * r;
-    const pct = Math.max(0, Math.min(100, score ?? 0));
-    const off = circ * (1 - pct / 100);
-    const col = _scoreColor(score ?? 0);
-    return `
-    <a class="dr-nav__card" href="#${href}" onclick="event.preventDefault();_diagScrollTo('${href}');" aria-label="Ver seÃ§Ã£o ${label}" role="link" tabindex="0">
-      <svg viewBox="0 0 80 80" class="dr-nav__svg" aria-hidden="true">
-        <circle cx="40" cy="40" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="${sw}"/>
-        <circle cx="40" cy="40" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}"
-          stroke-linecap="round" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
-          transform="rotate(-90 40 40)" class="dr-nav__arc"/>
-        <text x="40" y="40" text-anchor="middle" dominant-baseline="central"
-          font-size="18" font-weight="700" fill="${col}" font-family="system-ui">${score ?? 'â€”'}</text>
-      </svg>
-      <span class="dr-nav__label">${label}</span>
-      <span class="dr-nav__tag" style="color:${col}">${score != null ? _scoreLabel(score) : ''}</span>
-      <i class="ph ph-caret-down dr-nav__arrow" aria-hidden="true"></i>
-    </a>`;
-}
-
-function _dc(icon, label, value, status) {
-    return `<div class="dr-card ${status || ''}"><span class="dr-card__key"><i class="ph ${icon}" aria-hidden="true"></i>${label}</span><span class="dr-card__val">${value}</span></div>`;
-}
-
-/* ==========================================
-   STEP 4 â€” RESULT (full-page anchored layout)
-   ========================================== */
-
-function _diagResultHTML() {
-    const d = _diagState.resultData;
-    if (!d) {
-        return `<div class="dr-wrap">${_diagResultHeader()}<div class="tool-result__disclaimer"><i class="ph ph-warning" aria-hidden="true"></i><p>Este relatÃ³rio Ã© gerado por automaÃ§Ã£o.</p></div><div class="tool-result__content">${_diagState.resultHtml}</div>${_diagResultCTA(0, '', '')}</div>`;
-    }
-
-    const hrd = d.htmlReportData || {};
-    const sc = d.scores || {};
-    const maps = d.mapsData || {};
-    const bom = hrd.bom || []; const ruim = hrd.ruim || [];
-    const psi = d.psiData || hrd.psi || {};
-    const seoF = d.seoFilesData || hrd.seoFiles || {};
-    const secH = d.securityHeaders || hrd.secHeaders || {};
-    const sd = d.siteData || hrd.sd || {};
-    const h = sd.headings || {}; const img = sd.images || {};
-    const contact = sd.contact || {}; const schema = sd.schema || {};
-    const conv = sd.conversion || {}; const links = sd.links || {};
-    const tech = sd.technology || {}; const kw = sd.keywords || {};
-    const nome = d.nomeEscritorio || sd.title || '';
-    const urgCol = _urgencyColor(sc.nivelUrgencia);
-    const hasPsi = !psi.error;
-    const Y = '<span class="c-ok">Sim</span>'; const N = '<span class="c-fail">NÃ£o</span>';
-    const P = '<span class="c-ok">Presente</span>'; const A = '<span class="c-fail">Ausente</span>';
-
-    const psiArr = [
-        { l: 'Performance', v: psi.performanceScore, i: 'ph-gauge' },
-        { l: 'SEO', v: psi.seoScore, i: 'ph-magnifying-glass' },
-        { l: 'Acessibilidade', v: psi.accessibilityScore, i: 'ph-eye' },
-        { l: 'Boas PrÃ¡ticas', v: psi.bestPracticesScore, i: 'ph-check-square' },
-    ];
-    const cwv = [
-        { l: 'FCP', v: psi.fcp, s: psi.fcpScore }, { l: 'LCP', v: psi.lcp, s: psi.lcpScore },
-        { l: 'TBT', v: psi.tbt, s: psi.tbtScore }, { l: 'CLS', v: psi.cls, s: psi.clsScore },
-        { l: 'SI', v: psi.si, s: null }, { l: 'TTI', v: psi.tti, s: null },
-    ].filter(m => m.v && m.v !== 'N/A');
-    const shDefs = [
-        { k: 'hsts', l: 'HSTS', d: 'ForÃ§a HTTPS' }, { k: 'xframe', l: 'X-Frame-Options', d: 'Anti-clickjacking' },
-        { k: 'csp', l: 'CSP', d: 'Anti-XSS' }, { k: 'xctype', l: 'X-Content-Type', d: 'Anti-MIME sniffing' },
-        { k: 'ref', l: 'Referrer-Policy', d: 'Controla referÃªncia' },
-    ];
-
-    return `
-  <div class="dr-wrap">
-    ${_diagResultHeader()}
-    <div class="dr-banner" style="--uc:${urgCol}">
-      <span class="dr-banner__dot"></span>
-      <div class="dr-banner__body">
-        <strong>UrgÃªncia: ${sc.nivelUrgencia || 'â€”'}</strong>
-        ${nome ? `<span>${nome}</span>` : ''}
-      </div>
-      <span class="dr-banner__lead">${d.leadEmoji || ''} ${d.leadScore || ''}</span>
-    </div>
-
-    <nav class="dr-nav" aria-label="PontuaÃ§Ãµes por categoria">
-      ${_navGauge(sc.notaGeral, 'Geral', 'dr-sec-problemas')}
-      ${_navGauge(sc.notaTecnica, 'TÃ©cnico', 'dr-sec-tecnico')}
-      ${_navGauge(sc.notaSeoLocal, 'SEO Local', 'dr-sec-seo')}
-      ${_navGauge(sc.notaConversao, 'ConversÃ£o', 'dr-sec-conversao')}
-    </nav>
-
-    <div class="dr-pills" role="navigation" aria-label="NavegaÃ§Ã£o rÃ¡pida">
-      <a href="#dr-sec-lighthouse" onclick="event.preventDefault();_diagScrollTo('dr-sec-lighthouse');"><i class="ph ph-gauge" aria-hidden="true"></i>Lighthouse</a>
-      <a href="#dr-sec-mercado"    onclick="event.preventDefault();_diagScrollTo('dr-sec-mercado');"><i class="ph ph-map-pin" aria-hidden="true"></i>Mercado</a>
-      <a href="#dr-sec-seguranca"  onclick="event.preventDefault();_diagScrollTo('dr-sec-seguranca');"><i class="ph ph-shield" aria-hidden="true"></i>SeguranÃ§a</a>
-      <a href="#dr-sec-auditoria"  onclick="event.preventDefault();_diagScrollTo('dr-sec-auditoria');"><i class="ph ph-robot" aria-hidden="true"></i>Auditoria IA</a>
-    </div>
-
-    ${(d.maturidadeDigital != null || d.potencialMercado != null) ? `
-    <div class="dr-bars">
-      ${d.maturidadeDigital != null ? `<div class="dr-bar-item"><div class="dr-bar-head"><span>Maturidade Digital</span><strong style="color:${_scoreColor(d.maturidadeDigital)}">${d.maturidadeDigital}/100 â€” ${d.nivelMaturidade || ''}</strong></div><div class="dr-bar-track"><div class="dr-bar-fill" style="width:${d.maturidadeDigital}%;background:${_scoreColor(d.maturidadeDigital)}"></div></div></div>` : ''}
-      ${d.potencialMercado != null ? `<div class="dr-bar-item"><div class="dr-bar-head"><span>Potencial de Mercado</span><strong style="color:${_scoreColor(d.potencialMercado)}">${d.potencialMercado}/100 â€” ${d.nivelPotencial || ''}</strong></div><div class="dr-bar-track"><div class="dr-bar-fill" style="width:${d.potencialMercado}%;background:${_scoreColor(d.potencialMercado)}"></div></div></div>` : ''}
-    </div>` : ''}
-
-    <div class="dr-tabs" role="tablist">
-      <button class="dr-tab dr-tab--active" data-tab="simple" role="tab" onclick="_switchDiagTab('simple')"><i class="ph ph-list-checks" aria-hidden="true"></i> VisÃ£o Geral</button>
-      <button class="dr-tab" data-tab="tech" role="tab" onclick="_switchDiagTab('tech')"><i class="ph ph-wrench" aria-hidden="true"></i> AnÃ¡lise TÃ©cnica</button>
-    </div>
-
-    <div id="dr-panel-simple" class="dr-tab-panel" style="display:block">
-      <section class="dr-sec" id="dr-sec-lighthouse">
-        <h2 class="dr-sec__h"><i class="ph ph-gauge" aria-hidden="true"></i>PontuaÃ§Ãµes Lighthouse <span class="dr-muted-inline">(Google PSI API)</span></h2>
-        ${hasPsi ? `
-        <div class="dr-psi">${psiArr.map(c => { const v = c.v ?? 0, col = _psiColor(v); return `<div class="dr-psi__card"><i class="ph ${c.i}" style="color:${col}" aria-hidden="true"></i><span class="dr-psi__score" style="color:${col}">${v}</span><span class="dr-psi__label">${c.l}</span><div class="dr-psi__bar" role="progressbar" aria-valuenow="${Math.min(100, v)}" aria-valuemin="0" aria-valuemax="100"><div style="width:${Math.min(100, v)}%;background:${col}"></div></div></div>`; }).join('')}</div>
-        ${cwv.length ? `<h3 class="dr-sub"><i class="ph ph-timer" aria-hidden="true"></i>Core Web Vitals</h3><div class="dr-cwv">${cwv.map(m => { const col = m.s != null ? (m.s >= 0.9 ? '#22C55E' : m.s >= 0.5 ? '#F97316' : '#EF4444') : '#A8A8C0'; return `<div class="dr-cwv__item"><span class="dr-cwv__label">${m.l}</span><span class="dr-cwv__val" style="color:${col}">${m.v}</span></div>`; }).join('')}</div>` : ''}
-        ` : `<div class="dr-empty"><i class="ph ph-warning" aria-hidden="true"></i>${psi.error ? 'Erro Lighthouse â€” URL invÃ¡lida ou inacessÃ­vel.' : 'Dados nÃ£o disponÃ­veis.'}</div>`}
-      </section>
-
-      <section class="dr-sec" id="dr-sec-problemas">
-        ${ruim.length ? `
-        <h2 class="dr-sec__h"><i class="ph ph-warning-circle" aria-hidden="true"></i>Problemas Identificados <span class="dr-badge dr-badge--red">${ruim.length}</span></h2>
-        <p class="dr-muted"><i class="ph ph-info" aria-hidden="true"></i> Cada item abaixo representa uma oportunidade de melhoria com impacto direto na captaÃ§Ã£o de clientes.</p>
-        <div class="dr-issues">${ruim.map(i => _persuasiveIssueCard(i)).join('')}</div>` : ''}
-        ${bom.length ? `
-        <h2 class="dr-sec__h" style="margin-top:${ruim.length ? '2rem' : '0'}"><i class="ph ph-check-circle" aria-hidden="true"></i>Pontos Fortes <span class="dr-badge dr-badge--green">${bom.length}</span></h2>
-        <p class="dr-muted"><i class="ph ph-info" aria-hidden="true"></i> Estes itens jÃ¡ contribuem para o posicionamento e credibilidade do seu site.</p>
-        <ul class="dr-positives">${bom.map(b => _persuasivePositiveCard(b)).join('')}</ul>` : ''}
-        ${!ruim.length && !bom.length ? '<p class="dr-empty">Nenhum item catalogado.</p>' : ''}
-      </section>
-
-      <section class="dr-sec" id="dr-sec-conversao">
-        <h2 class="dr-sec__h"><i class="ph ph-cursor-click" aria-hidden="true"></i>ConversÃ£o</h2>
-        <div class="dr-grid">
-          ${_dc('ph-clipboard', 'FormulÃ¡rios', conv.totalForms || 0, conv.totalForms > 0 ? 'ok' : 'fail')}
-          ${_dc('ph-hand-pointing', 'CTAs de aÃ§Ã£o', conv.actionCtas?.length || 0, conv.actionCtas?.length > 0 ? 'ok' : 'fail')}
-          ${_dc('ph-star', 'Prova social', conv.hasSocialProof ? P : A, conv.hasSocialProof ? 'ok' : 'fail')}
-          ${_dc('ph-map', 'Maps embed', conv.hasMapsEmbed ? P : '<span class="c-warn">Ausente</span>', conv.hasMapsEmbed ? 'ok' : 'warn')}
-          ${_dc('ph-link', 'Links internos', links.internal || 0, '')}
-          ${_dc('ph-arrow-square-out', 'Links externos', links.external || 0, '')}
-        </div>
-      </section>
-
-      <section class="dr-sec" id="dr-sec-mercado">
-        <h2 class="dr-sec__h"><i class="ph ph-users-three" aria-hidden="true"></i>Mercado &amp; ConcorrÃªncia <span class="dr-muted-inline">(Google Maps API)</span></h2>
-        ${maps.totalCompetitors ? `
-        <div class="dr-fin">
-          <div class="dr-fin__sm"><span>Concorrentes</span><strong>${maps.totalCompetitors}</strong></div>
-          <div class="dr-fin__sm"><span>Rating mÃ©dio</span><strong>${maps.avgRating ?? 'â€”'}</strong></div>
-          <div class="dr-fin__sm"><span>Mediana reviews</span><strong>${maps.medianReviews ?? 'â€”'}</strong></div>
-          <div class="dr-fin__sm" style="border-color:rgba(34,197,94,.25)"><span>Sem site</span><strong class="c-ok">${maps.withoutWebsite ?? 'â€”'}</strong></div>
-          <div class="dr-fin__sm"><span>Com site</span><strong>${maps.withWebsite ?? 'â€”'}</strong></div>
-        </div>
-        ${maps.withoutWebsite > 0 ? `<p class="dr-insight"><i class="ph ph-lightbulb" aria-hidden="true"></i> <strong>${maps.withoutWebsite}</strong> concorrentes na sua regiÃ£o ainda nÃ£o tÃªm site â€” uma janela de oportunidade significativa para quem atua com presenÃ§a digital otimizada.</p>` : ''}
-        ${maps.totalCompetitors > 0 ? `<p class="dr-insight"><i class="ph ph-chart-pie" aria-hidden="true"></i> Com <strong>${maps.totalCompetitors}</strong> concorrentes e rating mÃ©dio de <strong>${maps.avgRating}</strong>, a exigÃªncia de qualidade Ã© alta. Destaque-se com mais avaliaÃ§Ãµes e SEO local otimizado.</p>` : ''}
-        ` : '<p class="dr-empty">Dados de mercado indisponÃ­veis.</p>'}
-        ${d.marketAnalysis || d.uxAudit ? `<details class="dr-collapse"><summary><i class="ph ph-caret-right" aria-hidden="true"></i>AnÃ¡lise de Mercado detalhada (IA)</summary>${_mdToHtml(d.marketAnalysis || d.uxAudit)}</details>` : ''}
-      </section>
-
-      <section class="dr-sec" id="dr-sec-rubrica">
-        <h2 class="dr-sec__h"><i class="ph ph-calculator" aria-hidden="true"></i>Como Calculamos sua Nota</h2>
-        <p class="dr-muted"><i class="ph ph-info" aria-hidden="true"></i> Nota Geral = 0.4 Ã— TÃ©cnica + 0.3 Ã— SEO Local + 0.3 Ã— ConversÃ£o</p>
-        <div class="dr-scoring">
-          ${['TÃ©cnica', 'SEO Local', 'ConversÃ£o'].map((dim, idx) => {
-        const nota = [sc.notaTecnica, sc.notaSeoLocal, sc.notaConversao][idx];
-        const peso = ['40%', '30%', '30%'][idx];
-        const detail = [sc.detalheTecnica, sc.detalheSeoLocal, sc.detalheConversao][idx];
-        const items = _parseScoreRubric(detail);
-        const col = _scoreColor(nota ?? 0);
-        return `
-              <div class="dr-scoring__block">
-                <div class="dr-scoring__head">
-                  <span>${dim} <small>(peso ${peso})</small></span>
-                  <strong style="color:${col}">${nota ?? 'â€”'}/100</strong>
-                </div>
-                ${items.length ? `<div class="dr-scoring__items">${items.map(it => `
-                  <div class="dr-scoring__item">
-                    <span class="dr-scoring__pts ${it.pts > 0 ? 'ok' : 'zero'}">${it.pts > 0 ? '+' + it.pts : '0'}</span>
-                    <span>${it.label}</span>
-                  </div>
-                `).join('')}</div>` : ''}
-              </div>`;
-    }).join('')}
-        </div>
-      </section>
-    </div>
-
-    <div id="dr-panel-tech" class="dr-tab-panel" style="display:none">
-      <section class="dr-sec" id="dr-sec-tecnico">
-        <h2 class="dr-sec__h"><i class="ph ph-code" aria-hidden="true"></i>AnÃ¡lise TÃ©cnica</h2>
-        <h3 class="dr-sub"><i class="ph ph-globe" aria-hidden="true"></i>Meta &amp; Estrutura</h3>
-        <div class="dr-grid">
-          ${_dc('ph-lock', 'HTTPS', sd.isHttps ? Y : N, sd.isHttps ? 'ok' : 'fail')}
-          ${_dc('ph-device-mobile', 'Viewport', sd.hasViewport ? P : A, sd.hasViewport ? 'ok' : 'fail')}
-          ${_dc('ph-text-t', 'Charset', sd.charset || A, sd.charset ? 'ok' : 'fail')}
-          ${_dc('ph-link', 'Canonical', sd.canonical ? P : A, sd.canonical ? 'ok' : 'fail')}
-          ${_dc('ph-tag', 'Title', sd.titleLength > 0 ? sd.titleLength + ' chars' : A, sd.titleLength > 0 ? 'ok' : 'fail')}
-          ${_dc('ph-text-align-left', 'Meta Desc', sd.metaDescLength > 0 ? sd.metaDescLength + ' chars' : A, sd.metaDescLength > 0 ? 'ok' : 'fail')}
-        </div>
-        <h3 class="dr-sub"><i class="ph ph-text-h" aria-hidden="true"></i>Headings &amp; ConteÃºdo</h3>
-        <div class="dr-grid">
-          ${_dc('ph-text-h-one', 'H1', h.h1Count > 0 ? h.h1Count + ' encontrado(s)' : A, h.h1Count > 0 ? 'ok' : 'fail')}
-          ${_dc('ph-text-h-two', 'H2', (h.h2Count || 0) + ' encontrado(s)', '')}
-          ${_dc('ph-tree-structure', 'Hierarquia', h.isHierarchical ? '<span class="c-ok">Correta</span>' : '<span class="c-fail">Incorreta</span>', h.isHierarchical ? 'ok' : 'fail')}
-          ${_dc('ph-file-text', 'Palavras', (sd.text?.totalWords || 0) + ((sd.text?.totalWords || 0) < 300 ? ' <span class="c-fail">(min 300)</span>' : ''), (sd.text?.totalWords || 0) >= 300 ? 'ok' : 'fail')}
-          ${_dc('ph-map-pin', 'MenÃ§Ãµes cidade', (sd.text?.cityMentions || 0) + 'x', (sd.text?.cityMentions || 0) > 0 ? 'ok' : 'fail')}
-        </div>
-        <h3 class="dr-sub"><i class="ph ph-image" aria-hidden="true"></i>Imagens</h3>
-        <div class="dr-grid">
-          ${_dc('ph-images', 'Total', img.total || 0, '')}
-          ${_dc('ph-subtitles', 'Com ALT', `${img.withAlt || 0}/${img.total || 0} (${img.altPercentage || 0}%)`, img.total > 0 && img.withAlt === img.total ? 'ok' : img.withoutAlt > 0 ? 'fail' : '')}
-          ${_dc('ph-x', 'Sem ALT', img.withoutAlt || 0, (img.withoutAlt || 0) === 0 && (img.total || 0) > 0 ? 'ok' : (img.withoutAlt || 0) > 0 ? 'fail' : '')}
-        </div>
-        <h3 class="dr-sub"><i class="ph ph-wrench" aria-hidden="true"></i>Tecnologia</h3>
-        <div class="dr-grid">
-          ${_dc('ph-toolbox', 'Construtor', tech.possibleBuilder || 'NÃ£o identificado', '')}
-          ${_dc('ph-film-script', 'Iframes', tech.iframeCount || 0, '')}
-          ${tech.builders?.length ? _dc('ph-stack', 'Detectado', tech.builders.join(', '), '') : ''}
-        </div>
-      </section>
-
-      <section class="dr-sec" id="dr-sec-seo">
-        <h2 class="dr-sec__h"><i class="ph ph-map-pin" aria-hidden="true"></i>SEO Local</h2>
-        <h3 class="dr-sub"><i class="ph ph-phone" aria-hidden="true"></i>Contato &amp; NAP</h3>
-        <div class="dr-grid">
-          ${_dc('ph-phone', 'Telefone', contact.phones?.length ? contact.phones.join(', ') : A, contact.phones?.length ? 'ok' : 'fail')}
-          ${_dc('ph-cursor-click', 'Tel. clicÃ¡vel', contact.hasClickablePhone ? Y : N, contact.hasClickablePhone ? 'ok' : 'fail')}
-          ${_dc('ph-whatsapp-logo', 'WhatsApp', contact.hasWhatsApp ? P : A, contact.hasWhatsApp ? 'ok' : 'fail')}
-          ${_dc('ph-map-trifold', 'NAP completo', contact.hasNAP ? '<span class="c-ok">Completo</span>' : '<span class="c-fail">Incompleto</span>', contact.hasNAP ? 'ok' : 'fail')}
-        </div>
-        <h3 class="dr-sub"><i class="ph ph-code-block" aria-hidden="true"></i>Schema &amp; Keywords</h3>
-        <div class="dr-grid">
-          ${_dc('ph-brackets-curly', 'Schema', schema.found ? `<span class="c-ok">${schema.types?.join(', ') || 'Encontrado'}</span>` : N, schema.found ? 'ok' : 'fail')}
-          ${_dc('ph-storefront', 'LocalBusiness', schema.hasLocalBusiness ? Y : N, schema.hasLocalBusiness ? 'ok' : 'fail')}
-          ${_dc('ph-tag', 'Nicho no tÃ­tulo', kw.nichoInTitle ? Y : N, kw.nichoInTitle ? 'ok' : 'fail')}
-          ${_dc('ph-map-pin', 'Cidade no tÃ­tulo', kw.cidadeInTitle ? Y : N, kw.cidadeInTitle ? 'ok' : 'fail')}
-          ${_dc('ph-text-h-one', 'Nicho no H1', kw.nichoInH1 ? Y : N, kw.nichoInH1 ? 'ok' : 'fail')}
-          ${_dc('ph-map-pin', 'Cidade no H1', kw.cidadeInH1 ? Y : N, kw.cidadeInH1 ? 'ok' : 'fail')}
-        </div>
-      </section>
-
-      <section class="dr-sec" id="dr-sec-seguranca">
-        <h2 class="dr-sec__h"><i class="ph ph-shield" aria-hidden="true"></i>SeguranÃ§a &amp; Rastreamento</h2>
-        <div class="dr-split">
-          <div>
-            <h3 class="dr-sub"><i class="ph ph-robot" aria-hidden="true"></i>Rastreamento</h3>
-            <div class="dr-checks">
-              <div class="dr-check ${seoF.hasRobots ? 'ok' : 'fail'}"><i class="ph ${seoF.hasRobots ? 'ph-check-circle' : 'ph-x-circle'}" aria-hidden="true"></i><div><strong>robots.txt</strong><span>${seoF.hasRobots ? 'Presente' : 'Ausente'}</span></div></div>
-              <div class="dr-check ${seoF.hasSitemap ? 'ok' : 'fail'}"><i class="ph ${seoF.hasSitemap ? 'ph-check-circle' : 'ph-x-circle'}" aria-hidden="true"></i><div><strong>sitemap.xml</strong><span>${seoF.hasSitemap ? 'Presente Â· ' + (seoF.sitemapUrlCount || 0) + ' URLs' : 'Ausente'}</span></div></div>
-            </div>
-          </div>
-          <div>
-            <h3 class="dr-sub"><i class="ph ph-lock" aria-hidden="true"></i>Headers <span class="dr-pill" style="background:${(secH.securityScore || 0) >= 4 ? 'rgba(34,197,94,.12)' : 'rgba(239,68,68,.12)'};color:${(secH.securityScore || 0) >= 4 ? '#22C55E' : '#EF4444'}">${secH.securityScore ?? 0}/${secH.maxScore ?? 5}</span></h3>
-            <div class="dr-checks">
-              ${shDefs.map(sh => { const ok = !!(secH[sh.k] || secH[sh.l]); return `<div class="dr-check ${ok ? 'ok' : 'fail'}"><i class="ph ${ok ? 'ph-check-circle' : 'ph-x-circle'}" aria-hidden="true"></i><div><strong>${sh.l}</strong><span>${sh.d}</span></div></div>`; }).join('')}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="dr-sec" id="dr-sec-auditoria">
-        <h2 class="dr-sec__h"><i class="ph ph-robot" aria-hidden="true"></i>Auditoria IA</h2>
-        ${d.technicalAudit ? `<details class="dr-collapse"><summary><i class="ph ph-caret-right" aria-hidden="true"></i>Auditoria TÃ©cnica SEO</summary>${_mdToHtml(d.technicalAudit)}</details>` : ''}
-        ${d.contentAudit ? `<details class="dr-collapse"><summary><i class="ph ph-caret-right" aria-hidden="true"></i>Posicionamento &amp; ConversÃ£o</summary>${_mdToHtml(d.contentAudit)}</details>` : ''}
-        ${d.scoringRaw ? `<details class="dr-collapse"><summary><i class="ph ph-caret-right" aria-hidden="true"></i>UX &amp; Acessibilidade</summary>${_mdToHtml(d.scoringRaw)}</details>` : ''}
-      </section>
-    </div>
-
-    ${_diagResultCTA(ruim.length, sc.nivelUrgencia, sc.notaGeral)}
   </div>`;
 }
 
-function _diagResultHeader() {
-    return `
-    <header class="dr-header">
-      <span class="dr-header__badge"><i class="ph ph-check-circle" aria-hidden="true"></i> AnÃ¡lise concluÃ­da</span>
-      <h1 class="dr-header__title">DiagnÃ³stico de PresenÃ§a Digital</h1>
-      <p class="dr-header__meta"><strong>${_diagState.url}</strong> Â· ${_diagState.nicho} Â· ${_diagState.cidade}</p>
-      <div class="dr-header__actions">
-        <button id="diag-print" class="btn btn--outline btn--sm"><i class="ph ph-printer" aria-hidden="true"></i> Imprimir PDF</button>
-        <a href="/ferramentas/diagnostico" class="btn btn--ghost btn--sm" data-route="/ferramentas/diagnostico"><i class="ph ph-arrow-clockwise" aria-hidden="true"></i> Nova anÃ¡lise</a>
+function _formListeners(){
+  document.getElementById('diag-form')?.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const url=document.getElementById('d-url').value.trim();
+    const nicho=document.getElementById('d-nicho').value.trim();
+    const cidade=document.getElementById('d-cidade').value.trim();
+    const email=document.getElementById('d-email').value.trim();
+    if(!url||!url.startsWith('http')){_setDS({error:'Informe uma URL válida (https://...).'});_renderDS();return;}
+    if(!nicho){_setDS({error:'Informe o nicho do negócio.'});_renderDS();return;}
+    if(!cidade){_setDS({error:'Informe a cidade.'});_renderDS();return;}
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){_setDS({error:'Informe um e-mail válido.'});_renderDS();return;}
+    const btn=document.getElementById('diag-submit');
+    btn.disabled=true; btn.innerHTML='<i class="ph ph-circle-notch ph-spin"></i> Enviando...';
+    try{
+      const r=await fetch('/api/diagnostico',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send_code',email})});
+      const d=await r.json();
+      if(!r.ok){_setDS({error:d.error||'Não foi possível enviar o código.'});_renderDS();return;}
+      _setDS({url,nicho,cidade,email,error:'',step:'verify',resendCooldown:60});
+      _renderDS(); _startResendTimer();
+    }catch{_setDS({error:'Erro de conexão. Tente novamente.'});_renderDS();}
+  });
+}
+
+/* ===== STEP 2: VERIFY ===== */
+function _verifyHTML(){
+  const masked=_ds.email.replace(/(.{2})(.*)(@.*)/,(_,a,b,c)=>a+'*'.repeat(b.length)+c);
+  const ok=_ds.resendCooldown<=0;
+  return `<div class="tool-card-page">
+    ${_steps('verify')}
+    <div class="tool-card-page__header">
+      <div class="tool-card-page__icon tool-card-page__icon--verify"><i class="ph ph-envelope-open"></i></div>
+      <h1 class="tool-card-page__title">Verifique seu e-mail</h1>
+      <p class="tool-card-page__desc">Enviamos um código de <strong>6 dígitos</strong> para <strong>${masked}</strong>. Verifique caixa de entrada e spam.</p>
+    </div>
+    ${_ds.error?`<div class="tool-error"><i class="ph ph-x-circle"></i> ${_ds.error}</div>`:''}
+    <form id="verify-form" class="tool-form" novalidate>
+      <div class="tool-form__field">
+        <label for="d-code">Código de verificação</label>
+        <div class="tool-form__input-wrap"><i class="ph ph-password"></i>
+          <input type="text" id="d-code" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" required>
+        </div>
       </div>
-    </header>`;
+      <button type="submit" class="btn btn--primary btn--full" id="verify-submit">
+        <i class="ph ph-check-circle"></i> Confirmar e iniciar análise
+      </button>
+      <div class="tool-form__resend">
+        <button type="button" id="resend-btn" class="tool-form__resend-btn${ok?'':' disabled'}" ${ok?'':'disabled'}>
+          ${ok?'<i class="ph ph-arrow-clockwise"></i> Reenviar código':`<i class="ph ph-clock"></i> Reenviar em ${_ds.resendCooldown}s`}
+        </button>
+        <button type="button" id="back-btn" class="tool-form__back-btn">
+          <i class="ph ph-arrow-left"></i> Alterar e-mail
+        </button>
+      </div>
+    </form>
+  </div>`;
 }
 
-function _diagResultCTA(issueCount, urgencia, notaGeral) {
-    const urgUpper = (urgencia || '').toUpperCase();
-    const isCritical = urgUpper === 'CRÃTICO' || urgUpper === 'ALTO';
-    const headline = isCritical
-        ? 'Seu site precisa de atenÃ§Ã£o imediata'
-        : (notaGeral != null && notaGeral < 50)
-            ? 'HÃ¡ oportunidades importantes aqui'
-            : 'Quer levar seus resultados ao prÃ³ximo nÃ­vel?';
-    const subtext = isCritical
-        ? `Identificamos <strong>${issueCount || 'vÃ¡rios'} problemas</strong> que afetam diretamente sua visibilidade no Google e a captaÃ§Ã£o de novos clientes. Quanto mais tempo essas questÃµes permanecem sem soluÃ§Ã£o, mais oportunidades sÃ£o direcionadas aos seus concorrentes.`
-        : `Mesmo com pontos positivos, existem ${issueCount ? `<strong>${issueCount} melhorias</strong>` : 'melhorias'} que podem aumentar significativamente sua presenÃ§a nos resultados de busca e a taxa de conversÃ£o do seu site.`;
-    return `
-    <div class="dr-cta">
-      <h2>${headline}</h2>
-      <p>${subtext}</p>
-      <a href="/contato" class="btn btn--primary" data-route="/contato"><i class="ph ph-handshake" aria-hidden="true"></i> Falar com Ivie</a>
-    </div>`;
+function _verifyListeners(){
+  const ci=document.getElementById('d-code');
+  ci?.addEventListener('input',()=>{ci.value=ci.value.replace(/\D/g,'').slice(0,6);});
+  document.getElementById('verify-form')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const code=ci.value.trim();
+    if(code.length!==6){_setDS({error:'O código deve ter 6 dígitos.'});_renderDS();return;}
+    const btn=document.getElementById('verify-submit');
+    btn.disabled=true; btn.innerHTML='<i class="ph ph-circle-notch ph-spin"></i> Verificando...';
+    _setDS({step:'loading',error:''}); _renderDS();
+    try{
+      const r=await fetch('/api/diagnostico',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'run',email:_ds.email,code,url:_ds.url,nicho:_ds.nicho,cidade:_ds.cidade})});
+      const data=await r.json();
+      if(!r.ok){_setDS({step:'verify',error:data.error||'Código inválido ou expirado.'});_renderDS();return;}
+      let parsedData=null, fallbackHtml='';
+      const raw=data.result??data.html??null;
+      if(raw!==null&&typeof raw==='object'){
+        parsedData=Array.isArray(raw)?(raw[0]||null):raw;
+      }else if(typeof raw==='string'){
+        try{const p=JSON.parse(raw);parsedData=Array.isArray(p)?(p[0]||null):p;}
+        catch{fallbackHtml=raw;}
+      }
+      _setDS({step:'result',resultHtml:fallbackHtml,resultData:parsedData}); _renderDS();
+    }catch{_setDS({step:'verify',error:'Erro de conexão. Tente novamente.'});_renderDS();}
+  });
+  document.getElementById('resend-btn')?.addEventListener('click',async()=>{
+    if(_ds.resendCooldown>0) return;
+    const btn=document.getElementById('resend-btn');
+    btn.disabled=true; btn.innerHTML='<i class="ph ph-circle-notch ph-spin"></i> Enviando...';
+    try{
+      const r=await fetch('/api/diagnostico',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'send_code',email:_ds.email})});
+      const d=await r.json();
+      if(!r.ok){_setDS({error:d.error||'Não foi possível reenviar.'});}
+      else{_setDS({error:'',resendCooldown:60});_startResendTimer();}
+    }catch{_setDS({error:'Erro ao reenviar.'});}
+    _renderDS();
+  });
+  document.getElementById('back-btn')?.addEventListener('click',()=>{
+    if(_ds.resendTimer) clearInterval(_ds.resendTimer);
+    _setDS({step:'form',error:'',resendCooldown:0}); _renderDS();
+  });
 }
 
-function _attachDiagResultListeners() {
-    document.getElementById('diag-print')?.addEventListener('click', () => window.print());
-    document.querySelectorAll('.dr-pills a').forEach(pill => {
-        pill.addEventListener('click', (e) => {
-            e.preventDefault();
-            const href = pill.getAttribute('href')?.replace('#', '');
-            if (!href) return;
-            const techSections = ['dr-sec-tecnico', 'dr-sec-seo', 'dr-sec-seguranca', 'dr-sec-auditoria'];
-            if (techSections.includes(href)) {
-                _switchDiagTab('tech');
-            } else {
-                _switchDiagTab('simple');
-            }
-            setTimeout(() => _diagScrollTo(href), 100);
-        });
+function _startResendTimer(){
+  if(_ds.resendTimer) clearInterval(_ds.resendTimer);
+  _ds.resendTimer=setInterval(()=>{
+    _ds.resendCooldown=Math.max(0,_ds.resendCooldown-1);
+    const b=document.getElementById('resend-btn');
+    if(!b) return;
+    if(_ds.resendCooldown<=0){
+      clearInterval(_ds.resendTimer);
+      b.disabled=false; b.classList.remove('disabled');
+      b.innerHTML='<i class="ph ph-arrow-clockwise"></i> Reenviar código';
+    }else{
+      b.innerHTML=`<i class="ph ph-clock"></i> Reenviar em ${_ds.resendCooldown}s`;
+    }
+  },1000);
+}
+
+/* ===== STEP 3: LOADING ===== */
+function _loadingHTML(){
+  return `<div class="tool-card-page tool-card-page--loading">
+    <div class="tool-loading">
+      <div class="tool-loading__orb"></div>
+      <h2 class="tool-loading__title">Analisando seu site</h2>
+      <p class="tool-loading__sub">Aguarde até 90 segundos. Consultando múltiplas fontes.</p>
+      <div class="tool-loading__steps">
+        ${['Google PageSpeed Insights','SEO técnico e robots/sitemap','Concorrentes no Google Maps','Análise de mercado com IA','Gerando relatório personalizado']
+          .map((l,i)=>`<div class="tool-loading__item" id="ls${i}"><i class="ph ph-circle-notch"></i><span>${l}</span></div>`)
+          .join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function _loadingAnim(){
+  [0,8000,18000,35000,55000].forEach((d,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById('ls'+i);
+      if(!el) return;
+      el.classList.add('active');
+      const ic=el.querySelector('i');
+      if(ic) ic.className='ph ph-circle-notch ph-spin';
+    },d);
+  });
+}
+
+/* ===== HELPERS ===== */
+function _scoreColor(s){return s>=70?'#22C55E':s>=40?'#F97316':'#EF4444';}
+function _scoreLabel(s){return s>=70?'Bom':s>=40?'Atenção':'Crítico';}
+function _urgColor(l){const m={'CRÍTICO':'#EF4444','CRITICO':'#EF4444','ALTO':'#F97316','MÉDIO':'#EAB308','MEDIO':'#EAB308','BAIXO':'#22C55E'};return m[(l||'').toUpperCase()]||'#A855F7';}
+function _urgBg(l){const m={'CRÍTICO':'rgba(239,68,68,.10)','CRITICO':'rgba(239,68,68,.10)','ALTO':'rgba(249,115,22,.10)','MÉDIO':'rgba(234,179,8,.10)','MEDIO':'rgba(234,179,8,.10)','BAIXO':'rgba(34,197,94,.10)'};return m[(l||'').toUpperCase()]||'rgba(168,85,247,.10)';}
+function _priorColor(p){const l=(p||'').toLowerCase();if(l==='alta')return{c:'#EF4444',b:'rgba(239,68,68,.10)'};if(l.startsWith('m'))return{c:'#F97316',b:'rgba(249,115,22,.10)'};return{c:'#EAB308',b:'rgba(234,179,8,.10)'};}
+
+function _switchTab(id){
+  document.querySelectorAll('.dr-tab').forEach(t=>t.classList.remove('dr-tab--active'));
+  document.querySelectorAll('.dr-tab-panel').forEach(p=>{p.style.display='none';});
+  const b=document.querySelector(`.dr-tab[data-tab="${id}"]`);
+  const p=document.getElementById('drp-'+id);
+  if(b) b.classList.add('dr-tab--active');
+  if(p) p.style.display='block';
+}
+
+/* ---- Converter Markdown para HTML ---- */
+function _md2html(text){
+  if(!text) return '';
+  const blockTags=(text.match(/<(?:p|div|section|article|h[1-6]|ul|ol|blockquote)[^>]*>/gi)||[]).length;
+  if(blockTags>=3) return text;
+  return text
+    .replace(/^#### (.+)$/gm,'<h4>$1</h4>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/^---+$/gm,'<hr>')
+    .replace(/^[*-] (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>(\n|$))+/g,'<ul>$&</ul>')
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .split(/\n\n+/).map(block=>{
+      block=block.trim();
+      if(!block) return '';
+      if(/^<(h[1-4]|ul|ol|blockquote|hr|div|li)/.test(block)) return block;
+      return `<p>${block.replace(/\n/g,' ')}</p>`;
+    }).join('\n');
+}
+
+/* ---- Parse top competitors from analise_mercado markdown ---- */
+function _parseTopCompetitors(text){
+  if(!text) return [];
+  const re=/\d+\.\s+\*\*(.+?)\*\*\s*\n\s*-\s*Rating:\s*([\d.]+)\s*\n\s*-\s*Reviews:\s*(\d+)/g;
+  const out=[];
+  let m;
+  while((m=re.exec(text))!==null&&out.length<5){
+    out.push({name:m[1].trim(),rating:parseFloat(m[2]),reviews:parseInt(m[3])});
+  }
+  return out;
+}
+
+/* ---- Inicializar Chart.js radar ---- */
+function _initCharts(pnt,psi){
+  const canvas=document.getElementById('dr-radar-chart');
+  if(!canvas) return;
+  const data=[
+    Math.max(0,Math.min(100,pnt.seo_local??0)),
+    Math.max(0,Math.min(100,psi?.acessibilidade??50)),
+    Math.max(0,Math.min(100,pnt.conversao??0)),
+    Math.max(0,Math.min(100,pnt.tecnica??0)),
+  ];
+  const doRender=()=>{
+    if(!window.Chart) return;
+    new window.Chart(canvas,{
+      type:'radar',
+      data:{
+        labels:['SEO Local','UX / Acess.','Conversão','Performance'],
+        datasets:[
+          {
+            label:'Seu Site',
+            data,
+            backgroundColor:'rgba(146,52,234,0.22)',
+            borderColor:'#9234EA',
+            borderWidth:2.5,
+            pointBackgroundColor:'#9234EA',
+            pointRadius:4,
+            pointHoverRadius:6,
+          },
+          {
+            label:'Concorrente Médio',
+            data:[60,60,60,60],
+            backgroundColor:'rgba(200,200,220,0.08)',
+            borderColor:'rgba(200,200,220,0.40)',
+            borderWidth:1.5,
+            pointBackgroundColor:'rgba(200,200,220,0.40)',
+            pointRadius:3,
+          },
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:true,
+        scales:{r:{
+          min:0,max:100,
+          ticks:{display:false,stepSize:25},
+          grid:{color:'rgba(255,255,255,0.07)'},
+          angleLines:{color:'rgba(255,255,255,0.07)'},
+          pointLabels:{color:'rgba(255,255,255,0.72)',font:{size:11,weight:'700'},padding:10}
+        }},
+        plugins:{legend:{display:false}},
+        animation:{duration:1200,easing:'easeInOutQuart'}
+      }
     });
+  };
+  if(typeof Chart!=='undefined'){doRender();}
+  else{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+    s.onload=doRender;
+    document.head.appendChild(s);
+  }
+}
+
+/* ===== RESULT HTML ===== */
+function _resultHTML(){
+  const raw=_ds.resultData;
+
+  /* Fallback quando não há dados estruturados */
+  if(!raw) return `<div class="dr-wrap dr-disclaimer-wrap">
+    <header class="dr-header dr-header--simple">
+      <span class="dr-header__badge"><i class="ph ph-check-circle"></i> Análise concluída</span>
+      <h1 class="dr-header__title">Diagnóstico de Presença Digital</h1>
+      <p class="dr-header__meta"><strong>${_ds.url}</strong></p>
+      <div class="dr-print-buttons">
+        <button id="diag-print-client" class="dr-print-btn"><i class="ph ph-user"></i> PDF Visão do Cliente</button>
+        <button id="diag-print-tech" class="dr-print-btn"><i class="ph ph-wrench"></i> PDF Relatório Técnico</button>
+      </div>
+    </header>
+    <div class="tool-result__disclaimer"><i class="ph ph-warning"></i>
+      <p>Relatório gerado por automação. Os dados refletem o estado atual do site.</p></div>
+    <div class="tool-result__content">${_ds.resultHtml}</div>
+  </div>`;
+
+  const report=raw.auditReport||raw;
+  const meta=report.metadata||{};
+  const pnt=report.pontuacao||{};
+  const relTec=report.relatorio_tecnico||{};
+  const relCli=report.relatorio_cliente||{};
+  const sum=relCli.sumario_executivo||{};
+  const uc=_urgColor(pnt.nivel_urgencia), ub=_urgBg(pnt.nivel_urgencia);
+  const dateStr=meta.dataAnalise?new Date(meta.dataAnalise).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}):'';
+
+  return `<div class="dr-wrap">
+
+    <header class="dr-header">
+      <div class="dr-header__left">
+        <div class="dr-hero-badge"><span class="dr-hero-badge__dot"></span> ANÁLISE EM TEMPO REAL</div>
+        <h1 class="dr-header__title">Diagnóstico de<br>Presença Digital</h1>
+        <p class="dr-header__desc">Análise técnica completa: performance, SEO e conversão estratégica para o seu negócio. Inteligência artificial e ferramentas líderes de mercado para mapear cada falha do funil digital.</p>
+        <div class="dr-header__metas">
+          <div class="dr-header__meta-item">
+            <i class="ph ph-link"></i>
+            <span>URL Analisada</span>
+            <strong>${meta.url||_ds.url}</strong>
+          </div>
+          ${dateStr?`<div class="dr-header__meta-item">
+            <i class="ph ph-calendar"></i>
+            <span>Data da Análise</span>
+            <strong>${dateStr}</strong>
+          </div>`:''}
+        </div>
+        ${sum.frase_resumo?`<blockquote class="dr-header__quote">"${sum.frase_resumo}"</blockquote>`:''}
+        <div class="dr-header__chips">
+          ${(sum.total_problemas_criticos||0)>0?`<span class="dr-hero__chip dr-hero__chip--bad"><i class="ph ph-warning"></i> ${sum.total_problemas_criticos} problema${sum.total_problemas_criticos>1?'s':''}</span>`:''}
+          ${pnt.lead_score?`<span class="dr-hero__chip" style="background:${ub};color:${uc};border-color:${uc}55"><i class="ph ph-fire"></i> ${pnt.lead_emoji||''} ${pnt.lead_score}</span>`:''}
+        </div>
+      </div>
+      <div class="dr-header__right">
+        <div class="dr-header__stack-box">
+          <h3 class="dr-header__stack-title"><i class="ph ph-cpu"></i> Stack Tecnológica</h3>
+          <div class="dr-stack-grid">
+            <div class="dr-stack-item"><i class="ph ph-gauge"></i><span>Google PageSpeed</span></div>
+            <div class="dr-stack-item"><i class="ph ph-magnifying-glass"></i><span>Lighthouse v10</span></div>
+            <div class="dr-stack-item"><i class="ph ph-brain"></i><span>OpenAI Engine</span></div>
+            <div class="dr-stack-item"><i class="ph ph-map-pin"></i><span>Maps Places API</span></div>
+          </div>
+        </div>
+        <div class="dr-header__actions">
+          <div class="dr-print-buttons">
+            <button id="diag-print-client" class="dr-print-btn"><i class="ph ph-user"></i> PDF Visão do Cliente</button>
+            <button id="diag-print-tech" class="dr-print-btn"><i class="ph ph-wrench"></i> PDF Relatório Técnico</button>
+          </div>
+          <a href="/ferramentas/diagnostico" class="btn btn--ghost btn--sm" data-route="/ferramentas/diagnostico">
+            <i class="ph ph-arrow-clockwise"></i> Nova análise</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="dr-banner" style="border-color:${uc};background:${ub}">
+      <span class="dr-banner__dot" style="background:${uc};box-shadow:0 0 8px ${uc}40"></span>
+      <div class="dr-banner__body">
+        <strong>Urgência: ${pnt.nivel_urgencia||'—'}</strong>
+        <span>${pnt.nivel_urgencia&&(pnt.nivel_urgencia.toUpperCase().includes('CRÍT')||pnt.nivel_urgencia.toUpperCase()==='ALTO')
+          ?'Ação imediata recomendada — o site está perdendo oportunidades diariamente.'
+          :'Melhorias identificadas que podem maximizar os resultados online.'}</span>
+      </div>
+      <span class="dr-banner__lead" style="border-color:${uc};color:${uc}">${pnt.lead_emoji||''} ${pnt.lead_score||''}</span>
+    </div>
+
+    <div class="dr-tabs" role="tablist">
+      <button class="dr-tab dr-tab--active" data-tab="cliente" role="tab" onclick="_switchTab('cliente')">
+        <i class="ph ph-user"></i> Visão do Cliente</button>
+      <button class="dr-tab" data-tab="tech" role="tab" onclick="_switchTab('tech')">
+        <i class="ph ph-wrench"></i> Análise Técnica</button>
+    </div>
+
+    <div id="drp-cliente" class="dr-tab-panel" style="display:block">
+      ${_tabCliente(pnt,relCli,meta,relTec)}
+    </div>
+    <div id="drp-tech" class="dr-tab-panel" style="display:none">
+      ${_tabTech(relTec,pnt,meta)}
+    </div>
+
+    ${_cta(relCli.problemas||[],pnt)}
+  </div>`;
+}
+
+/* ---- Tab Cliente ---- */
+function _tabCliente(pnt,relCli,meta,relTec){
+  const probs=relCli.problemas||[];
+  const fortes=relCli.pontos_fortes||[];
+  const mercado=relCli.contexto_mercado||{};
+  const psi=relCli.pagespeed_simplificado||{};
+  const recos=relCli.recomendacoes_prioritarias||[];
+  return [
+    _scoreCards(pnt,psi),
+    _problemsVitals(probs,psi),
+    fortes.length?_fortes(fortes):'',
+    mercado.total_concorrentes?_competitiveSection(pnt,psi,mercado,relTec):'',
+    _implementationPlan(probs),
+    recos.length?_recos(recos):'',
+    pnt.maturidade_score!=null||pnt.potencial_score!=null?_maturityBars(pnt):'',
+  ].join('');
+}
+
+/* ---- 4 Score Cards horizontais ---- */
+function _scoreCards(pnt,psi){
+  const uc=_urgColor(pnt.nivel_urgencia),ub=_urgBg(pnt.nivel_urgencia);
+  const cards=[
+    {l:'Score Geral',  v:pnt.geral??0,     icon:'ph-star',         unit:'',  sub:'de 100 pontos'},
+    {l:'SEO Local',    v:pnt.seo_local??0,  icon:'ph-map-pin',      unit:'%', sub:'relevância local'},
+    {l:'Performance',  v:pnt.tecnica??0,    icon:'ph-gauge',        unit:'%', sub:'velocidade & técnica'},
+    {l:'Conversão',    v:pnt.conversao??0,  icon:'ph-cursor-click', unit:'%', sub:'potencial de leads'},
+  ];
+  return `<section class="dr-sec dr-sec--scores">
+    <div class="dr-score-cards">
+      ${cards.map((c,i)=>{
+        const col=_scoreColor(c.v);
+        return `<div class="dr-score-card-v2">
+          <div class="dr-score-card-v2__header">
+            <span class="dr-score-card-v2__icon" style="background:${col}20;color:${col}"><i class="ph ${c.icon}"></i></span>
+            <span class="dr-score-card-v2__label">${c.l}</span>
+          </div>
+          <div class="dr-score-card-v2__value" style="color:${col}">${c.v}<small>${c.unit}</small></div>
+          <div class="dr-score-card-v2__sub">${c.sub}</div>
+          <div class="dr-score-card-v2__bar-track">
+            <div class="dr-score-card-v2__bar-fill" style="width:${c.v}%;background:${col}"></div>
+          </div>
+          ${i===0&&pnt.nivel_urgencia?`<span class="dr-score-card-v2__badge" style="background:${ub};color:${uc};border:1px solid ${uc}44">${pnt.nivel_urgencia}</span>`:''}
+        </div>`;
+      }).join('')}
+    </div>
+  </section>`;
+}
+
+/* ---- Problemas em accordion (1º aberto) + Core Web Vitals ---- */
+function _problemsVitals(probs,psi){
+  if(!probs.length) return '';
+  const shown=probs.slice(0,4),hiddenCount=probs.length-4;
+  const score=_ds.resultData?.auditReport?.pontuacao?.geral??0;
+  const cwv=[
+    {l:'LCP (Largest Contentful Paint)',v:psi.lcp,good:false},
+    {l:'FCP (First Contentful Paint)',v:psi.fcp,good:false},
+    {l:'TBT (Total Blocking Time)',v:psi.tbt,good:false},
+    {l:'CLS (Cumulative Layout Shift)',v:psi.cls,good:true},
+  ].filter(c=>c.v!=null&&c.v!=='N/A'&&c.v!==undefined);
+
+  const card=(prob,isFirst)=>{
+    const pc=_priorColor(prob.prioridade);
+    return `<div class="dr-accordion-item${isFirst?' dr-accordion-item--open':''}">
+      <button class="dr-accordion-btn" onclick="this.parentElement.classList.toggle('dr-accordion-item--open')">
+        <div class="dr-accordion-btn__left">
+          <i class="ph ph-warning-circle" style="color:${pc.c}"></i>
+          <span>${prob.titulo}</span>
+        </div>
+        <i class="ph ph-caret-down dr-accordion-caret"></i>
+      </button>
+      <div class="dr-accordion-body">
+        <p>${prob.descricao}</p>
+        ${prob.beneficio_de_resolver?`<div class="dr-accordion-gain"><i class="ph ph-arrow-up-right"></i> ${prob.beneficio_de_resolver}</div>`:''}
+        ${prob.custo_de_nao_resolver?`<div class="dr-accordion-risk"><i class="ph ph-trend-down"></i> ${prob.custo_de_nao_resolver}</div>`:''}
+        ${prob.fonte?`<p class="dr-source-block"><i class="ph ph-book-open"></i> Fonte: ${prob.fonte}</p>`:''}
+      </div>
+    </div>`;
+  };
+
+  return `<section class="dr-sec">
+    <div class="dr-two-col">
+      <div class="dr-two-col__main">
+        <div class="dr-two-col__head">
+          <h2 class="dr-sec__h" style="margin:0"><i class="ph ph-warning-octagon"></i> Problemas Críticos</h2>
+          <span class="dr-badge dr-badge--red">${probs.length} alertas</span>
+        </div>
+        <div class="dr-accordion">${shown.map((p,i)=>card(p,i===0)).join('')}</div>
+        ${hiddenCount>0?`<div class="dr-problems-cta">
+          <div>
+            <p class="dr-problems-cta__title">Existem mais <strong>${hiddenCount} problemas técnicos</strong> identificados.</p>
+            <p class="dr-problems-cta__sub">Sua pontuação de ${score}/100 é impactada por falhas ocultas no código.</p>
+          </div>
+          <a href="https://wa.me/5521999999999" target="_blank" rel="noopener" class="btn btn--primary btn--sm">
+            <i class="ph ph-rocket-launch"></i> Solicitar Consultoria
+          </a>
+        </div>`:''}
+      </div>
+      ${cwv.length?`<div class="dr-two-col__aside">
+        <h2 class="dr-sec__h"><i class="ph ph-timer"></i> Core Web Vitals</h2>
+        ${cwv.map(c=>{
+          const val=parseFloat(c.v)||0;
+          let good=c.good;
+          if(c.l.includes('CLS')) good=val<=0.1;
+          else if(c.l.includes('LCP')) good=val<=2.5;
+          else if(c.l.includes('FCP')) good=val<=1.8;
+          else if(c.l.includes('TBT')) good=val<=200;
+          const col=good?'#22C55E':'#F97316';
+          const pct=good?20:78;
+          return `<div class="dr-vital-item">
+            <div class="dr-vital-item__head"><span>${c.l}</span><span style="color:${col};font-weight:700">${c.v}</span></div>
+            <div class="dr-vital-item__bar"><div style="width:${pct}%;background:${col}"></div></div>
+            <p class="dr-vital-item__status" style="color:${col}">${good?'✓ BOM':'⚠ PRECISA MELHORAR'}</p>
+          </div>`;
+        }).join('')}
+        ${psi.performance!=null?`<div class="dr-psi-mini">
+          ${[{l:'Perf.',v:psi.performance},{l:'SEO',v:psi.seo_lighthouse},{l:'Acess.',v:psi.acessibilidade},{l:'Práticas',v:psi.melhores_praticas}]
+          .map(c=>{const v=c.v??0,cc=_scoreColor(v);return `<div class="dr-psi-mini__item" style="border-color:${cc}33">
+            <span class="dr-psi-mini__val" style="color:${cc}">${v}</span>
+            <span class="dr-psi-mini__label">${c.l}</span>
+          </div>`;}).join('')}
+        </div>`:''}
+        ${psi.frase_performance?`<div class="dr-insight" style="margin-top:.75rem"><i class="ph ph-info"></i><span>${psi.frase_performance}</span></div>`:''}
+      </div>`:''}
+    </div>
+  </section>`;
+}
+
+/* ---- Análise Competitiva: radar Chart.js + tabela top 5 ---- */
+function _competitiveSection(pnt,psi,mercado,relTec){
+  const competitors=relTec?_parseTopCompetitors(relTec.analise_mercado||''):[];
+  const maxReviews=competitors.reduce((mx,c)=>Math.max(mx,c.reviews),1);
+  const total=mercado.total_concorrentes||0,sem=mercado.sem_site||0,rating=mercado.rating_medio??0;
+
+  return `<section class="dr-sec">
+    <h2 class="dr-sec__h"><i class="ph ph-users-three"></i> Análise Competitiva</h2>
+    <p class="dr-muted"><i class="ph ph-info"></i> Como você se posiciona em relação ao mercado local de ${_ds.nicho||'seu nicho'} em ${_ds.cidade||'sua cidade'}.</p>
+    <div class="dr-competitive">
+      <div class="dr-competitive__chart">
+        <canvas id="dr-radar-chart" width="300" height="300"></canvas>
+        <div class="dr-competitive__legend">
+          <span><em class="dr-legend-dot" style="background:#9234EA"></em> Seu Site</span>
+          <span><em class="dr-legend-dot" style="background:rgba(200,200,220,0.5)"></em> Concorrente Médio</span>
+        </div>
+      </div>
+      <div class="dr-competitive__data">
+        ${competitors.length?`<h3 class="dr-sub"><i class="ph ph-ranking"></i> Top Concorrentes</h3>
+        <div class="dr-comp-table">
+          ${competitors.map(c=>{
+            const pct=Math.round((c.reviews/maxReviews)*100);
+            return `<div class="dr-comp-row">
+              <div class="dr-comp-row__info">
+                <span class="dr-comp-row__name">${c.name}</span>
+                <span class="dr-comp-row__rating">⭐ ${c.rating}</span>
+              </div>
+              <div class="dr-comp-row__bar-wrap">
+                <div class="dr-comp-row__bar-track"><div style="width:${pct}%;background:rgba(146,52,234,0.65)"></div></div>
+                <span class="dr-comp-row__reviews">${c.reviews} reviews</span>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>`:''}
+        ${total?`<div class="dr-competitive__stats">
+          <div class="dr-competitive__stat"><span class="dr-competitive__stat-val">${total}</span><span>Concorrentes</span></div>
+          <div class="dr-competitive__stat"><span class="dr-competitive__stat-val" style="color:#22C55E">${sem}</span><span>Sem site</span></div>
+          ${rating?`<div class="dr-competitive__stat"><span class="dr-competitive__stat-val" style="color:#F97316">⭐${rating}</span><span>Rating médio</span></div>`:''}
+        </div>`:''}
+        ${sem>0?`<div class="dr-insight"><i class="ph ph-lightbulb"></i><span>
+          <strong>${sem} concorrente${sem>1?'s':''}</strong> na sua região ainda não ${sem>1?'têm':'tem'} site — oportunidade real para quem investe em presença digital otimizada.
+        </span></div>`:''}
+        ${mercado.fonte?`<p class="dr-source-block"><i class="ph ph-book-open"></i> ${mercado.fonte}</p>`:''}
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ---- Plano de implementação ---- */
+function _implementationPlan(probs){
+  const phases=[
+    {n:1,badge:'PRIORIDADE CRÍTICA',bc:'#EF4444',title:'Correção Técnica',desc:'Tags HTML, Meta Description, Schema Markup, Sitemap e erros críticos imediatos.',active:true},
+    {n:2,badge:'PRIORIDADE ALTA',bc:'#22C55E',title:'Performance & SEO Local',desc:'Velocidade, Title Tag com cidade e nicho, robots.txt e HTTPS.',active:false},
+    {n:3,badge:'PRIORIDADE MÉDIA',bc:'#F97316',title:'Conteúdo & Conversão',desc:'Prova social, CTAs otimizados e conteúdo localizado para maior relevância.',active:false},
+    {n:4,badge:'MANUTENÇÃO',bc:'rgba(255,255,255,0.4)',title:'Escala & CRO',desc:'Testes A/B, expansão de autoridade de marca e monitoramento de resultados.',active:false},
+  ];
+  return `<section class="dr-sec">
+    <h2 class="dr-sec__h" style="justify-content:center"><i class="ph ph-steps"></i> Plano de Implementação</h2>
+    <p class="dr-muted" style="justify-content:center;margin-bottom:1.5rem"><i class="ph ph-info"></i> Sequência estratégica recomendada para maximizar resultados.</p>
+    <div class="dr-plan-grid">
+      ${phases.map(ph=>`<div class="dr-plan-card${ph.active?' dr-plan-card--active':''}">
+        <div class="dr-plan-card__num" style="background:${ph.active?'var(--accent-purple)':ph.bc+'20'};color:${ph.active?'#fff':ph.bc}">${ph.n}</div>
+        <div class="dr-plan-card__badge" style="color:${ph.bc}">${ph.badge}</div>
+        <h4 class="dr-plan-card__title">${ph.title}</h4>
+        <p class="dr-plan-card__desc">${ph.desc}</p>
+      </div>`).join('')}
+    </div>
+  </section>`;
+}
+
+function _maturityBars(pnt){
+  if(pnt.maturidade_score==null&&pnt.potencial_score==null) return '';
+  const bar=(label,score,desc,nota)=>`<div class="dr-bar-item">
+    <div class="dr-bar-head"><span>${label}</span><strong style="color:${_scoreColor(score)}">${score}/100${desc?' — '+desc:''}</strong></div>
+    <div class="dr-bar-track"><div class="dr-bar-fill" style="width:${score}%;background:${_scoreColor(score)}"></div></div>
+    ${nota?`<p class="dr-bar-note">${nota}</p>`:''}
+  </div>`;
+  return `<section class="dr-sec">
+    <h2 class="dr-sec__h"><i class="ph ph-trend-up"></i> Posição Digital</h2>
+    <div class="dr-bars">
+      ${pnt.maturidade_score!=null?bar('Maturidade Digital',pnt.maturidade_score,pnt.maturidade_digital,'Nível de otimização técnica e presença digital.'):''}
+      ${pnt.potencial_score!=null?bar('Potencial de Mercado',pnt.potencial_score,pnt.potencial_mercado,'Oportunidade de mercado na região e nicho analisados.'):''}
+    </div>
+    ${pnt.base_calculo?`<p class="dr-source-block" style="margin-top:.75rem"><i class="ph ph-calculator"></i> ${pnt.base_calculo}</p>`:''}
+  </section>`;
+}
+
+function _fortes(list){
+  return `<section class="dr-sec">
+    <h2 class="dr-sec__h"><i class="ph ph-check-circle"></i> Pontos Fortes<span class="dr-badge dr-badge--green">${list.length}</span></h2>
+    <div class="dr-fortes-grid">
+      ${list.map(f=>{
+        if(typeof f==='string') return `<div class="dr-forte-card"><i class="ph ph-check-fat"></i><span>${f}</span></div>`;
+        return `<div class="dr-forte-card"><div class="dr-forte-card__top"><i class="ph ph-check-fat"></i><strong>${f.titulo||f.item||''}</strong></div>${f.descricao?`<p>${f.descricao}</p>`:''}</div>`;
+      }).join('')}
+    </div>
+  </section>`;
+}
+
+function _recos(list){
+  if(!list||!list.length) return '';
+  return `<section class="dr-sec">
+    <h2 class="dr-sec__h"><i class="ph ph-list-checks"></i> Oportunidades Estratégicas</h2>
+    <p class="dr-muted"><i class="ph ph-info"></i> Estratégias baseadas em análise de concorrência, performance e mercado.</p>
+    <ol class="dr-reco-list">
+      ${list.map((r,i)=>{
+        const text=typeof r==='string'?r:(r.text||r.acao||String(r));
+        return `<li class="dr-reco-item"><span class="dr-reco-num">${i+1}</span><p>${text}</p></li>`;
+      }).join('')}
+    </ol>
+  </section>`;
+}
+
+/* ---- Tab Técnica ---- */
+function _tabTech(relTec,pnt,meta){
+  const psi=relTec.pagespeed||{};
+  const dados=relTec.dados_site||{};
+  const seo=relTec.seo_files||{};
+  const sec=relTec.security_headers||{};
+  const dmkt=relTec.dados_mercado||{};
+
+  const ok=(v)=>v?'<span class="c-ok">✓ Sim</span>':'<span class="c-fail">✗ Não</span>';
+  const pr=(v)=>v?'<span class="c-ok">✓ Presente</span>':'<span class="c-fail">✗ Ausente</span>';
+
+  const h=dados.headings||{};
+  const img=dados.images||{};
+  const contact=dados.contact||{};
+  const schema=dados.schema||{};
+  const conv=dados.conversion||{};
+  const links=dados.links||{};
+  const tech=dados.technology||{};
+  const perf=dados.performance||{};
+
+  const cwv=[
+    {l:'FCP',v:psi.fcp},{l:'LCP',v:psi.lcp},{l:'TBT',v:psi.tbt},
+    {l:'CLS',v:psi.cls},{l:'Speed Index',v:psi.speed_index},{l:'TTI',v:psi.tti},
+  ].filter(m=>m.v&&m.v!=='N/A');
+
+  const shList=[
+    {k:'has_hsts',l:'HSTS',d:'Força HTTPS'},
+    {k:'has_x_frame_options',l:'X-Frame-Options',d:'Anti-clickjacking'},
+    {k:'has_csp',l:'Content-Security-Policy',d:'Anti-XSS'},
+    {k:'has_x_content_type',l:'X-Content-Type-Options',d:'Anti-MIME sniffing'},
+    {k:'has_referrer_policy',l:'Referrer-Policy',d:'Controle de referência'},
+    {k:'has_permissions_policy',l:'Permissions-Policy',d:'Controle de APIs'},
+  ];
+
+  const table=(rows)=>`<div class="dr-table-wrap"><table class="dr-table"><tbody>
+    ${rows.filter(Boolean).map(([k,v,note])=>`<tr>
+      <td class="dr-table__key">${k}</td>
+      <td class="dr-table__val">${v}</td>
+      ${note!==undefined?`<td class="dr-table__note">${note||''}</td>`:''}
+    </tr>`).join('')}
+  </tbody></table></div>`;
+
+  const sec_total=shList.filter(s=>sec[s.k]).length;
+
+  const scoringData=relTec.scoring_detalhado||relTec.scoring||pnt.scoring_detalhado||{};
+  const scoringEntries=Object.entries(scoringData).filter(([,v])=>v!=null);
+  const scoringSection=scoringEntries.length?`<section class="dr-sec">
+    <h2 class="dr-sec__h"><i class="ph ph-calculator"></i> Scoring Detalhado</h2>
+    <div class="dr-scoring">
+      ${scoringEntries.map(([cat,data])=>{
+        let score=0,maxScore=100;
+        if(typeof data==='number'){score=data;maxScore=100;}
+        else if(typeof data==='object'){
+          score=data.score??data.pontuacao??data.valor??0;
+          maxScore=data.maxScore??data.max??data.total??100;
+        }
+        const pct=maxScore>0?Math.round(score/maxScore*100):0;
+        const col=_scoreColor(pct);
+        const label=cat.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        return `<div class="dr-scoring__row">
+          <span class="dr-scoring__label">${label}</span>
+          <div class="dr-scoring__bar"><div style="width:${pct}%;background:${col}"></div></div>
+          <span class="dr-scoring__val" style="color:${col}">${score}/${maxScore}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  </section>`:'';
+
+  return `
+    <section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-magnifying-glass"></i> Metodologia de Análise</h2>
+      <div class="dr-prose-block">
+        <p><strong>Google Maps Places API:</strong> Mapeamos concorrentes locais, avaliações e presença digital.</p>
+        <p><strong>Google PageSpeed Insights API v5:</strong> Métricas de performance, SEO, acessibilidade e boas práticas.</p>
+        <p><strong>OpenAI:</strong> Análises estratégicas, recomendações e diagnósticos de conteúdo.</p>
+        <p><strong>Scraping HTML:</strong> Dados técnicos, estrutura on-page, segurança e conversão.</p>
+        <p><strong>Security Headers:</strong> Verificação de cabeçalhos de segurança HTTP.</p>
+      </div>
+    </section>
+
+    <section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-gauge"></i> Google PageSpeed — Dados Completos</h2>
+      ${!psi.error&&psi.performance!=null?`
+      <div class="dr-psi">
+        ${[{l:'Performance',v:psi.performance,i:'ph-gauge'},{l:'SEO',v:psi.seo,i:'ph-magnifying-glass'},{l:'Acessibilidade',v:psi.acessibilidade,i:'ph-eye'},{l:'Boas Práticas',v:psi.melhores_praticas,i:'ph-check-square'}]
+          .map(c=>{const v=c.v??0,col=_scoreColor(v);return `<div class="dr-psi__card">
+            <i class="ph ${c.i}" style="color:${col}"></i>
+            <span class="dr-psi__score" style="color:${col}">${v}</span>
+            <span class="dr-psi__label">${c.l}</span>
+            <div class="dr-psi__bar"><div style="width:${Math.min(100,v)}%;background:${col}"></div></div>
+          </div>`;}).join('')}
+      </div>
+      ${cwv.length?`<h3 class="dr-sub"><i class="ph ph-timer"></i> Core Web Vitals</h3>
+      <div class="dr-cwv">${cwv.map(m=>`<div class="dr-cwv__item">
+        <span class="dr-cwv__label">${m.l}</span><span class="dr-cwv__val">${m.v}</span>
+      </div>`).join('')}</div>`:''}
+      ${psi.tamanho_pagina_kb!=null?table([
+        ['Tamanho da página',psi.tamanho_pagina_kb+' KB'],
+        psi.numero_requisicoes!=null?['Requisições HTTP',psi.numero_requisicoes]:null,
+        psi.servidor!=null?['Servidor',psi.servidor]:null,
+        psi.protocolo!=null?['Protocolo',psi.protocolo]:null,
+      ]):''}`
+      :`<div class="dr-notice-warn"><i class="ph ph-warning"></i> ${psi.error||'Dados do PageSpeed não disponíveis.'}</div>`}
+      <p class="dr-source-block"><i class="ph ph-book-open"></i> Fonte: Google PageSpeed Insights API</p>
+    </section>
+
+    <section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-file-code"></i> Arquivos SEO</h2>
+      ${table([
+        ['robots.txt',pr(seo.robots_txt_exists),'Permite ou bloqueia indexação'],
+        ['sitemap.xml',pr(seo.sitemap_exists),'Facilita descoberta de páginas'],
+        ['HTTPS ativo',ok(seo.https_active),'Segurança e ranking no Google'],
+        seo.canonical_url?['Canonical URL',`<code class="dr-icode">${seo.canonical_url}</code>`,'']:null,
+        seo.meta_robots?['Meta robots',`<code class="dr-icode">${seo.meta_robots}</code>`,'']:null,
+        seo.lang?['Idioma',seo.lang,'']:null,
+        seo.structured_data_types&&seo.structured_data_types.length?['Schema.org',seo.structured_data_types.join(', '),'']:null,
+      ])}
+      <p class="dr-source-block"><i class="ph ph-book-open"></i> Fonte: Análise direta do site</p>
+    </section>
+
+    ${dados.title||h.h1Count!=null?`<section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-code"></i> Estrutura On-Page</h2>
+      ${table([
+        dados.title?['Title',`<code class="dr-icode">${dados.title}</code>`,dados.title_length!=null?dados.title_length+' chars':'']:null,
+        dados.meta_description?['Meta description',`<code class="dr-icode">${dados.meta_description.slice(0,80)}${dados.meta_description.length>80?'…':''}</code>`,dados.meta_description_length!=null?dados.meta_description_length+' chars':'']:null,
+        h.h1Count!=null?['Tags H1',h.h1Count,'Ideal: apenas 1']:null,
+        h.h2Count!=null?['Tags H2',h.h2Count,'']:null,
+        h.isHierarchical!=null?['Hierarquia de headings',ok(h.isHierarchical),'']:null,
+        img.totalImages!=null?['Total de imagens',img.totalImages,'']:null,
+        img.imagesWithoutAlt!=null?['Imagens sem alt',img.imagesWithoutAlt,img.imagesWithoutAlt>0?'<span class="c-fail">Problema de acessibilidade</span>':'<span class="c-ok">OK</span>']:null,
+        img.imagesWithLazyLoad!=null?['Lazy load',img.imagesWithLazyLoad+' imagens','']:null,
+        links.internalLinks!=null?['Links internos',links.internalLinks,'']:null,
+        links.externalLinks!=null?['Links externos',links.externalLinks,'']:null,
+        links.brokenLinks!=null?['Links quebrados',links.brokenLinks,links.brokenLinks>0?'<span class="c-fail">Problema</span>':'<span class="c-ok">OK</span>']:null,
+        perf.hasCssMinification!=null?['CSS minificado',ok(perf.hasCssMinification),'']:null,
+        perf.hasJsMinification!=null?['JS minificado',ok(perf.hasJsMinification),'']:null,
+        perf.hasGzip!=null?['Compressão Gzip/Brotli',ok(perf.hasGzip),'']:null,
+        tech.cms?['CMS detectado',tech.cms,'']:null,
+        tech.framework?['Framework',tech.framework,'']:null,
+      ])}
+    </section>`:''}
+
+    ${contact.hasPhone!=null||conv.hasCTA!=null?`<section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-phone"></i> Conversão e Contato</h2>
+      ${table([
+        contact.hasPhone!=null?['Telefone visível',ok(contact.hasPhone),'']:null,
+        contact.hasWhatsApp!=null?['WhatsApp',ok(contact.hasWhatsApp),'']:null,
+        contact.hasEmail!=null?['E-mail de contato',ok(contact.hasEmail),'']:null,
+        contact.hasAddress!=null?['Endereço',ok(contact.hasAddress),'']:null,
+        conv.hasCTA!=null?['Botão CTA',ok(conv.hasCTA),'Ex: "Fale conosco", "Solicite orçamento"']:null,
+        conv.hasForm!=null?['Formulário de contato',ok(conv.hasForm),'']:null,
+        schema.hasLocalBusiness!=null?['Schema LocalBusiness',ok(schema.hasLocalBusiness),'Dados estruturados para SEO local']:null,
+        schema.hasOpenGraph!=null?['Open Graph (redes sociais)',ok(schema.hasOpenGraph),'']:null,
+      ])}
+    </section>`:''}
+
+    <section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-shield-check"></i> Cabeçalhos de Segurança
+        <span class="dr-badge" style="background:${_scoreColor(Math.round(sec_total/shList.length*100))}22;color:${_scoreColor(Math.round(sec_total/shList.length*100))}">${sec_total}/${shList.length}</span>
+      </h2>
+      <div class="dr-sec-grid">
+        ${shList.map(s=>{
+          const has=!!sec[s.k];
+          return `<div class="dr-sec-item ${has?'dr-sec-item--ok':'dr-sec-item--fail'}">
+            <div class="dr-sec-item__icon"><i class="ph ${has?'ph-shield-check':'ph-shield-warning'}"></i></div>
+            <div><strong>${s.l}</strong><span>${s.d}</span></div>
+          </div>`;
+        }).join('')}
+      </div>
+      <p class="dr-source-block"><i class="ph ph-book-open"></i> Fonte: HTTP Headers Analysis</p>
+    </section>
+
+    ${dmkt.total_concorrentes!=null?`<section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-map-trifold"></i> Dados de Mercado
+        <span class="dr-muted-inline">Google Maps Places API</span></h2>
+      ${table([
+        ['Concorrentes mapeados',dmkt.total_concorrentes,''],
+        dmkt.concorrentes_com_site!=null?['Com website',dmkt.concorrentes_com_site,'']:null,
+        dmkt.concorrentes_sem_site!=null?['Sem website',dmkt.concorrentes_sem_site,'']:null,
+        dmkt.percentual_sem_site!=null?['% sem website',dmkt.percentual_sem_site+'%','']:null,
+        dmkt.media_avaliacoes!=null?['Avaliações médias',dmkt.media_avaliacoes,'']:null,
+        dmkt.raio_busca_km!=null?['Raio de busca',dmkt.raio_busca_km+' km','']:null,
+      ])}
+      <p class="dr-source-block"><i class="ph ph-book-open"></i> Fonte: Google Maps Places API</p>
+    </section>`:''}
+
+    ${scoringSection}
+
+    ${relTec.auditoria_tecnica&&typeof relTec.auditoria_tecnica==='string'?`<section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-file-text"></i> Diagnóstico Técnico</h2>
+      <div class="dr-prose-block dr-content-rendered">${_md2html(relTec.auditoria_tecnica)}</div>
+    </section>`:''}
+    ${relTec.auditoria_conteudo&&typeof relTec.auditoria_conteudo==='string'?`<section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-article"></i> Diagnóstico de Conteúdo</h2>
+      <div class="dr-prose-block dr-content-rendered">${_md2html(relTec.auditoria_conteudo)}</div>
+    </section>`:''}
+    ${relTec.auditoria_ux&&typeof relTec.auditoria_ux==='string'?`<section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-cursor-click"></i> Diagnóstico de UX</h2>
+      <div class="dr-prose-block dr-content-rendered">${_md2html(relTec.auditoria_ux)}</div>
+    </section>`:''}
+    ${relTec.analise_mercado&&typeof relTec.analise_mercado==='string'?`<section class="dr-sec">
+      <h2 class="dr-sec__h"><i class="ph ph-buildings"></i> Análise de Mercado Detalhada</h2>
+      <div class="dr-prose-block dr-content-rendered">${_md2html(relTec.analise_mercado)}</div>
+    </section>`:''}
+  `;
+}
+
+/* ---- CTA com foto da Ivie ---- */
+function _cta(probs,pnt){
+  const altos=(probs||[]).filter(p=>(p.prioridade||'').toLowerCase()==='alta').length;
+  const urgente=(pnt.nivel_urgencia||'').toUpperCase().includes('CRÍT')||(pnt.nivel_urgencia||'').toUpperCase()==='ALTO';
+  const score=pnt.geral??0;
+  return `<div class="dr-cta-footer">
+    <div class="dr-cta-footer__badge"><i class="ph ph-star"></i> Especialista em Presença Digital</div>
+    <h2 class="dr-cta-footer__title">Seu site está <span>perdendo clientes</span> todos os dias.</h2>
+    <p class="dr-cta-footer__sub">
+      Este diagnóstico mostra apenas a superfície. Vamos transformar esses <strong>${score} pontos</strong> em uma máquina de conversão?
+      ${urgente&&altos>0?` Identifiquei <strong>${altos} problema${altos>1?'s':''} de alta prioridade</strong> que custam clientes ao seu negócio diariamente.`:''}
+    </p>
+    <div class="dr-cta-footer__body">
+      <div class="dr-cta-footer__profile">
+        <img src="/img/ivieximenes.jpg" alt="Ivie Ximenes — Especialista em Estratégia Digital" class="dr-cta-footer__photo">
+        <div class="dr-cta-footer__profile-info">
+          <strong class="dr-cta-footer__profile-name">Ivie Ximenes</strong>
+          <span class="dr-cta-footer__profile-role">Especialista em Estratégia Digital &amp; Auditoria de Performance</span>
+          <div class="dr-cta-footer__social">
+            <a href="https://wa.me/5521999999999?text=Ol%C3%A1%20Ivie!%20Fiz%20o%20diagn%C3%B3stico%20do%20meu%20site%20e%20gostaria%20de%20conversar%20sobre%20as%20melhorias."
+               target="_blank" rel="noopener" class="dr-social-btn dr-social-btn--wa" title="WhatsApp">
+              <i class="ph ph-whatsapp-logo"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/ivieximenes/"
+               target="_blank" rel="noopener" class="dr-social-btn dr-social-btn--li" title="LinkedIn">
+              <i class="ph ph-linkedin-logo"></i>
+            </a>
+            <a href="https://instagram.com/ivieximenes"
+               target="_blank" rel="noopener" class="dr-social-btn dr-social-btn--ig" title="Instagram">
+              <i class="ph ph-instagram-logo"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="dr-cta-footer__actions">
+        <a href="https://wa.me/5521999999999?text=Ol%C3%A1%20Ivie!%20Gostaria%20de%20solicitar%20uma%20consultoria."
+           target="_blank" rel="noopener" class="btn btn--primary dr-cta-btn--main">
+          <i class="ph ph-rocket-launch"></i> SOLICITAR CONSULTORIA
+        </a>
+        <a href="/projetos" class="btn btn--ghost dr-cta-btn--secondary" data-route="/projetos">
+          Ver Case de Sucesso
+        </a>
+      </div>
+    </div>
+    <p class="dr-cta-footer__fine">
+      <i class="ph ph-lock"></i> Seus dados são usados apenas para este diagnóstico. Sem spam, sem compromisso. Respondo em até 24h úteis.
+    </p>
+  </div>`;
+}
+
+/* ---- Result listeners ---- */
+function _resultListeners(){
+  document.getElementById('diag-print-tech')?.addEventListener('click',()=>_printReport('tech'));
+  document.getElementById('diag-print-client')?.addEventListener('click',()=>_printReport('cliente'));
+
+  /* Init radar chart após DOM render */
+  const raw=_ds.resultData;
+  const report=raw?.auditReport||raw;
+  if(report){
+    const pnt=report.pontuacao||{};
+    const relCli=report.relatorio_cliente||{};
+    const psi=relCli.pagespeed_simplificado||{};
+    setTimeout(()=>_initCharts(pnt,psi),150);
+  }
+
+  document.querySelectorAll('[data-route]').forEach(el=>{
+    el.addEventListener('click',e=>{
+      e.preventDefault();
+      const route=el.getAttribute('data-route');
+      if(route==='/ferramentas/diagnostico'){
+        if(_ds.resendTimer) clearInterval(_ds.resendTimer);
+        initToolDiagnostico();
+      }else if(window.router?.navigate){
+        window.router.navigate(route);
+      }
+    });
+  });
+}
+
+/* ---- Print Report — mostra apenas o painel correto ---- */
+function _printReport(type){
+  const clientPanel=document.getElementById('drp-cliente');
+  const techPanel=document.getElementById('drp-tech');
+  const ctaEl=document.querySelector('.dr-cta-footer');
+
+  const prevClient=clientPanel?.style.display||'block';
+  const prevTech=techPanel?.style.display||'none';
+  const prevCta=ctaEl?.style.display||'';
+
+  if(type==='cliente'){
+    if(clientPanel) clientPanel.style.display='block';
+    if(techPanel)   techPanel.style.display='none';
+    if(ctaEl)       ctaEl.style.display='block';
+  }else{
+    if(clientPanel) clientPanel.style.display='none';
+    if(techPanel)   techPanel.style.display='block';
+    if(ctaEl)       ctaEl.style.display='none';
+  }
+
+  window.print();
+
+  setTimeout(()=>{
+    if(clientPanel) clientPanel.style.display=prevClient;
+    if(techPanel)   techPanel.style.display=prevTech;
+    if(ctaEl)       ctaEl.style.display=prevCta;
+  },1000);
 }

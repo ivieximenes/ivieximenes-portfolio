@@ -4,39 +4,47 @@
 
 /* ---- DARK THEME (default) ---- */
 [data-theme="dark"] {
-  --bg-primary:      #0F0F1A;
-  --bg-secondary:    #13131F;
-  --bg-tertiary:     #1A1A2E;
-  --bg-glass:        rgba(255, 255, 255, 0.04);
-  --bg-glass-hover:  rgba(255, 255, 255, 0.07);
-  --bg-card:         rgba(255, 255, 255, 0.04);
-  --bg-nav:          rgba(15, 15, 26, 0.80);
+  /* Backgrounds — alinhados com paleta da inspiração */
+  --bg-primary:      #0B0B14;
+  --bg-secondary:    #161625;
+  --bg-tertiary:     #120B25;
+  --bg-glass:        rgba(22, 22, 37, 0.70);
+  --bg-glass-hover:  rgba(22, 22, 37, 0.90);
+  --bg-card:         #161625;
+  --bg-nav:          rgba(11, 11, 20, 0.90);
 
-  --text-primary:    #F0F0F8;
-  --text-secondary:  #A8A8C0;
+  /* Textos */
+  --text-primary:    #E2E2F0;
+  --text-secondary:  #9494B8;
   --text-muted:      #6B6B8A;
   --text-heading:    #FFFFFF;
 
-  --accent-purple:   #A855F7;
-  --accent-purple-2: #7C3AED;
+  /* Acentos — primary #9234EA */
+  --accent-purple:   #9234EA;
+  --accent-purple-2: #631BB3;
   --accent-pink:     #EC4899;
   --accent-pink-2:   #F43F5E;
 
-  --border-glass:    rgba(255, 255, 255, 0.08);
-  --border-accent:   rgba(168, 85, 247, 0.30);
+  /* Utilitários de status */
+  --success:         #0BDA73;
+  --warning:         #FA6F38;
+
+  /* Bordas — glass tintada de roxo, accent sólida */
+  --border-glass:    rgba(146, 52, 234, 0.10);
+  --border-accent:   #2D2D44;
 
   --shadow-card:     0 8px 32px rgba(0, 0, 0, 0.40);
-  --shadow-glow:     0 0 40px rgba(168, 85, 247, 0.15);
+  --shadow-glow:     0 0 40px rgba(146, 52, 234, 0.15);
 
   --gradient-hero:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124, 58, 237, 0.25) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 50% at 80% 60%, rgba(236, 72, 153, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(124, 58, 237, 0.10) 0%, transparent 55%);
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(146, 52, 234, 0.25) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 80% 60%, rgba(146, 52, 234, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(99, 27, 179, 0.10)  0%, transparent 55%);
 
   --gradient-mesh:
-    radial-gradient(at 40% 20%, rgba(124, 58, 237, 0.18) 0px, transparent 50%),
-    radial-gradient(at 80% 0%,  rgba(236, 72, 153, 0.12) 0px, transparent 50%),
-    radial-gradient(at 0% 50%,  rgba(168, 85, 247, 0.10) 0px, transparent 50%);
+    radial-gradient(at 40% 20%, rgba(146, 52, 234, 0.18) 0px, transparent 50%),
+    radial-gradient(at 80% 0%,  rgba(146, 52, 234, 0.12) 0px, transparent 50%),
+    radial-gradient(at 0% 50%,  rgba(99,  27, 179, 0.10) 0px, transparent 50%);
 
   --wa-color:    #25D366;
   --li-color:    #0A66C2;

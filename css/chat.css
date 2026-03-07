@@ -329,7 +329,7 @@
 }
 
 .chat-greeting p { margin: 0; }
-.chat-greeting strong { color: var(--accent-purple, #A855F7); }
+.chat-greeting strong { color: var(--accent-purple, #9234EA); }
 
 .chat-greeting__close {
   position: absolute;

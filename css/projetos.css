@@ -194,9 +194,9 @@ button.project-link--details {
 
 button.project-link--details:hover, button.project-link--details:focus {
   background: linear-gradient(90deg, rgba(124,58,237,0.22) 0%, rgba(168,85,247,0.28) 100%);
-  border-color: var(--accent-purple-2, #A855F7);
-  color: var(--accent-purple-2, #A855F7);
-  box-shadow: 0 4px 16px -4px var(--accent-purple-2, #A855F7);
+  border-color: var(--accent-purple-2, #631BB3);
+  color: var(--accent-purple-2, #631BB3);
+  box-shadow: 0 4px 16px -4px var(--accent-purple-2, #631BB3);
   transform: translateY(-2px) scale(1.04);
 }
 

@@ -170,31 +170,30 @@ async function sendVerificationEmail(to, code) {
   const html = `
     <!DOCTYPE html>
     <html lang="pt-BR">
-    <body style="margin:0;padding:0;background:#0F0F1A;font-family:Arial,sans-serif;">
+    <body style="margin:0;padding:0;font-family:Inter, sans-serif;">
       <table width="100%" cellpadding="0" cellspacing="0">
         <tr><td align="center" style="padding:40px 16px;">
-          <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#13131F;border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;">
-            <tr><td style="padding:32px 40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);">
+          <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;border-radius:16px;">
+            <tr><td style="padding:32px 40px 24px;border-bottom:1px solid #ddd;">
               <p style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#A855F7;">IVIE XIMENES</p>
             </td></tr>
             <tr><td style="padding:32px 40px;">
-              <h1 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#FFFFFF;line-height:1.3;">Seu código de verificação</h1>
-              <p style="margin:0 0 28px;font-size:15px;color:#A8A8C0;line-height:1.7;">
-                Use o código abaixo para acessar o <strong style="color:#F0F0F8;">Diagnóstico de Presença Digital</strong>.<br>
-                Válido por <strong style="color:#F0F0F8;">15 minutos</strong>.
+              <h1 style="margin:0 0 12px;font-size:24px;font-weight:700;line-height:1.3;">Seu código de verificação</h1>
+              <p style="margin:0 0 28px;font-size:15px;line-height:1.7;">
+                Use o código abaixo para acessar o Diagnóstico de Presença Digital.<br>
+                Válido por <strong>15 minutos</strong>.
               </p>
               <div style="text-align:center;margin:0 0 28px;">
-                <span style="display:inline-block;padding:20px 48px;background:rgba(168,85,247,0.12);border:2px solid rgba(168,85,247,0.35);border-radius:12px;font-size:36px;font-weight:700;letter-spacing:0.25em;color:#FFFFFF;font-family:'Courier New',monospace;">
+                <span style="display:inline-block;padding:20px 48px;border:2px solid #A855F7;border-radius:12px;font-size:36px;font-weight:700;letter-spacing:0.25em;color:#A855F7;font-family:'Inter', sans-serif;">
                   ${code}
                 </span>
               </div>
-              <p style="margin:0;font-size:13px;color:#6B6B8A;line-height:1.7;">
+              <p style="margin:0;font-size:13px;line-height:1.7;">
                 Se você não solicitou este código, ignore este e-mail.<br>
-                Limite: 1 diagnóstico gratuito por dia por e-mail.
               </p>
             </td></tr>
-            <tr><td style="padding:20px 40px;border-top:1px solid rgba(255,255,255,0.06);">
-              <p style="margin:0;font-size:12px;color:#6B6B8A;">Ivie Ximenes · Sênior Full Stack Developer · Rio de Janeiro, Brasil</p>
+            <tr><td style="padding:20px 40px;border-top:1px solid #ddd;">
+              <p style="margin:0;font-size:12px;">Ivie Ximenes · Sênior Full Stack Developer · Rio de Janeiro, Brasil</p>
             </td></tr>
           </table>
         </td></tr>

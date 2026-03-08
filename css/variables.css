@@ -15,8 +15,8 @@
 
   /* Textos */
   --text-primary:    #E2E2F0;
-  --text-secondary:  #9494B8;
-  --text-muted:      #6B6B8A;
+  --text-secondary:  #E2E2F0;
+  --text-muted:      #d2d2ff;
   --text-heading:    #FFFFFF;
 
   /* Acentos — primary #9234EA */
@@ -62,7 +62,7 @@
 
   --text-primary:    #1A1A2E;
   --text-secondary:  #4A4A6A;
-  --text-muted:      #8A8AAA;
+  --text-muted:      #363644;
   --text-heading:    #0F0F1A;
 
   --accent-purple:   #7C3AED;

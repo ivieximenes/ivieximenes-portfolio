@@ -9,7 +9,7 @@
 
 /* ---- Hero ---- */
 .ferramentas-page__hero {
-  padding: 5rem 1.5rem 3rem;
+  padding: 8rem 1.5rem 0rem;
   text-align: center;
   background: var(--gradient-hero);
 }
@@ -20,7 +20,6 @@
 }
 
 .ferramentas-page__title {
-  font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   color: var(--text-heading);
@@ -94,15 +93,9 @@
   opacity: 0.65;
 }
 
-/* ---- Icon area ---- */
+/* ---- Icon area ---- (now reused inside title row) ---- */
 .tool-card__icon {
-  padding: 1.75rem 1.75rem 0;
-}
-
-.tool-card__icon i.ph {
-  font-size: 2rem;
-  color: var(--accent-purple);
-  display: block;
+  flex-shrink: 0;
   width: 48px;
   height: 48px;
   background: var(--accent-purple)18;
@@ -111,6 +104,29 @@
   align-items: center;
   justify-content: center;
 }
+
+.tool-card__icon i.ph {
+  font-size: 1.6rem;
+  color: var(--accent-purple);
+}
+
+/* title row layout */
+.tool-card__title-area {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* move badge into flow, push to end */
+.tool-card__badge {
+  margin-left: auto;
+}
+
+/* no absolute positioning needed on card */
+.tool-card {
+  /* keep relative if used elsewhere */
+}
+
 
 /* ---- Body ---- */
 .tool-card__body {
@@ -123,9 +139,9 @@
 
 .tool-card__top {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
   gap: 0.75rem;
+  position: relative; /* allow badge absolute inside */
 }
 
 .tool-card__title {

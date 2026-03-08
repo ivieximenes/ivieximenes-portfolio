@@ -28,7 +28,7 @@
 }
 
 .chat-trigger__initials {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   color: #fff;
@@ -117,7 +117,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Playfair Display', serif;
   font-weight: 700;
   font-size: 0.9rem;
   color: #fff;

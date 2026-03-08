@@ -5,8 +5,33 @@
 /* ─── Layout base ─────────────────────────── */
 .tool-page {
   max-width: 860px;
-  margin: 0 auto;
+  margin: 0; /* mobile-first: do not center, avoids bleed/overflow issues */
   padding: 2rem 1.25rem 5rem;
+  /* overflow-x NOT set here — html/body already prevent horizontal scroll,
+     and this container must be transparent so the full-width bleed works on desktop */
+}
+
+/* center the container only on wider screens */
+@media (min-width: 641px) {
+  .tool-page {
+    margin: 0 auto;
+  }
+}
+
+/* Mobile-first tweaks: reduce padding on very small screens */
+@media (max-width: 480px) {
+  .tool-page {
+    padding: 6.5rem 1rem 4rem;
+  }
+}
+
+/* On mobile, clip horizontal overflow within the tool-page to prevent content
+   spilling past the viewport edge. On desktop this is NOT set so the bleed
+   (header/CTA extending to viewport edges) continues to work correctly. */
+@media (max-width: 640px) {
+  .tool-page {
+    overflow-x: hidden;
+  }
 }
 
 .tool-page__back {
@@ -25,12 +50,6 @@
 
 .tool-page__back-link:hover {
   color: var(--accent-purple);
-}
-
-/* ─── Override legibilidade de texto no relatório ─ */
-.dr-wrap {
-  --text-secondary: #c4c4dc;
-  --text-muted: rgba(255, 255, 255, 0.52);
 }
 
 /* ─── Tool Card (form/verify/loading) ─────── */
@@ -64,11 +83,7 @@
 }
 
 /* ─── Form Sections ───────────────────────── */
-.tool-form-section {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px dashed var(--border-glass);
-}
+
 
 .tool-form-section:last-child {
   border-bottom: none;
@@ -126,9 +141,10 @@
   background: var(--bg-secondary);
   border: 2px solid var(--border-glass);
   border-radius: 12px;
-  padding: 0.85rem 1rem 0.85rem 3rem;
+  padding: 0.5rem 0.1rem 0.5rem 2rem;
   font-size: 0.9rem;
   color: var(--text-primary);
+  caret-color: var(--text-primary);
   outline: none;
   transition: all 0.3s ease;
   font-family: inherit;
@@ -149,7 +165,8 @@
 
 .tool-form-input:focus + i,
 .tool-form-input-wrap:focus-within > i.ph {
-  color: var(--accent-purple);
+  /* keep icon muted even when input has focus to avoid white/contrasty display */
+  color: var(--text-muted) !important;
 }
 
 .tool-form-hint {
@@ -395,7 +412,6 @@
 .tool-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
 }
 
 .tool-form__row {
@@ -414,6 +430,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  margin-bottom: 1rem;
 }
 
 .tool-form__field label {
@@ -445,6 +462,7 @@
   padding: 0.65rem 0.9rem 0.65rem 2.5rem;
   font-size: 0.9rem;
   color: var(--text-primary);
+  caret-color: var(--text-primary);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   font-family: inherit;
@@ -485,7 +503,8 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  
+  margin-top: 20px;
 }
 
 .tool-form__resend-btn,
@@ -627,13 +646,7 @@
 
 /* ─── HERO HEADER ─────────────────────────── */
 .dr-header {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent-purple) 12%, var(--bg-secondary)) 0%,
-    var(--bg-secondary) 55%
-  );
-  border: 1px solid color-mix(in srgb, var(--accent-purple) 20%, transparent);
-  border-radius: 20px;
+  background: linear-gradient(135deg, color-mix(in srgb, #9234ea00 12%, #16162526) 0%, #1616257a 55%);
   padding: 2.5rem 2rem;
   margin-bottom: 1.25rem;
   display: grid;
@@ -663,7 +676,80 @@
   .dr-header {
     grid-template-columns: 1fr;
     gap: 1.75rem;
+    padding: 1.75rem 1.25rem; /* reduce internal spacing for narrow viewports */
+    margin-bottom: 1rem;
   }
+}
+
+/* further compress header on very small phones */
+@media (max-width: 480px) {
+  .dr-header {
+    padding: 1.25rem 1rem;
+  }
+}
+
+/* light-theme gradients for header/cta footer */
+[data-theme="light"] .dr-header {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent-purple) 12%, var(--bg-secondary)) 0%,
+    color-mix(in srgb, var(--accent-purple) 25%, var(--bg-secondary)) 55%);
+}
+[data-theme="light"] .dr-cta-footer {
+  background: linear-gradient(
+    1deg,
+    color-mix(in srgb, var(--accent-purple) 14%, var(--bg-secondary)),
+    color-mix(in srgb, var(--accent-purple) 8%, var(--bg-secondary))
+  );
+}
+
+/* ─── full-width bleed for header, CTA footer and ending section ───────────────── */
+/* Bleed only on larger screens — avoids 100vw misbehaviours on mobile */
+@media (min-width: 641px) {
+  .tool-page .dr-header,
+  .tool-page .dr-cta-footer,
+  .tool-page .dr-sec--fullwidth {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-left: 4.25rem;
+    padding-right: 4.25rem;
+  }
+}
+
+/* Mobile (≤640px): cancel the bleed — let elements fill only the tool-page width.
+   Negative margins recreate edge-to-edge visual only if the page has no side padding
+   at this breakpoint; instead we simply respect the tool-page padding. */
+@media (max-width: 640px) {
+  .tool-page .dr-header,
+  .tool-page .dr-cta-footer,
+  .tool-page .dr-sec--fullwidth {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    box-sizing: border-box;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 480px) {
+  .tool-page .dr-header,
+  .tool-page .dr-cta-footer,
+  .tool-page .dr-sec--fullwidth {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ensure paragraphs inside full‑width sections are centred and not constrained
+   by previous central layout rules */
+.dr-sec--fullwidth {
+  text-align: center;
+}
+.dr-sec--fullwidth p {
+  max-width: 860px;
+  margin: 0 auto 1rem;
 }
 
 /* Header — coluna esquerda */
@@ -671,6 +757,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  min-width: 0; /* prevent grid item from overflowing its cell */
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .dr-header__title {
@@ -686,7 +775,8 @@
   color: var(--text-secondary);
   line-height: 1.65;
   margin: 0;
-  max-width: 480px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .dr-header__metas {
@@ -705,6 +795,10 @@
   border-radius: 10px;
   font-size: 0.82rem;
   flex-wrap: wrap;
+  max-width: 100%;      /* never exceed parent width */
+  min-width: 0;         /* allow item to shrink in flex/grid context */
+  overflow-wrap: break-word;
+  word-break: break-all; /* break long URLs */
 }
 
 .dr-header__meta-item i {
@@ -748,6 +842,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-width: 0;
 }
 
 .dr-header__stack-box {
@@ -806,6 +901,17 @@
   flex-wrap: wrap;
 }
 
+/* ── "Nova análise" button — slightly more prominent ── */
+.dr-header__actions .btn--ghost {
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+  font-weight: 600;
+}
+
+.dr-header__actions .btn--ghost:hover {
+  background: color-mix(in srgb, var(--accent-purple) 12%, transparent);
+}
+
 /* ─── Banner (urgency) ────────────────────── */
 .dr-banner {
   display: flex;
@@ -862,6 +968,11 @@
   border-radius: 8px;
   padding: 0.25rem 0.6rem;
   white-space: nowrap;
+}
+
+/* ─── Tab panel visibility ────────────────── */
+.dr-tab-panel--hidden {
+  display: none;
 }
 
 /* ─── Tabs ────────────────────────────────── */
@@ -1005,7 +1116,7 @@
 }
 
 .dr-score-card-v2 {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border: 1px solid var(--border-glass);
   border-radius: 14px;
   padding: 1.25rem 1rem;
@@ -1921,6 +2032,7 @@
 .dr-content-rendered ol {
   margin: 0.5rem 0 0.75rem 1.25rem;
   padding: 0;
+  list-style: disc outside;
 }
 
 .dr-prose-block li,
@@ -2019,15 +2131,23 @@
 
 /* ─── Competitive Section ─────────────────── */
 .dr-competitive {
-  display: grid;
-  grid-template-columns: 300px 1fr;
+  display: block; /* mobile first: chart above data */
   gap: 2rem;
-  align-items: start;
+}
+
+@media (min-width: 701px) {
+  .dr-competitive {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    align-items: start;
+  }
 }
 
 @media (max-width: 700px) {
   .dr-competitive {
-    grid-template-columns: 1fr;
+    /* still block, but if display grid were present it would collapse
+       automatically due to template below; leaving here for clarity only */
+    display: block;
   }
 }
 
@@ -2129,22 +2249,37 @@
   white-space: nowrap;
 }
 
+/* ensure radar/chart resizes on narrow screens */
+.dr-competitive__chart canvas {
+  height: auto !important;
+}
+
 /* Stats box no competitive */
 .dr-competitive__stats {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  justify-content: space-between;
   padding: 0.85rem 1rem;
   background: var(--bg-primary);
   border: 1px solid var(--border-glass);
   border-radius: 10px;
 }
 
+/* ensure each stat item shares equal width on large viewports */
+@media (min-width: 600px) {
+  .dr-competitive__stat {
+    flex: 1 1 0;
+    text-align: center;
+  }
+} 
+
 .dr-competitive__stat {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
   min-width: 60px;
+  text-align: center;
 }
 
 .dr-competitive__stat-val {
@@ -2163,8 +2298,20 @@
 /* ─── Implementation Plan ─────────────────── */
 .dr-plan-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 0.85rem;
+}
+
+/* carousel variant used on small screens */
+.plan-carousel {
+  display: flex !important;
+  overflow-x: hidden !important;
+  gap: 0.85rem;
+}
+
+/* ensure cards don't shrink when flex container */
+.plan-carousel > * {
+  flex: 0 0 auto;
 }
 
 @media (max-width: 640px) {
@@ -2180,7 +2327,7 @@
 }
 
 .dr-plan-card {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border: 1px solid var(--border-glass);
   border-radius: 14px;
   padding: 1.25rem 1rem;
@@ -2191,7 +2338,6 @@
 }
 
 .dr-plan-card--active {
-  border-color: var(--accent-purple);
   background: color-mix(in srgb, var(--accent-purple) 6%, var(--bg-secondary));
 }
 
@@ -2339,12 +2485,7 @@
 /* ─── CTA Footer com perfil ───────────────── */
 .dr-cta-footer {
   background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent-purple) 12%, var(--bg-secondary)),
-    color-mix(in srgb, var(--accent-pink) 8%, var(--bg-secondary))
-  );
-  border: 1px solid color-mix(in srgb, var(--accent-purple) 25%, transparent);
-  border-radius: 20px;
+1deg, color-mix(in srgb, #9234ea14 12%, #1616253b), color-mix(in srgb, #ec489900 8%, #16162526));
   padding: 2.5rem 2rem;
   margin-top: 2.5rem;
   position: relative;
@@ -2388,6 +2529,7 @@
   color: var(--text-primary);
   line-height: 1.25;
   margin: 0 0 0.75rem;
+  text-align: center;
 }
 
 .dr-cta-footer__title span {
@@ -2401,17 +2543,23 @@
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.65;
-  margin: 0 0 1.75rem;
-  max-width: 580px;
+}
+
+@media (min-width: 1024px) {
+  .dr-cta-footer__sub {
+    margin: 1rem 13rem 1.75rem;
+  }
 }
 
 /* Body row: perfil + ações */
 .dr-cta-footer__body {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
   margin-bottom: 1.25rem;
+  margin-top: 3rem;
 }
 
 /* Perfil (foto + nome + social) */
@@ -2475,9 +2623,8 @@
 }
 
 .dr-social-btn--wa {
-  background: rgba(37, 211, 102, 0.12);
-  border-color: rgba(37, 211, 102, 0.3);
-  color: #25d366;
+  border: 1px solid var(--border-glass);
+  color: #0e582a;
 }
 
 .dr-social-btn--wa:hover {
@@ -2487,8 +2634,7 @@
 }
 
 .dr-social-btn--li {
-  background: rgba(10, 102, 194, 0.12);
-  border-color: rgba(10, 102, 194, 0.3);
+  border: 1px solid var(--border-glass);
   color: #0a66c2;
 }
 
@@ -2499,8 +2645,7 @@
 }
 
 .dr-social-btn--ig {
-  background: rgba(225, 48, 108, 0.12);
-  border-color: rgba(225, 48, 108, 0.3);
+  border: 1px solid var(--border-glass);
   color: #e1306c;
 }
 
@@ -2515,14 +2660,15 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  flex: 1;
+  align-items: center;
+  flex: 0;
   min-width: 200px;
 }
 
 .dr-cta-btn--main {
-  font-size: 0.95rem;
-  font-weight: 700;
-  padding: 0.85rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem 0.5rem;
   letter-spacing: 0.02em;
 }
 
@@ -2695,19 +2841,180 @@
   }
 }
 
+/* ─── Utilitários de alinhamento de seção ─── */
+
+/* Título de seção centralizado (ex: Plano de Implementação) */
+.dr-sec__h--center {
+  justify-content: center;
+}
+
+/* Títulos de seção sem margem superior (usado no dr-two-col__head) */
+.dr-sec__h--no-margin {
+  margin: 0;
+}
+
+/* Texto de apoio centralizado com espaçamento inferior */
+.dr-muted--center {
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Source block com margem superior */
+.dr-source-block--mt {
+  margin-top: 0.75rem;
+}
+
+/* ─── Competitive stat values coloridos ───── */
+.dr-competitive__stat-val--good {
+  color: #22c55e;
+}
+
+.dr-competitive__stat-val--warn {
+  color: #f97316;
+}
+
+/* ─── Competitive bar fill (cor fixa) ───────
+   Somente o background é fixo; a largura (width:...)
+   continua como inline style (valor dinâmico do JS). */
+.dr-comp-row__bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--accent-purple) 65%, transparent);
+  transition: width 1s ease;
+}
+
+/* ─── Vital item value (peso negrito) ──────── */
+.dr-vital-item__value {
+  font-weight: 700;
+}
+
+/* ─── Resumo Estratégico (IA) ───────────────── */
+.dr-resumo {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    var(--bg-secondary) 0%,
+    color-mix(in srgb, var(--accent-purple) 5%, var(--bg-secondary)) 100%
+  );
+  border: 1px solid var(--border-glass);
+  border-left: 3px solid var(--accent-purple);
+  border-radius: var(--radius-lg, 12px);
+  padding: 1.75rem 2rem;
+  overflow: hidden;
+}
+
+.dr-resumo::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 260px; height: 260px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent-purple) 10%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.dr-resumo__header {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dr-resumo__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .25rem .75rem;
+  background: color-mix(in srgb, var(--accent-purple) 15%, transparent);
+  color: var(--accent-purple);
+  border: 1px solid color-mix(in srgb, var(--accent-purple) 35%, transparent);
+  border-radius: 100px;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.dr-resumo__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.dr-resumo__sub {
+  margin: 0;
+  font-size: .83rem;
+  color: var(--text-muted);
+}
+
+.dr-resumo__body {
+  line-height: 1.8;
+}
+
+.dr-resumo__body h2 {
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  margin: 1.5rem 0 .5rem;
+  padding-bottom: .4rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  letter-spacing: .01em;
+}
+
+.dr-resumo__body h2:first-child { margin-top: 0; }
+
+.dr-resumo__body h3 {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 1rem 0 .4rem;
+}
+
+.dr-resumo__body p {
+  margin: 0 0 .8rem;
+  font-size: .875rem;
+  color: var(--text-muted);
+}
+
+.dr-resumo__body ul {
+  padding-left: 1.3rem;
+  margin: 0 0 .8rem;
+}
+
+.dr-resumo__body ul li {
+  font-size: .875rem;
+  color: var(--text-muted);
+  margin-bottom: .4rem;
+}
+
+.dr-resumo__body strong { color: var(--text-primary); font-weight: 600; }
+
 /* ─── Print ───────────────────────────────── */
 @media print {
+  /* ── Oculta elementos de UI ──────────────── */
+  .navbar,
   .tool-page__back,
   .dr-header__actions,
   .dr-tabs,
   .dr-cta-box,
   .dr-cta-footer,
-  .dr-print-buttons {
+  .dr-print-buttons,
+  .chat-trigger,
+  .chat-widget {
     display: none !important;
   }
 
-  /* NÃO forçar painéis — o JS controla display via inline style */
-  /* .dr-tab-panel { display: block !important; } <- REMOVIDO */
+  /* ── Garante que a aba oculta não apareça no PDF ── */
+  .dr-tab-panel--hidden,
+  .dr-tab-panel--hidden * {
+    display: none !important;
+    visibility: hidden !important;
+  }
 
   .dr-wrap {
     gap: 0;
@@ -2938,12 +3245,27 @@
     display: none !important;
   }
 
-  [class*="dr-sec"] {
-    display: block !important;
-    visibility: visible !important;
+  /* Seções da aba VISÍVEL devem ser exibidas normalmente */
+  .dr-tab-panel:not(.dr-tab-panel--hidden) .dr-sec {
+    display: block;
   }
 
   @page {
-    margin: 1.5cm 1.5cm 1.5cm 1.5cm;
+    size: A4 portrait;
+    margin: 1.5cm 1.2cm;
+  }
+
+  body {
+    background: white !important;
+    color: #1f2937 !important;
+  }
+
+  .tool-page {
+    padding-top: 1rem !important;
+  }
+
+  .dr-wrap {
+    max-width: 100% !important;
+    padding: 0 !important;
   }
 }

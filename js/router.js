@@ -12,10 +12,21 @@ const routes = {
   '/curriculo':                { render: renderCurriculo,        init: initCurriculo,        title: `Currículo | ${BASE_TITLE}`                 },
   '/contato':                  { render: renderContato,          init: initContato,          title: `Contato | ${BASE_TITLE}`                   },
   '/contrate':                 { render: renderContrate,         init: initContrate,         title: `Contrate | ${BASE_TITLE}`                  },
-  '/blog':                     { render: renderBlogList,         init: initBlogList,         title: `Blog | ${BASE_TITLE}`                      },
-  '/blog/:slug':               { render: renderBlogPost,         init: initBlogPost,         title: `Blog | ${BASE_TITLE}`                      },
   '/ferramentas':              { render: renderFerramentas,      init: initFerramentas,      title: `Ferramentas Gratuitas | ${BASE_TITLE}`     },
   '/ferramentas/diagnostico':  { render: renderToolDiagnostico,  init: initToolDiagnostico,  title: `Diagnóstico Digital | ${BASE_TITLE}`       },
+  '/cookies': {
+    // renderCookies is defined in js/pages/cookies.js.  If for any reason the
+    // script fails to load (syntax error, network error, etc.) we still want the
+    // router to boot without throwing a ReferenceError.  The safe getter below
+    // checks for the existence of the function at runtime.
+    render: () => {
+      if (typeof renderCookies === 'function') return renderCookies();
+      // fallback minimal content so the SPA doesn't completely break
+      return `<section class="cookies page"><div class="container"><p>Carregando política de cookies...</p></div></section>`;
+    },
+    init: null,
+    title: `Política de Cookies | ${BASE_TITLE}`
+  }
 };
 
 // Dummy implementations to avoid ReferenceError (replace with real ones)
@@ -29,7 +40,6 @@ function getRoute() {
   const p = window.location.pathname;
   if (routes[p]) return p;
   // Dynamic routes
-  if (p.match(/^\/blog\/.+/))          return '/blog/:slug';
   if (p.match(/^\/ferramentas\/.+/))   return '/ferramentas/diagnostico';
   // Fallback
   return '/';

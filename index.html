@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ivie Ximenes — Full Stack Developer | Cabo Frio, RJ &amp; Brasil</title>
+  <title>Ivie Ximenes | Desenvolvedora Full Stack Java, Spring, Angular, React | Cabo Frio, RJ & Brasil</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Imagem de perfil para SEO e acessibilidade -->
+  <img src="img/ivieximenes.jpg" alt="Ivie Ximenes — Full Stack Developer" style="display:none" />
 
   <!-- ============================================
        MARKETING & ANALYTICS TAGS
@@ -34,7 +37,10 @@
   </script>
   <!-- End Google Analytics 4 -->
 
-  <meta name="description" content="Desenvolvedora Full Stack com base em Cabo Frio, RJ, atendendo todo o Brasil. Criação de sites, automações para WhatsApp e sistemas sob medida. 15+ anos de experiência." />
+  <meta name="description" content="Desenvolvedora Full Stack Java Sênior (Spring, Angular, React) para projetos corporativos e vagas CLT. Também atuo como freelancer em desenvolvimento de sites, landing pages e automações para WhatsApp em Cabo Frio, RJ e todo o Brasil." />
+  <!-- Segurança: CSP e HSTS -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; script-src 'self' https://www.googletagmanager.com https://www.googletagmanager.com/gtag/js 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; frame-src https://www.googletagmanager.com;" />
+  <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload" />
 
   <!-- Canonical -->
   <link rel="canonical" href="https://ivieximenes.cloud/" />
@@ -44,10 +50,10 @@
   <meta property="og:url"         content="https://ivieximenes.cloud/" />
   <meta property="og:locale"      content="pt_BR" />
   <meta property="og:site_name"   content="Ivie Ximenes" />
-  <meta property="og:title"       content="Ivie Ximenes — Full Stack Developer | Cabo Frio, RJ &amp; Brasil" />
-  <meta property="og:description" content="Desenvolvedora Full Stack com base em Cabo Frio, RJ, atendendo todo o Brasil. Criação de sites, automações para WhatsApp e sistemas sob medida. 15+ anos de experiência." />
-  <meta property="og:image"       content="https://ivieximenes.cloud/img/ivieximenes.jpg" />
-  <meta property="og:image:alt"   content="Ivie Ximenes — Full Stack Developer" />
+  <meta property="og:title"       content="Ivie Ximenes | Full Stack Java, Spring, Angular, React | Cabo Frio, RJ" />
+  <meta property="og:description" content="Desenvolvedora Full Stack Java Sênior para projetos corporativos (CLT/PJ) e freelancer em sites, landing pages e automações para WhatsApp. Cabo Frio, RJ e Brasil." />
+  <meta property="og:image"       content="https://ivieximenes.cloud/img/og-cover-2026.jpg" />
+  <meta property="og:image:alt"   content="Desenvolvimento de sites, landing pages e automação WhatsApp em Cabo Frio, RJ por Ivie Ximenes" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card"        content="summary_large_image" />
@@ -64,7 +70,8 @@
       "name": "Ivie Ximenes",
       "url": "https://ivieximenes.cloud/",
       "image": "https://ivieximenes.cloud/img/ivieximenes.jpg",
-      "jobTitle": "Sênior Full Stack Developer",
+      "jobTitle": "Desenvolvedora Full Stack Java Sênior",
+      "description": "Desenvolvedora Full Stack Java (Spring, Angular, React) para projetos corporativos, vagas CLT/PJ e consultoria técnica.",
       "email": "mailto:ivieximenes@gmail.com",
       "telephone": "+55-22-98174-8083",
       "address": {
@@ -78,15 +85,40 @@
         "https://github.com/ivieximenes"
       ],
       "knowsAbout": [
-        "Desenvolvimento de Sites",
-        "Full Stack Development",
-        "Automação para WhatsApp",
-        "Inteligência Artificial",
         "Java",
+        "Spring",
         "Angular",
         "React",
-        "Node.js"
+        "APIs REST",
+        "Arquitetura de Software",
+        "Desenvolvimento de Sites",
+        "Automação para WhatsApp"
       ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Ivie Ximenes - Desenvolvimento Web e Automação WhatsApp",
+      "image": "https://ivieximenes.cloud/img/ivieximenes.jpg",
+      "url": "https://ivieximenes.cloud/",
+      "telephone": "+55-22-98174-8083",
+      "email": "ivieximenes@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Cabo frio, RJ",
+        "addressLocality": "Cabo Frio",
+        "addressRegion": "RJ",
+        "postalCode": "28915-000",
+        "addressCountry": "BR"
+      },
+      "priceRange": "R$R$",
+      "areaServed": ["Cabo Frio", "Região dos Lagos", "Rio de Janeiro", "Brasil"],
+      "description": "Freelancer em desenvolvimento de sites, landing pages, automações para WhatsApp e soluções digitais sob medida em Cabo Frio, RJ.",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -22.8814,
+        "longitude": -42.0192
+      }
     },
     {
       "@context": "https://schema.org",
@@ -207,14 +239,39 @@
   </div>
 
   <!-- ======= MAIN APP ======= -->
-  <main id="app"></main>
+  <main id="app">
+    <section class="sr-only">
+      <h2>Freelancer em Desenvolvimento de Sites, Landing Pages e Automação WhatsApp</h2>
+      <p>
+        Atendo empresas, profissionais liberais e pequenos negócios em Cabo Frio, RJ e todo o Brasil. Criação de sites institucionais, landing pages, integrações com WhatsApp Business, automações e soluções digitais sob medida. Especialista em SEO local, performance e conversão. Solicite um orçamento!
+      </p>
+    </section>
+    <section class="hero-home sr-only">
+      <h1 class="main-title">Desenvolvedora Full Stack em Cabo Frio, RJ</h1>
+      <h2 class="subtitle">Criação de sites, automações para WhatsApp e sistemas sob medida</h2>
+      <p class="summary">
+        Com mais de 15 anos de experiência, ajudo empresas e profissionais a terem presença digital de alto impacto, com foco em performance, SEO local e conversão.<br><br>
+        <strong>Serviços oferecidos:</strong> Desenvolvimento de sites institucionais, landing pages, portfólios digitais, automações para WhatsApp Business, integrações com inteligência artificial, sistemas sob medida e APIs REST.<br><br>
+        <strong>Diferenciais:</strong> Atendimento personalizado, soluções sob medida para cada cliente, uso das melhores práticas de SEO, design responsivo, otimização para dispositivos móveis e foco total em resultados reais para o seu negócio.<br><br>
+        <strong>Experiência comprovada:</strong> Atuação em projetos para pequenas, médias e grandes empresas, com cases de sucesso em diversos segmentos. Meu objetivo é transformar sua presença digital em uma poderosa ferramenta de captação de clientes.<br><br>
+        <strong>SEO Local:</strong> Especialista em posicionar negócios de Cabo Frio e região nos primeiros resultados do Google, aumentando a visibilidade e atraindo clientes qualificados.<br><br>
+        <strong>Consultoria completa:</strong> Desde a concepção do projeto até a publicação e manutenção, acompanho cada etapa para garantir que seu site esteja sempre atualizado, seguro e performando no máximo potencial.<br><br>
+        <strong>Vamos conversar?</strong> Solicite um orçamento sem compromisso e descubra como posso ajudar seu negócio a crescer no ambiente digital.
+      </p>
+      <a href="#contato" class="btn btn--primary cta-home">Solicite um orçamento</a>
+    </section>
+  </main>
 
   <!-- ======= FOOTER ======= -->
   <footer class="footer">
     <div class="footer__inner">
       <div class="footer__left">
         <span class="footer__label">VAMOS CONVERSAR</span>
-        <strong class="footer__location"><span class="footer__brasil">Brasil</span> | <span class="footer__brasil">Rio de Janeiro</span> — Remoto</strong>
+        <strong class="footer__location">
+          Ivie Ximenes — Desenvolvimento Web<br>
+          Cabo Frio, RJ, 28915-000<br>
+          <a href="tel:+5522981748083" class="footer__tel">(22) 98174-8083</a> | <a href="mailto:ivieximenes@gmail.com" class="footer__email">ivieximenes@gmail.com</a>
+        </strong>
         <span class="footer__credit">Desenvolvido por Ivie Ximenes.</span>
       </div>
       <div class="footer__right">
@@ -237,27 +294,25 @@
     </div>
   </footer>
 
-  <!-- WhatsApp float removido — chat widget ativo -->
-
   <!-- ======= SCRIPTS ======= -->
-  <script src="/js/theme.js"></script>
-  <script src="/js/nav.js"></script>
-  <script src="/js/pages/home.js"></script>
-  <script src="/js/pages/sobre.js"></script>
-  <script src="/js/pages/servicos.js"></script>
-  <script src="/js/data/projetos-data.js"></script>
-  <script src="/js/pages/projetos.js"></script>
-  <script src="/js/pages/curriculo.js"></script>
-  <script src="/js/pages/contato.js"></script>
-  <script src="/js/cookie-consent.js"></script>
-  <script src="/js/pages/ferramentas.js"></script>
-  <script src="js/pages/tool/diagnostico-i18n.js"></script>
-  <script src="js/pages/tool/tool-diagnostico-helpers.js"></script>
-  <script src="js/pages/tool/tool-diagnostico-steps.js"></script>
-  <script src="js/pages/tool/tool-diagnostico-result.js"></script>
-  <script src="js/pages/tool/tool-diagnostico-print.js"></script>
-  <script src="js/pages/tool/tool-diagnostico.js"></script>
-  <script src="/js/router.js"></script>
-  <script src="/js/main.js"></script>
-  <script src="/js/chat.js"></script></body>
+  <script src="/js/theme.js" defer></script>
+  <script src="/js/nav.js" defer></script>
+  <script src="/js/pages/home.js" defer></script>
+  <script src="/js/pages/sobre.js" defer></script>
+  <script src="/js/pages/servicos.js" defer></script>
+  <script src="/js/data/projetos-data.js" defer></script>
+  <script src="/js/pages/projetos.js" defer></script>
+  <script src="/js/pages/curriculo.js" defer></script>
+  <script src="/js/pages/contato.js" defer></script>
+  <script src="/js/cookie-consent.js" defer></script>
+  <script src="/js/pages/ferramentas.js" defer></script>
+  <script src="js/pages/tool/diagnostico-i18n.js" defer></script>
+  <script src="js/pages/tool/tool-diagnostico-helpers.js" defer></script>
+  <script src="js/pages/tool/tool-diagnostico-steps.js" defer></script>
+  <script src="js/pages/tool/tool-diagnostico-result.js" defer></script>
+  <script src="js/pages/tool/tool-diagnostico-print.js" defer></script>
+  <script src="js/pages/tool/tool-diagnostico.js" defer></script>
+  <script src="/js/router.js" defer></script>
+  <script src="/js/main.js" defer></script>
+  <script src="/js/chat.js" defer></script></body>
 </html>

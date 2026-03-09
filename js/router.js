@@ -12,6 +12,8 @@ const routes = {
   '/curriculo':                { render: renderCurriculo,        init: initCurriculo,        title: `Currículo | ${BASE_TITLE}`                 },
   '/contato':                  { render: renderContato,          init: initContato,          title: `Contato | ${BASE_TITLE}`                   },
   '/contrate':                 { render: renderContrate,         init: initContrate,         title: `Contrate | ${BASE_TITLE}`                  },
+  '/ferramentas':              { render: renderFerramentas,      init: initFerramentas,      title: `Ferramentas Gratuitas | ${BASE_TITLE}`     },
+  '/ferramentas/diagnostico':  { render: renderToolDiagnostico,  init: initToolDiagnostico,  title: `Diagnóstico Digital | ${BASE_TITLE}`       },
   '/cookies': {
     // renderCookies is defined in js/pages/cookies.js.  If for any reason the
     // script fails to load (syntax error, network error, etc.) we still want the
@@ -36,8 +38,11 @@ function initContrate() {
 }
 function getRoute() {
   const p = window.location.pathname;
-  // Fallback para rotas desconhecidas
-  return routes[p] ? p : '/';
+  if (routes[p]) return p;
+  // Dynamic routes
+  if (p.match(/^\/ferramentas\/.+/))   return '/ferramentas/diagnostico';
+  // Fallback
+  return '/';
 }
 
 function goTo(path) {

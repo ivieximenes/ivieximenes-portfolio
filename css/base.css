@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.35s ease, color 0.35s ease;
@@ -32,7 +32,7 @@ button { cursor: pointer; font-family: inherit; }
 
 /* ---- Typography ---- */
 h1, h2, h3, h4 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
   line-height: 1.2;
   color: var(--text-heading);
@@ -126,7 +126,6 @@ p  {
 .btn--primary:hover {
   filter: brightness(1.15);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.40);
 }
 
 .btn--outline {
@@ -140,6 +139,24 @@ p  {
   border-color: var(--accent-purple);
   color: var(--accent-purple);
   transform: translateY(-2px);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-glass);
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+  background: color-mix(in srgb, var(--accent-purple) 8%, transparent);
+  transform: translateY(-2px);
+}
+
+.btn--sm {
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
 }
 
 /* ---- Tab buttons ---- */

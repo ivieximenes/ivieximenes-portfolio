@@ -94,7 +94,6 @@
 }
 
 .pricing-card__title {
-  font-family: 'Playfair Display', serif;
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-heading);
@@ -105,7 +104,6 @@
   font-size: 0.88rem;
   font-style: italic;
   color: var(--accent-purple);
-  font-family: 'Playfair Display', serif;
   margin-bottom: 0.9rem;
 }
 

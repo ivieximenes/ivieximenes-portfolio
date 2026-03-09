@@ -12,7 +12,17 @@ const routes = {
   '/curriculo':                { render: renderCurriculo,        init: initCurriculo,        title: `Currículo | ${BASE_TITLE}`                 },
   '/contato':                  { render: renderContato,          init: initContato,          title: `Contato | ${BASE_TITLE}`                   },
   '/contrate':                 { render: renderContrate,         init: initContrate,         title: `Contrate | ${BASE_TITLE}`                  },
-  '/ferramentas':              { render: renderFerramentas,      init: initFerramentas,      title: `Ferramentas Gratuitas | ${BASE_TITLE}`     },
+  '/ferramentas': {
+    render: () => {
+      if (typeof renderFerramentas === 'function') return renderFerramentas();
+      // fallback minimal content so the SPA doesn't completamente break
+      return '<section class="ferramentas-page"><div class="container"><p>Carregando ferramentas...</p></div></section>';
+    },
+    init: () => {
+      if (typeof initFerramentas === 'function') return initFerramentas();
+    },
+    title: `Ferramentas Gratuitas | ${BASE_TITLE}`
+  },
   '/ferramentas/diagnostico':  { render: renderToolDiagnostico,  init: initToolDiagnostico,  title: `Diagnóstico Digital | ${BASE_TITLE}`       },
   '/cookies': {
     // renderCookies is defined in js/pages/cookies.js.  If for any reason the

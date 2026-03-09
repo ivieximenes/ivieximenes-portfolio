@@ -5,13 +5,26 @@
 const BASE_TITLE = 'Ivie Ximenes — Sênior Full Stack Developer';
 
 const routes = {
-  '/':          { render: renderHome,      init: initHome,      title: `Home | ${BASE_TITLE}`      },
-  '/sobre':     { render: renderSobre,     init: initSobre,     title: `Sobre | ${BASE_TITLE}`     },
-  '/servicos':  { render: renderServicos,  init: initServicos,  title: `Serviços | ${BASE_TITLE}`  },
-  '/projetos':  { render: renderProjetos,  init: initProjetos,  title: `Projetos | ${BASE_TITLE}`  },
-  '/curriculo': { render: renderCurriculo, init: initCurriculo, title: `Currículo | ${BASE_TITLE}`  },
-  '/contato':   { render: renderContato,   init: initContato,   title: `Contato | ${BASE_TITLE}`   },
-  '/contrate':  { render: renderContrate,  init: initContrate,  title: `Contrate | ${BASE_TITLE}`  },
+  '/':                         { render: renderHome,             init: initHome,             title: `Home | ${BASE_TITLE}`                      },
+  '/sobre':                    { render: renderSobre,            init: initSobre,            title: `Sobre | ${BASE_TITLE}`                     },
+  '/servicos':                 { render: renderServicos,         init: initServicos,         title: `Serviços | ${BASE_TITLE}`                  },
+  '/projetos':                 { render: renderProjetos,         init: initProjetos,         title: `Projetos | ${BASE_TITLE}`                  },
+  '/curriculo':                { render: renderCurriculo,        init: initCurriculo,        title: `Currículo | ${BASE_TITLE}`                 },
+  '/contato':                  { render: renderContato,          init: initContato,          title: `Contato | ${BASE_TITLE}`                   },
+  '/contrate':                 { render: renderContrate,         init: initContrate,         title: `Contrate | ${BASE_TITLE}`                  },
+  '/cookies': {
+    // renderCookies is defined in js/pages/cookies.js.  If for any reason the
+    // script fails to load (syntax error, network error, etc.) we still want the
+    // router to boot without throwing a ReferenceError.  The safe getter below
+    // checks for the existence of the function at runtime.
+    render: () => {
+      if (typeof renderCookies === 'function') return renderCookies();
+      // fallback minimal content so the SPA doesn't completely break
+      return `<section class="cookies page"><div class="container"><p>Carregando política de cookies...</p></div></section>`;
+    },
+    init: null,
+    title: `Política de Cookies | ${BASE_TITLE}`
+  }
 };
 
 // Dummy implementations to avoid ReferenceError (replace with real ones)

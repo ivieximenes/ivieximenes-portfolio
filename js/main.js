@@ -3,7 +3,13 @@
    ============================================= */
 
 (function () {
-  // ...existing code...
+  // stub de segurança para evitar a exceção "fbq is not defined" quando o
+  // Gerenciador de Tags (GTM) executa um evento antes do pixel do Facebook ser
+  // carregado. O stub imita a API básica e armazena chamadas em fila.
+  window.fbq = window.fbq || function() {
+    (window.fbq.queue = window.fbq.queue || []).push(arguments);
+  };
+  window.fbq.queue = window.fbq.queue || [];
 
   // Boot all modules
   initTheme();
@@ -23,8 +29,22 @@
 
     // Facebook Pixel
     if (typeof fbq === 'function') {
-      if (eventName === 'download_cv' || eventName === 'form_submit' || eventName === 'whatsapp_click' || eventName === 'chat_open') {
-        fbq('trackCustom', eventName, params);
+      switch (eventName) {
+        case 'form_submit':
+          // treat any completed form as a lead conversion
+          fbq('track', 'Lead', params);
+          break;
+        case 'download_cv':
+          fbq('track', 'Lead', { content_name: 'CV', ...params });
+          break;
+        case 'whatsapp_click':
+          fbq('track', 'Contact', params);
+          break;
+        case 'chat_open':
+          fbq('trackCustom', eventName, params);
+          break;
+        default:
+          fbq('trackCustom', eventName, params);
       }
     }
   }

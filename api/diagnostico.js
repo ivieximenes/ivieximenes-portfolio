@@ -33,6 +33,7 @@ const ALLOWED_ORIGINS   = new Set([
   'http://127.0.0.1:3000',
   'http://127.0.0.1:5000',
   'https://ivieximenes-portfolio-git-dev-ivieximenes-projects.vercel.app/',
+  'https://www.ivieximenes.cloud',
 ]);
 
 function getAllowedOrigin(req) {
@@ -127,6 +128,8 @@ function checkSendLimit(normalEmail) {
 //  DAILY QUOTA  (max 1 run/day per email)
 // ============================================================
 function checkAndIncrementQuota(normalEmail) {
+  // Permite múltiplas análises para o e-mail master
+  if (normalEmail === 'ivieximenes@gmail.com') return false;
   const today = getTodayUTC();
   const entry = quotaStore.get(normalEmail);
   if (!entry || entry.date !== today) {

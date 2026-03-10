@@ -11,33 +11,34 @@ function renderContato() {
           <p>Tem um projeto em mente? <br/> Preencha o formulário ou use um dos canais abaixo.</p>
         </div>
 
-        <form class="contact-form glass-card" id="contactForm" novalidate>
+
+        <form class="contact-form glass-card" id="contactForm" novalidate aria-label="Formulário de contato" autocomplete="on">
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="cf-name">Nome</label>
+              <label class="form-label" for="cf-name">Nome <span aria-hidden="true" style="color:#e35">*</span></label>
               <input class="form-input" id="cf-name" name="name" type="text"
-                     placeholder="Seu nome completo" required />
+                     placeholder="Seu nome completo" required aria-required="true" aria-label="Nome completo" autocomplete="name" />
             </div>
             <div class="form-group">
-              <label class="form-label" for="cf-email">E-mail</label>
+              <label class="form-label" for="cf-email">E-mail <span aria-hidden="true" style="color:#e35">*</span></label>
               <input class="form-input" id="cf-email" name="email" type="email"
-                     placeholder="seu@email.com" required />
+                     placeholder="seu@email.com" required aria-required="true" aria-label="E-mail" autocomplete="email" />
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="cf-subject">Assunto</label>
+            <label class="form-label" for="cf-subject">Assunto <span aria-hidden="true" style="color:#e35">*</span></label>
             <input class="form-input" id="cf-subject" name="subject" type="text"
-                   placeholder="Sobre o que você quer conversar?" required />
+                   placeholder="Sobre o que você quer conversar?" required aria-required="true" aria-label="Assunto" autocomplete="off" />
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="cf-message">Mensagem</label>
+            <label class="form-label" for="cf-message">Mensagem <span aria-hidden="true" style="color:#e35">*</span></label>
             <textarea class="form-textarea" id="cf-message" name="message"
-                      placeholder="Conte mais sobre o seu projeto ou dúvida..." required></textarea>
+                      placeholder="Conte mais sobre o seu projeto ou dúvida..." required aria-required="true" aria-label="Mensagem" autocomplete="off"></textarea>
           </div>
 
-          <button type="submit" class="btn btn--primary form-submit">
+          <button type="submit" class="btn btn--primary form-submit" aria-label="Enviar mensagem">
             <i class="ph ph-paper-plane-tilt"></i> Enviar Mensagem
           </button>
         </form>

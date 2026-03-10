@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Status do Site | Ivie Ximenes</title>
+  <meta name="description" content="Página de status e observabilidade do portfólio Ivie Ximenes. Veja uptime, versão, build e status das APIs." />
+  <link rel="canonical" href="https://ivieximenes.cloud/status" />
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/nav.css" />
+  <link rel="stylesheet" href="/css/footer.css" />
+</head>
+<body>
+  <main class="status-page" style="max-width:600px;margin:2rem auto;padding:2rem;background:#fff2;border-radius:12px;">
+    <h1>Status do Site</h1>
+    <div id="status-data">Carregando status...</div>
+  </main>
+  <script>
+    fetch('/status.json')
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('status-data').innerHTML = `
+          <ul style="list-style:none;padding:0;">
+            <li><b>Status:</b> ${data.status}</li>
+            <li><b>Versão:</b> ${data.version}</li>
+            <li><b>Ambiente:</b> ${data.environment}</li>
+            <li><b>Deploy:</b> ${data.deploy}</li>
+            <li><b>Último build:</b> ${data.lastBuild}</li>
+          </ul>
+        `;
+      })
+      .catch(() => {
+        document.getElementById('status-data').textContent = 'Não foi possível carregar o status.';
+      });
+  </script>
+</body>
+</html>

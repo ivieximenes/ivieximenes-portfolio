@@ -1,0 +1,321 @@
+[
+  {
+    "auditReport": {
+      "metadata": {
+        "url": "https://www.ivieximenes.cloud/",
+        "nicho": "criação de site",
+        "cidade": "cabo frio",
+        "dataAnalise": "2026-03-09T08:47:59.818Z",
+        "versao": "5.0"
+      },
+      "pontuacao": {
+        "geral": 63,
+        "tecnica": 76,
+        "seo_local": 63,
+        "conversao": 45,
+        "nivel_urgencia": "MÉDIO",
+        "lead_score": "Morno",
+        "lead_emoji": "⚡",
+        "maturidade_digital": "Intermediário",
+        "maturidade_score": 63,
+        "potencial_mercado": "Médio",
+        "potencial_score": 57,
+        "base_calculo": "Nota Técnica × 0.4 + SEO Local × 0.3 + Conversão × 0.3"
+      },
+      "relatorio_tecnico": {
+        "auditoria_tecnica": "## DIAGNÓSTICO TÉCNICO\n\n### 1. SEO Técnico\n📌 Oportunidade: O título possui 94 caracteres, que é um tamanho aceitável, porém não inclui o nicho.\n📍 Local: Title\n📈 Benefício: Mais visibilidade nas buscas, principalmente para o nicho de criação de site.\n🛠 Como resolver: Avaliar e ajustar o title para incluir termos como \"desenvolvimento web\" ou \"criação de sites\".\n⚠ Prioridade: Alta\n\n📌 Oportunidade: A meta description contém 234 caracteres, apresentando uma boa descrição, mas repetindo a cidade no início.\n📍 Local: Meta Description\n📈 Benefício: Melhor atração de cliques com uma descrição mais concisa e impactante.\n🛠 Como resolver: Simplificar a descrição, focando nos serviços e finalizando com a localidade.\n⚠ Prioridade: Média\n\n📌 Oportunidade: Schema markup está como \"unknown\" e não há marcação do tipo LocalBusiness.\n📍 Local: Schema\n📈 Benefício: Melhora o entendimento do Google sobre o negócio, resultando em melhores resultados locais.\n🛠 Como resolver: Implementar o schema LocalBusiness com detalhes como endereço, telefone e horário de funcionamento.\n⚠ Prioridade: Alta\n\n### 2. SEO Local\n📌 Oportunidade: O nicho não está presente no title e no H1.\n📍 Local: Title e H1\n📈 Benefício: Aumenta a relevância local e a capacidade de ser encontrado em buscas relacionadas.\n🛠 Como resolver: Incluir \"desenvolvedora web\" ou \"especialista em automações\" no título e H1.\n⚠ Prioridade: Alta\n\n📌 Oportunidade: O NAP (Nome, Endereço e Telefone) está presente, mas não é otimizado para busca.\n📍 Local: Contatos\n📈 Benefício: Melhora a consistência da presença local online.\n🛠 Como resolver: Garantir que o NAP esteja em destaque e formatado corretamente em todos os locais.\n⚠ Prioridade: Média\n\n### 3. Estrutura HTML Semântica\n📌 Oportunidade: Hierarquia de headings está correta, mas não há H3.\n📍 Local: Headings\n📈 Benefício: Melhor estruturação do conteúdo para SEO e navegabilidade do usuário.\n🛠 Como resolver: Adicionar H3 com subtítulos relevantes para o conteúdo que ajudem na organização.\n⚠ Prioridade: Média\n\n### 4. Performance\n📌 Oportunidade: Há um script bloqueante que pode impactar o tempo de carregamento da página.\n📍 Local: Performance\n📈 Benefício: Melhoria no tempo de carregamento da página, que impacta a experiência do usuário.\n🛠 Como resolver: Analisar e, se possível, carregar o script de forma assíncrona ou diferida.\n⚠ Prioridade: Alta\n\n### 5. Acessibilidade (WCAG)\n📌 Oportunidade: Ausência de labels para formulários.\n📍 Local: Acessibilidade\n📈 Benefício: Aumento na usabilidade e inclusão para usuários com deficiência.\n🛠 Como resolver: Implementar labels associadas aos campos do formulário, garantindo que os leitores de tela possam interpretá-los.\n⚠ Prioridade: Alta\n\n### 6. Segurança\n📌 Oportunidade: O site usa HTTPS, mas não há informações sobre conteúdo misto ou problemas de segurança.\n📍 Local: Segurança\n📈 Benefício: Adoção de boas práticas para segurança e confiança do usuário.\n🛠 Como resolver: Realizar auditoria de segurança e corrigir conteúdos que possam estar mistos ou não seguros.\n⚠ Prioridade: Média\n\n### 7. Open Graph / Social\n📌 Oportunidade: As tags Open Graph são detectadas, mas devem ser otimizadas.\n📍 Local: Open Graph\n📈 Benefício: Melhoria na apresentação do site ao ser compartilhado nas redes sociais, atraindo mais clicks.\n🛠 Como resolver: Adicionar uma tag og:image e uma descrição clara e envolvente.\n⚠ Prioridade: Média\n\n### 8. Conteúdo textual\n📌 Oportunidade: 316 palavras podem ser insuficientes para efetivar um bom ranqueamento em SEO.\n📍 Local: Conteúdo textual\n📈 Benefício: Melhor ranqueamento em motores de busca e retenção do visitante.\n🛠 Como resolver: Expandir o conteúdo com informações, casos de sucesso e Q&A relevantes ao nicho de desenvolvimento web.\n⚠ Prioridade: Média\n\n### 9. Links\n📌 Oportunidade: Aumentar a proporção de links externos.\n📍 Local: Links\n📈 Benefício: Melhor autoridade de domínio e ranqueamento em SEO.\n🛠 Como resolver: Incluir links para fontes externas relevantes e de alta autoridade no segmento de criação de sites.\n⚠ Prioridade: Baixa\n\nEstas são oportunidades pontuais que, se abordadas, podem melhorar o desempenho do site no segmento de criação de sites em Cabo Frio. Cada uma delas pode levar a um impacto positivo na visibilidade e na experiência do usuário.",
+        "auditoria_conteudo": "## 1. PANORAMA ESTRATÉGICO\nA presença digital de Ivie Ximenes está bem delineada ao apresentar serviços de desenvolvimento completos para empresas e prestadores de serviço em Cabo Frio. No entanto, a falta de elementos críticos para captação eficaz de leads, como formulários e provas sociais, sugere que ainda não está totalmente otimizada para converter a demanda ativa na região.\n\n## 2. POSICIONAMENTO NO MERCADO LOCAL\n- **Captação de demanda ativa**: N — Apesar da presença de CTAs e informações de contato, a ausência de formulários limita a eficácia da captura imediata de leads.\n- **Diferencial comunicado**: S — \"Atendimento personalizado, soluções sob medida para cada cliente, uso das melhores práticas de SEO, design responsivo, otimização para dispositivos móveis e foco total em resultados reais para o seu negócio.\"\n- **Prova social**: Ausente — Não há depoimentos, casos ou certificações visíveis no site.\n- **Posicionamento percebido**: Especialista — A ênfase em \"Desenvolvedora Full Stack sênior\" e menção a \"projetos corporativos\" indicam forte especialização.\n\n## 3. OPORTUNIDADES DE CRESCIMENTO\nPara cada oportunidade:\n📈 Oportunidade: Implementação de formulários de contato\n🎯 Benefício: Melhoria na captação imediata de leads interessados.\n\n📈 Oportunidade: Inserção de depoimentos de clientes\n🎯 Benefício: Construção de confiança através de validação social.\n\n📈 Oportunidade: Desenvolvimento de conteúdo local\n🎯 Benefício: Aumento na visibilidade e autoridade na área de Cabo Frio.\n\n📈 Oportunidade: Criação de um blog ou artigos relacionados a desenvolvimento web\n🎯 Benefício: Melhoria no SEO e engajamento com conteúdos informativos.\n\n📈 Oportunidade: Otimização de CTAs para especificar serviços distintos\n🎯 Benefício: Direcionamento claro para visitantes, melhorando a experiência e potencial de conversão.\n\n## 4. ANÁLISE DE CONVERSÃO\n- **Proposta de valor**: Moderada — \"transformar sua presença digital em uma poderosa ferramenta de captação de clientes.\"\n- **Oferta principal**: presente — \"Solicite um orçamento\"\n- **Diferencial**: presente — \"Atendimento personalizado, soluções sob medida...\"\n- **CTA principal**: \"Solicite um orçamento\" — genérico\n- **Prova social**: Ausente\n- **Urgência/Escassez**: ausente\n- **Above the fold (inferido)**: Formulário N | CTA S | Proposta de valor S\n\n## 5. MATURIDADE DIGITAL\n**Nível**: Intermediário\n**Justificativa**: A presença online de Ivie Ximenes está bem estruturada e focada em serviços de desenvolvimento especializados. No entanto, a falta de elementos como provas sociais e formulários limita a maturidade digital total e o potencial de conversão do site.",
+        "auditoria_ux": "## 1. EXPERIÊNCIA DO USUÁRIO (UX)\n\n### Navegação e Estrutura\n- **Clareza de navegação**: Boa — A estrutura de links e a hierarquia de headings proporciona uma navegação clara e intuitiva, permitindo que os usuários encontrem facilmente as informações.\n- **Hierarquia de informação**: Bem organizada — A utilização de um H1 para o título principal e dois H2 para subseções garante uma boa organização do conteúdo, facilitando a leitura e a compreensão.\n- **Acesso ao contato**: Fácil — Há opções de contato disponíveis, como um número de telefone clicável e link para WhatsApp, que melhoram a acessibilidade do suporte.\n\n### Experiência Mobile\n- **Preparação mobile**: Sim — O site é mobile-ready, o que é essencial para atender usuários em dispositivos móveis.\n- **Riscos identificados**: Não foi possível avaliar com os dados disponíveis. \n\n### Primeira Impressão (Above the Fold)\n- **Proposta de valor visível**: Sim — O título principal comunica claramente a especialização da desenvolvedora, e a proposta é reforçada no conteúdo inicial.\n- **CTA visível**: Sim — Os CTAs \"Solicite um orçamento\" e \"WhatsApp\" estão destacados, incentivando o engajamento do usuário.\n\n## 2. ACESSIBILIDADE (WCAG)\n\n### Conformidade Observável\n- **Atributo lang**: Presente — O atributo \"lang\" está definido como pt-BR, o que beneficia leitores de tela e a indexação pelo Google.\n- **Landmarks semânticos**: 4/4 presentes — Todos os landmarks estão claramente definidos: header, nav, main e footer, proporcionando uma navegação mais intuitiva para tecnologias assistivas.\n- **Alt em imagens**: 100% com ALT — Todas as imagens possuem atributos ALT adequados, o que garante que o conteúdo visual seja acessível a usuários com deficiência visual.\n- **Labels de formulário**: 0 labels para 0 formulários — Não há formulários no site, portanto, essa parte não se aplica.\n- **Atributos ARIA**: 3 encontrados — Os atributos ARIA existem, mas a utilização poderia ser revisada para garantir que estão aplicados de maneira a melhorar a acessibilidade.\n- **Navegação por teclado**: Não foi possível avaliar com os dados disponíveis.\n\n### Nível Estimado de Conformidade\n**WCAG**: AA parcial — O site está em conformidade parcial com os princípios da WCAG 2.1, mas a falta de formulários e a ausência de labels podem limitar a acessibilidade para alguns usuários.\n\n## 3. RECOMENDAÇÕES PRIORITÁRIAS\n\n🎯 Recomendação: Considerar a implementação de labels para formulários, caso sejam adicionados no futuro.\n👤 Impacto para o usuário: Facilitará a utilização de tecnologias assistivas para quem utiliza leitores de tela, melhorando a acessibilidade do site.\n⚠ Prioridade: Alta\n\n🎯 Recomendação: Revisar a utilização de atributos ARIA para garantir que estejam aplicados corretamente.\n👤 Impacto para o usuário: Promoverá uma navegação mais eficiente para usuários de assistentes de leitura e outras tecnologias de acessibilidade.\n⚠ Prioridade: Média\n\n🎯 Recomendação: Avaliar a implementação de um canvas HTML5, caso haja necessidade de conteúdos interativos no futuro.\n👤 Impacto para o usuário: Melhoraria a interatividade e a experiência do usuário em dispositivos variados.\n⚠ Prioridade: Média\n\n🎯 Recomendação: Incluir um link para uma política de acessibilidade no site.\n👤 Impacto para o usuário: Informará os usuários sobre como o site se compromete com a acessibilidade, aumentando a confiança na sua utilização.\n⚠ Prioridade: Melhoria\n\n🎯 Recomendação: Incorporar testes de usabilidade com ferramentas de navegação por teclado.\n👤 Impacto para o usuário: Garantirá que todos os usuários, incluindo aqueles que dependem da navegação por teclado, tenham uma experiência positiva.\n⚠ Prioridade: Melhoria",
+        "analise_mercado": "## ANÁLISE DE MERCADO\n\n**Resumo competitivo:**\n- Concorrentes encontrados: 17\n- Rating médio: 4.8\n- Mediana de reviews: 9\n- Com site: 13 de 17\n- Sem site: 4 de 17\n\n## TOP 5 CONCORRENTES (por rating e volume de reviews)\n1. **B&L Comunicação**: rating 5, 136 reviews, tem site S\n2. **CesarWeb**: rating 5, 19 reviews, tem site S\n3. **Catarina PropaMarketing**: rating 5, 23 reviews, tem site S\n4. **Promove Publicidade**: rating 5, 9 reviews, tem site S\n5. **Agência de Marketing Digital e Criação de Sites em Cabo Frio | LUNETA**: rating 5, 4 reviews, tem site S\n\n## POSICIONAMENTO RELATIVO\n- Captação digital do cliente (https://www.ivieximenes.cloud/): **Na média** — A média de rating do setor é alta (4.8), o que demonstra uma boa qualidade geral no atendimento. A presença do cliente é competitiva, mas ainda existem oportunidades para melhorar e se destacar.\n- Presença digital: **Bem posicionado** — A maioria dos concorrentes (13 de 17) possui site, indicando que a presença digital no segmento está ativa e estratégica.\n- Espaço para crescimento: **Sim** — Com 4 concorrentes sem site, há uma oportunidade clara de atrair clientes que buscam uma presença online mais robusta, junto a uma média de reviews que pode ser superada.\n\n## OPORTUNIDADE DE MERCADO\n**Nível**: **Alto**\n**Justificativa**: Com 4 concorrentes que ainda não possuem um site, a demanda por serviços na área de criação de sites pode ser explorada por quem deseja adicionar valor e visibilidade. Além disso, a média de rating é alta, o que confirma que o cliente deve apostar em uma proposta diferenciada e de qualidade.\n\n## SATURAÇÃO E RECOMENDAÇÃO\n- Saturação digital do nicho na região: **Média**\n- Espaço disponível: Com 17 concorrentes e 4 deles sem site, existe uma margem significativa para novos players que queiram se estabelecer com uma proposta diferenciada no mercado.\n- Recomendação: É aconselhável focar em estratégias de marketing digital que comunique claramente o valor agregado e a proposta única do serviço oferecido.\n\n## REFERÊNCIA COMPETITIVA\n- Líder: **B&L Comunicação**\n- Rating: **5** vs Média do mercado: **4.8**\n- Oportunidade para o cliente: Implementar um diferencial focado em atendimento ao cliente e serviços personalizados pode ajudar a se destacar nesse ambiente altamente competitivo.",
+        "pagespeed": {
+          "performance": 75,
+          "seo": 91,
+          "acessibilidade": 96,
+          "melhores_praticas": 96,
+          "fcp": "2.4 s",
+          "fcp_ms": 2414.769431862616,
+          "lcp": "4.3 s",
+          "lcp_ms": 4268.06818109581,
+          "tbt": "20 ms",
+          "tbt_ms": 17.5,
+          "cls": "0.074",
+          "cls_value": 0.0740636224351657,
+          "speed_index": "7.0 s",
+          "tti": "4.4 s",
+          "error": null,
+          "fonte": "Google PageSpeed Insights API V5"
+        },
+        "seo_files": {
+          "has_robots": true,
+          "robots_disallow": [],
+          "robots_sitemap_refs": [
+            "https://ivieximenes.cloud/sitemap.xml"
+          ],
+          "robots_preview": "User-agent: *\nAllow: /\n\nSitemap: https://ivieximenes.cloud/sitemap.xml\n",
+          "has_sitemap": true,
+          "sitemap_url_count": 10
+        },
+        "security_headers": {
+          "has_csp": false,
+          "csp_value": "",
+          "has_hsts": false,
+          "hsts_value": "",
+          "has_x_frame_options": false,
+          "has_x_content_type": false,
+          "has_referrer_policy": false,
+          "has_permissions_policy": false,
+          "score": 0,
+          "max_score": 5,
+          "level": "Fraco",
+          "error": null
+        },
+        "dados_site": {
+          "title": "Ivie Ximenes | Desenvolvedora Full Stack Java, Spring, Angular, React | Cabo Frio, RJ & Brasil",
+          "title_length": 94,
+          "meta_description": "Desenvolvedora Full Stack Java Sênior (Spring, Angular, React) para projetos corporativos e vagas CLT. Também atuo como freelancer em desenvolvimento de sites, landing pages e automações para WhatsApp em Cabo Frio, RJ e todo o Brasil.",
+          "meta_desc_length": 234,
+          "canonical": "https://ivieximenes.cloud/",
+          "charset": "UTF-8",
+          "has_viewport": true,
+          "is_https": true,
+          "headings": {
+            "h1": [
+              "Desenvolvedora Full Stack em Cabo Frio, RJ"
+            ],
+            "h1Count": 1,
+            "h2": [
+              "Freelancer em Desenvolvimento de Sites, Landing Pages e Automação WhatsApp",
+              "Criação de sites, automações para WhatsApp e sistemas sob medida"
+            ],
+            "h2Count": 2,
+            "h3": [],
+            "h3Count": 0,
+            "isHierarchical": true
+          },
+          "images": {
+            "total": 1,
+            "with_alt": 1,
+            "without_alt": 0,
+            "alt_percentage": 100
+          },
+          "text": {
+            "total_words": 316,
+            "city_mentions": 5,
+            "body_preview": "Ivie Ximenes Home Sobre Serviços Projetos Currículo Ferramentas Contato Home Sobre Serviços Projetos Currículo Contato Freelancer em Desenvolvimento de Sites, Landing Pages e Automação WhatsApp Atendo empresas, profissionais liberais e pequenos negócios em Cabo Frio, RJ e todo o Brasil. Criação de sites institucionais, landing pages, integrações com WhatsApp Business, automações e soluções digitais sob medida. Especialista em SEO local, performance e conversão. Solicite um orçamento! Desenvolvedora Full Stack em Cabo Frio, RJ Criação de sites, automações para WhatsApp e sistemas sob medida Com mais de 15 anos de experiência, ajudo empresas e profissionais a terem presença digital de alto impacto, com foco em performance, SEO local e conversão. Serviços oferecidos: Desenvolvimento de sites institucionais, landing pages, portfólios digitais, automações para WhatsApp Business, integrações com inteligência artificial, sistemas sob medida e APIs REST. Diferenciais: Atendimento personalizado, soluções sob medida para cada cliente, uso das melhores práticas de SEO, design responsivo, otimização para dispositivos móveis e foco total em resultados reais para o seu negócio. Experiência comprovada: Atuação em projetos para pequenas, médias e grandes empresas, com cases de sucesso em diversos segmentos. Meu objetivo é transformar sua presença digital em uma poderosa ferramenta de captação de clientes. SEO Local: Especialista em posicionar negócios de Cabo Frio e região nos primeiros resultados do Google, aumentando a visibilidade e atraindo clientes qualificados. Consultoria completa: Desde a concepção do projeto até a publicação e manutenção, acompanho cada etapa para garantir que seu site esteja sempre atualizado, seguro e performando no máximo potencial. Vamos conversar? Solicite um orçamento sem compromisso e descubra como posso ajudar seu negócio a crescer no ambiente digital. Solicite um orçamento VAMOS CONVERSAR Ivie Ximenes — Desenvolvimento Web Rua Exemplo, 123, Cabo Frio, RJ, 28915-000 (22) 98174-8083 | ivieximenes@gmail.com Desenvolvido por Ivie Ximenes. E-mail WhatsApp LinkedIn GitHub Política de Cookies"
+          },
+          "contact": {
+            "phones": [
+              "(22) 98174-8083"
+            ],
+            "hasClickablePhone": true,
+            "hasWhatsApp": true,
+            "addresses": [
+              "Rua Exemplo, 123"
+            ],
+            "hasNAP": true
+          },
+          "schema": {
+            "found": true,
+            "types": [
+              "Unknown"
+            ],
+            "has_local_business": false,
+            "has_address_in_schema": false
+          },
+          "conversion": {
+            "total_forms": 0,
+            "action_ctas": [
+              "Solicite um orçamento",
+              "WhatsApp"
+            ],
+            "generic_ctas": [],
+            "has_maps_embed": false,
+            "has_social_proof": false
+          },
+          "links": {
+            "total": 22,
+            "internal": 19,
+            "external": 3
+          },
+          "performance": {
+            "blocking_scripts": 1
+          },
+          "technology": {
+            "builders": [],
+            "possible_builder": "Não identificado",
+            "has_canvas": false,
+            "iframe_count": 1,
+            "full_page_iframe": false
+          },
+          "keywords": {
+            "nichoInTitle": false,
+            "cidadeInTitle": true,
+            "nichoInH1": false,
+            "cidadeInH1": true,
+            "nichoInMeta": false,
+            "cidadeInMeta": true
+          },
+          "open_graph": {
+            "title": "Ivie Ximenes | Full Stack Java, Spring, Angular, React | Cabo Frio, RJ",
+            "description": "Desenvolvedora Full Stack Java Sênior para projetos corporativos (CLT/PJ) e freelancer em sites, landing pages e automações para WhatsApp. Cabo Frio, RJ e Brasil.",
+            "image": "https://ivieximenes.cloud/img/og-cover-2026.jpg",
+            "twitterCard": "summary_large_image",
+            "hasOG": true
+          },
+          "semantics": {
+            "hasHeader": true,
+            "hasNav": true,
+            "hasMain": true,
+            "hasFooter": true,
+            "hasArticle": false,
+            "hasSection": true,
+            "hasAside": false,
+            "htmlLang": "pt-BR",
+            "landmarkCount": 4
+          },
+          "accessibility": {
+            "formLabels": 0,
+            "ariaLabels": 3,
+            "ariaDescribedby": 0,
+            "roleAttributes": 0,
+            "tabindexCount": 0
+          },
+          "security": {
+            "hasMixedContent": false
+          }
+        },
+        "dados_mercado": {
+          "total_concorrentes": 17,
+          "com_site": 13,
+          "sem_site": 4,
+          "avg_rating": 4.8,
+          "median_reviews": 9,
+          "maps_active": true,
+          "fonte": "Google Maps Places API (New) — Text Search"
+        },
+        "scoring_detalhado": {
+          "nota_tecnica": 76,
+          "nota_seo_local": 63,
+          "nota_conversao": 45,
+          "nota_geral": 63,
+          "detalhe_tecnica": "+8 H1 presente sem keyword | +5 Meta desc presente (curta ou sem nicho) | +8 Schema presente (outros tipos) | +8 Canonical presente | +10 Imagens ALT >80% | +8 Hierarquia headings correta | +5 1-5 scripts bloqueantes | +10 HTTPS ativo | +3 Conteudo 300-499 palavras | +5 Viewport presente | +3 Open Graph presente | +3 Landmarks semanticos >=3",
+          "detalhe_seo_local": "+0 Nicho ausente no titulo | +20 Cidade no titulo | +8 H1 generico | +15 Cidade no H1 | +10 Cidade na meta desc | +10 NAP completo | +0 Schema LocalBusiness ausente",
+          "detalhe_conversao": "+20 CTA de acao claro | +15 WhatsApp/tel clicavel | +0 Sem formulario | +0 Sem prova social | +0 Proposta de valor nao inferida | +0 Sem urgencia/oferta | +10 Diferencial explicito",
+          "justificativa_lead": "📊 CLASSIFICAÇÃO\nMaturidade Digital: 63/100 (Intermediário)\nPotencial de Mercado: 57/100 (Médio)\n📋 BASE DE CÁLCULO\nNota Técnica SEO: 76/100 (peso 40%)\nNota SEO Local: 63/100 (peso 30%)\nNota Conversão: 45/100 (peso 30%)\nNota Geral = 63/100\n🏢 DADOS DE MERCADO (Fonte: Google Maps API)\nConcorrentes encontrados: 17 | Sem site: 4 (24%)\nRating médio: 4.8 | Mediana reviews: 9\n📐 FATORES DO POTENCIAL DE MERCADO\nDemanda comprovada: 30/30 (baseado em 17 concorrentes)\nOportunidade digital: 12/25 (24% sem site)\nEspaço p/ crescimento: 10/25 (maturidade 63)\nQualidade do mercado: 5/20"
+        },
+        "validacoes": []
+      },
+      "relatorio_cliente": {
+        "sumario_executivo": {
+          "nota_geral": 63,
+          "nivel": "PRECISA DE ATENÇÃO",
+          "frase_resumo": "O site existe, mas o Google tem dificuldade para lê-lo e recomendá-lo. Sites mal estruturados tecnicamente raramente aparecem nas primeiras posições de busca.",
+          "lead_score": "⚡ Morno",
+          "total_problemas_criticos": 2,
+          "total_pontos_fortes": 9
+        },
+        "pontos_fortes": [
+          {
+            "titulo": "Site seguro (HTTPS)",
+            "descricao": "HTTPS é fator de ranqueamento oficial do Google desde 2014.",
+            "fonte": "Google Search Central Blog"
+          },
+          {
+            "titulo": "Otimizado para Celular",
+            "descricao": "62% dos brasileiros acessam a internet exclusivamente pelo celular.",
+            "fonte": "IBGE/Cetic.br 2024"
+          },
+          {
+            "titulo": "Título H1 Único",
+            "descricao": "Um único H1 consolida o tema principal da página para os algoritmos.",
+            "fonte": "Google Search Central — Headings"
+          },
+          {
+            "titulo": "Botão de WhatsApp",
+            "descricao": "WhatsApp tem 197 milhões de usuários no Brasil, sendo o principal canal de contato direto.",
+            "fonte": "Statista 2024"
+          },
+          {
+            "titulo": "Performance ≥70 no Lighthouse",
+            "descricao": "Acima do limiar de qualidade recomendado pelo Google.",
+            "fonte": "Google PageSpeed Insights API V5"
+          },
+          {
+            "titulo": "Schema Markup detectado",
+            "descricao": "Structured data permite rich snippets que destacam o link nos resultados de busca.",
+            "fonte": "Schema.org + Google Structured Data"
+          },
+          {
+            "titulo": "robots.txt presente",
+            "descricao": "Orienta corretamente como os crawlers devem indexar o site.",
+            "fonte": "Google Crawl Core Guidelines"
+          },
+          {
+            "titulo": "Sitemap.xml presente",
+            "descricao": "Acelera o rastreamento e indexação de 10 URLs pelo Google.",
+            "fonte": "Google Search Console Docs"
+          },
+          {
+            "titulo": "Telefone clicável",
+            "descricao": "Link tel: permite ligação direta com um toque no mobile.",
+            "fonte": "Google Mobile UX Guidelines"
+          }
+        ],
+        "problemas": [
+          {
+            "titulo": "Serviço/Nicho faltante no Title",
+            "descricao": "A palavra-chave principal do negócio não está no title tag, tornando a relevância temática menos evidente.",
+            "beneficio_de_resolver": "Com o serviço no title, o Google exibe o site para exatamente quem está buscando o que o negócio oferece.",
+            "custo_de_nao_resolver": "O Google prefere concorrentes que comunicam explicitamente o serviço no title, empurrando o site para baixo.",
+            "prioridade": "Alta",
+            "fonte": "Google Core Algorithm Guidelines — On-Page Signals"
+          },
+          {
+            "titulo": "Sem formulário de contato",
+            "descricao": "Sem formulário, o site não captura leads fora do horário comercial ou de usuários que preferem contato assíncrono.",
+            "beneficio_de_resolver": "Formulários capturam leads 24/7, incluindo usuários em ambiente de trabalho que preferem comunicação por escrito.",
+            "custo_de_nao_resolver": "Perde conversões noturnas e de usuários que não querem ligar, representando uma faixa significativa de contatos potenciais.",
+            "prioridade": "Alta",
+            "fonte": "CRO Research — HubSpot State of Marketing"
+          },
+          {
+            "titulo": "Políticas de Segurança Desatualizadas",
+            "descricao": "Headers de segurança ausentes ou insuficientes (0/5). Vulnerável a ataques comuns de XSS e clickjacking.",
+            "beneficio_de_resolver": "Headers de segurança configurados transmitem confiança ao navegador e ao usuário, evitando avisos de segurança.",
+            "custo_de_nao_resolver": "Alertas de \"site inseguro\" assustam clientes em potencial que fecham a aba e não retornam.",
+            "prioridade": "Melhoria",
+            "fonte": "OWASP Secure Headers Project + Mozilla Observatory"
+          }
+        ],
+        "contexto_mercado": {
+          "total_concorrentes": 17,
+          "com_site": 13,
+          "sem_site": 4,
+          "percentual_sem_site": 24,
+          "rating_medio": 4.8,
+          "mediana_reviews": 9,
+          "nivel_oportunidade": "Médio",
+          "dados_insuficientes": false,
+          "fonte": "Google Maps Places API (New) — Text Search"
+        },
+        "pagespeed_simplificado": {
+          "performance": 75,
+          "seo_lighthouse": 91,
+          "acessibilidade": 96,
+          "melhores_praticas": 96,
+          "fcp": "2.4 s",
+          "lcp": "4.3 s",
+          "tbt": "20 ms",
+          "cls": "0.074",
+          "frase_performance": "Carregamento moderado — há espaço para melhoria que pode reduzir a taxa de abandono.",
+          "fonte": "Google PageSpeed Insights API V5 — Mobile"
+        },
+        "recomendacoes_prioritarias": [
+          "Serviço/Nicho faltante no Title",
+          "Sem formulário de contato"
+        ],
+        "resumo_estrategico": "## Situação Atual\n\nAtualmente, seu site apresenta uma nota geral de 63/100, indicando que há espaço significativo para melhorias no contexto do mercado de Cabo Frio. Isso significa que, apesar de ter aspectos positivos, o site não está explorando todo o potencial que o mercado oferece, que é médio, com um potencial de 57/100. Essa diferença ilustra que há oportunidades não capturadas adequadamente, o que pode impactar o crescimento e a visibilidade de seu negócio online.\n\n## O Que Isso Significa Para Seu Negócio\n\nQuando alguém busca por serviços de criação de sites em Cabo Frio, seu site não aparece nas primeiras posições e, portanto, não está sendo facilmente encontrado por potenciais clientes. Isso acontece porque faltam elementos essenciais de relevância no Google, como serviços específicos no título do site. Com 17 concorrentes no mercado, dos quais 24% ainda não têm um site, a não otimização de sua presença online pode estar permitindo que seus concorrentes capturem esses contatos valiosos.\n\n## Oportunidade Identificada\n\nExiste uma janela de oportunidade clara para melhorar sua visibilidade no mercado local. Com uma concorrência que nem sempre está bem estruturada digitalmente, há um espaço latente a ser explorado. O mercado demonstra uma demanda ativa, e com algumas melhorias estratégicas, seu site poderá capturar melhor essa demanda. Aproveitar essa oportunidade pode significar uma presença mais forte e competitiva em seu setor.\n\n## O Que Precisa Ser Feito (em linguagem simples)\n\n- **Incluir o seu serviço e localização no título do site**: Isso aumentará a chance de seu site aparecer quando as pessoas buscarem por serviços que você oferece em Cabo Frio.\n- **Adicionar um formulário de contato**: Capturará potenciais clientes automaticamente a qualquer momento, especialmente aqueles que preferem não usar o telefone.\n- **Atualizar políticas de segurança do site**: Transmitirá confiança para quem visita seu site, evitando avisos de segurança que poderiam afastar clientes.\n\n## Conclusão\n\nOs dados mostram que há um potencial real de crescimento para o seu negócio. Fazendo os ajustes recomendados, você poderá não apenas corrigir as lacunas atuais, mas também se colocar à frente dos concorrentes que ainda não exploram digitalmente suas oportunidades de maneira eficiente. Este é o momento ideal para solidificar a sua presença online e capturar a atenção do mercado local em Cabo Frio. Aproveite este panorama para transformar visitantes em clientes e fazer seu negócio crescer."
+      }
+    }
+  }
+]

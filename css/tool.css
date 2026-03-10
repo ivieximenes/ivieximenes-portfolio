@@ -14,7 +14,7 @@
 /* center the container only on wider screens */
 @media (min-width: 641px) {
   .tool-page {
-    margin: 0 auto;
+    margin: 2rem auto auto auto;
   }
 }
 

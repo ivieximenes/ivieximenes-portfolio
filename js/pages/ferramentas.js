@@ -7,7 +7,7 @@ const ferramentasData = [
     id:       'diagnostico',
     icon:     'ph-magnifying-glass-plus',
     title:    'Diagnóstico de Presença Digital',
-    desc:     'Analisa o seu site e gera um relatório utilizando IA com insights técnicos.',
+    desc:     'Analisa o seu site e gera um relatório utilizando IA, APIs oficiais e insights técnicos.',
     tags:     ['PageSpeed', 'SEO', 'Google Maps', 'IA'],
     status:   'disponivel',
     href:     '/ferramentas/diagnostico',
@@ -18,8 +18,13 @@ const ferramentasData = [
 function renderFerramentas() {
   const cards = ferramentasData.map(tool => {
     const isAvailable = tool.status === 'disponivel';
+    // Adiciona badge "Em testes" apenas para a ferramenta de diagnóstico
+    const badge = tool.id === 'diagnostico'
+      ? `<span class="tool-card__badge tool-card__badge--testes">Em testes</span>`
+      : '';
     return `
       <div class="tool-card reveal ${isAvailable ? 'tool-card--active' : 'tool-card--soon'}">
+        ${badge}
         <div class="tool-card__body">
           <div class="tool-card__top">
             <div class="tool-card__title-area">
@@ -28,9 +33,6 @@ function renderFerramentas() {
               </div>
               <h2 class="tool-card__title">${tool.title}</h2>
             </div>
-            <span class="tool-card__badge ${isAvailable ? 'tool-card__badge--active' : 'tool-card__badge--soon'}">
-              ${isAvailable ? '<i class="ph ph-check-circle"></i> Disponível' : '<i class="ph ph-clock"></i> Em breve'}
-            </span>
           </div>
           <p class="tool-card__desc">${tool.desc}</p>
           <div class="tool-card__tags">

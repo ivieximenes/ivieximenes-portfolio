@@ -62,7 +62,7 @@ function _resultHTML() {
           ${dateStr ? `<div class="dr-header__meta-item">
             <i class="ph ph-calendar"></i>
             <span>${_t('result.dateLabel')}</span>
-            <strong>${dateStr}</strong>
+            <span><strong>${dateStr}</strong></span>
           </div>` : ''}
         </div>
         ${sum.frase_resumo ? `<blockquote class="dr-header__quote">"${sum.frase_resumo}"</blockquote>` : ''}

@@ -1,3 +1,24 @@
+// Atualiza a tag canonical dinamicamente
+function updateCanonical() {
+  let link = document.querySelector("link[rel='canonical']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "canonical";
+    document.head.appendChild(link);
+  }
+  link.href = window.location.origin + window.location.pathname;
+}
+
+// Atualiza a meta description dinamicamente
+function updateMetaDescription(desc) {
+  let meta = document.querySelector("meta[name='description']");
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "description";
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute("content", desc);
+}
 /* =============================================
   ROUTER — History API SPA Router (sem hash)
   ============================================= */
@@ -89,10 +110,35 @@ function navigate() {
     // Scroll reveal
     initScrollReveal();
 
-    // ---- Analytics: Virtual Pageview ----
-    // Atualiza o título ANTES de disparar o evento
+    // ---- SEO Dinâmico ----
+    // Atualiza o título
     document.title = route.title || document.title;
-    // Aguarda o DOM estar pronto para garantir que o título está correto
+
+    // Atualiza a meta description conforme a rota
+    let desc = '';
+    switch (path) {
+      case '/contato':
+        desc = 'Entre em contato com Ivie Ximenes para projetos de desenvolvimento, QA e automação.';
+        break;
+      case '/sobre':
+        desc = 'Conheça a trajetória, experiência e especialidades de Ivie Ximenes, desenvolvedora e QA.';
+        break;
+      case '/projetos':
+        desc = 'Veja projetos de desenvolvimento web, automação e QA realizados por Ivie Ximenes.';
+        break;
+      case '/servicos':
+        desc = 'Serviços de desenvolvimento de sites, automações, QA e consultoria por Ivie Ximenes.';
+        break;
+      case '/ferramentas':
+        desc = 'Ferramentas gratuitas de diagnóstico digital, SEO e automação por Ivie Ximenes.';
+        break;
+      default:
+        desc = 'Desenvolvedora Full Stack, QA e automação em Cabo Frio, RJ. Projetos sob medida para empresas e profissionais.';
+    }
+    updateMetaDescription(desc);
+    updateCanonical();
+
+    // ---- Analytics: Virtual Pageview ----
     setTimeout(() => {
       const pageTitle    = document.title;
       const pagePath     = path;

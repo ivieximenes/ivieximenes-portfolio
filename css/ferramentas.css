@@ -152,17 +152,34 @@
   line-height: 1.3;
 }
 
+
 .tool-card__badge {
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  padding: 0.2rem 0.6rem;
-  border-radius: 99px;
+  padding: 0.2rem 0.7rem 0.2rem 0.9rem;
+  border-radius: 0 8px 8px 0;
   white-space: nowrap;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  position: absolute;
+  top: 18px;
+  left: -1px;
+  z-index: 2;
+  box-shadow: 0 2px 8px 0 rgba(168,85,247,0.08);
+}
+
+.tool-card__badge--testes {
+  background: linear-gradient(90deg, #f59e42 60%, #fffbe6 100%);
+  color: #a35a00;
+  border-left: 4px solid #f59e42;
+  box-shadow: 0 2px 8px 0 rgba(245,158,66,0.10);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .tool-card__badge--active {

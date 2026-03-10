@@ -10,14 +10,18 @@ function initTheme() {
 
   applyTheme(saved);
 
-  btn.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    applyTheme(current === 'dark' ? 'light' : 'dark');
-  });
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  }
 
   function applyTheme(theme) {
     html.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
-    icon.className = theme === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+    if (icon) {
+      icon.className = theme === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+    }
   }
 }

@@ -1,6 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="dark">
 <head>
+        <!-- Open Graph para Home -->
+        <meta property="og:title" content="Ivie Ximenes | Desenvolvedora Full Stack, QA e Automação" />
+        <meta property="og:description" content="Portfólio, projetos, diagnósticos e ferramentas de Ivie Ximenes. Desenvolvimento, QA e automação em Cabo Frio, RJ." />
+        <meta property="og:image" content="https://ivieximenes.cloud/img/og-home.jpg" />
+        <meta property="og:url" content="https://ivieximenes.cloud/" />
+        <meta property="og:type" content="website" />
+
+        <!-- Rich Snippet: Person (já existe), Project e Review exemplos -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Project",
+          "name": "Diagnóstico de Presença Digital",
+          "description": "Ferramenta gratuita para análise de SEO, performance e presença digital.",
+          "url": "https://ivieximenes.cloud/ferramentas/diagnostico"
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "reviewBody": "Ferramenta excelente, análise detalhada e insights práticos!",
+          "author": { "@type": "Person", "name": "Usuário Satisfeito" }
+        }
+        </script>
+      <!-- Web Vitals (LCP, FCP, CLS, TBT) -->
+      <script type="module">
+        import {getCLS, getFID, getLCP, getFCP, getTTFB} from 'https://unpkg.com/web-vitals@3.3.1/dist/web-vitals.es5.min.js';
+        function sendToConsole(metric) {
+          console.log('[Web Vitals]', metric.name, metric.value, metric);
+        }
+        getCLS(sendToConsole);
+        getFID(sendToConsole);
+        getLCP(sendToConsole);
+        getFCP(sendToConsole);
+        getTTFB(sendToConsole);
+      </script>
+    <!-- Structured Data: Schema Person -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Ivie Ximenes",
+      "jobTitle": "QA Engineer / Software Developer",
+      "url": "https://ivieximenes.cloud",
+      "sameAs": [
+        "https://linkedin.com/in/ivieximenes",
+        "https://github.com/ivieximenes"
+      ]
+    }
+    </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ivie Ximenes | Desenvolvedora Full Stack Java, Spring, Angular, React | Cabo Frio, RJ & Brasil</title>
@@ -323,5 +374,18 @@
   <script src="js/pages/tool/tool-diagnostico.js" defer></script>
   <script src="/js/router.js" defer></script>
   <script src="/js/main.js" defer></script>
-  <script src="/js/chat.js" defer></script></body>
+  <script src="/js/chat.js" defer></script>
+
+  <!-- Web Vitals via jsDelivr CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/web-vitals@3/dist/web-vitals.iife.min.js"></script>
+  <script>
+    if (window.webVitals) {
+      webVitals.getCLS(console.log);
+      webVitals.getFID(console.log);
+      webVitals.getLCP(console.log);
+      webVitals.getFCP && webVitals.getFCP(console.log);
+      webVitals.getTTFB && webVitals.getTTFB(console.log);
+    }
+  </script>
+</body>
 </html>

@@ -9,27 +9,29 @@ function initNav() {
   const drawerClose   = document.getElementById('drawerClose');
 
   function openDrawer() {
-    drawer.classList.add('open');
-    drawerOverlay.classList.add('open');
-    hamburger.classList.add('open');
+    if (drawer) drawer.classList.add('open');
+    if (drawerOverlay) drawerOverlay.classList.add('open');
+    if (hamburger) hamburger.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
   function closeDrawer() {
-    drawer.classList.remove('open');
-    drawerOverlay.classList.remove('open');
-    hamburger.classList.remove('open');
+    if (drawer) drawer.classList.remove('open');
+    if (drawerOverlay) drawerOverlay.classList.remove('open');
+    if (hamburger) hamburger.classList.remove('open');
     document.body.style.overflow = '';
   }
 
-  hamburger.addEventListener('click', openDrawer);
-  drawerClose.addEventListener('click', closeDrawer);
-  drawerOverlay.addEventListener('click', closeDrawer);
+  if (hamburger) hamburger.addEventListener('click', openDrawer);
+  if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+  if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
 
   // Close drawer when a link is clicked
-  document.querySelectorAll('.drawer .nav-link').forEach(link => {
-    link.addEventListener('click', closeDrawer);
-  });
+  if (drawer) {
+    drawer.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', closeDrawer);
+    });
+  }
 }
 
 function updateActiveLink(path) {

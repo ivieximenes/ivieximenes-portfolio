@@ -1,0 +1,7 @@
+{
+  "status": "ok",
+  "version": "1.0.0",
+  "environment": "production",
+  "deploy": "vercel",
+  "lastBuild": "2026-03-09"
+}

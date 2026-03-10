@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatórios Públicos de Presença Digital | Ivie Ximenes</title>
+  <meta name="description" content="Veja a lista de relatórios públicos de presença digital, SEO e performance gerados pela ferramenta Ivie Ximenes. Descubra análises de sites reais." />
+  <link rel="canonical" href="https://ivieximenes.cloud/relatorio" />
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/nav.css" />
+  <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/tool.css" />
+  <style>
+    .relatorio-list { max-width: 700px; margin: 2rem auto; padding: 2rem; background: #fff2; border-radius: 12px; }
+    .relatorio-list h1 { font-size: 2rem; margin-bottom: 1rem; }
+    .relatorio-list ul { list-style: none; padding: 0; }
+    .relatorio-list li { margin-bottom: 1rem; }
+    .relatorio-list a { color: #5B21B6; font-weight: 600; text-decoration: none; }
+    .relatorio-list a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main class="relatorio-list">
+    <h1>Relatórios Públicos de Presença Digital</h1>
+    <p>Veja análises públicas de sites geradas automaticamente pela ferramenta. Cada relatório detalha SEO, performance e oportunidades de melhoria.</p>
+    <ul id="relatorio-list-ul">
+      <!-- Lista gerada por JS -->
+    </ul>
+  </main>
+  <script>
+    // Lista de domínios com relatórios públicos (pode ser gerada dinamicamente no futuro)
+    const dominios = [
+      'google.com',
+      // Adicione outros domínios aqui
+    ];
+    const ul = document.getElementById('relatorio-list-ul');
+    if (ul) {
+      ul.innerHTML = dominios.map(dom =>
+        `<li><a href="/relatorio/${dom}" target="_blank">Relatório: ${dom}</a></li>`
+      ).join('');
+    }
+  </script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

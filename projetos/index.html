@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Open Graph para Projetos -->
+    <meta property="og:title" content="Projetos | Ivie Ximenes" />
+    <meta property="og:description" content="Veja projetos de desenvolvimento web, automação e QA realizados por Ivie Ximenes." />
+    <meta property="og:image" content="https://ivieximenes.cloud/img/og-projetos.jpg" />
+    <meta property="og:url" content="https://ivieximenes.cloud/projetos" />
+    <meta property="og:type" content="website" />
+
+    <!-- Rich Snippet: Project exemplo -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Project",
+      "name": "Projetos de Ivie Ximenes",
+      "description": "Veja projetos de desenvolvimento web, automação e QA realizados por Ivie Ximenes.",
+      "url": "https://ivieximenes.cloud/projetos"
+    }
+    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projetos | Ivie Ximenes — Sênior Full Stack Developer</title>
+  <meta name="description" content="Veja projetos de desenvolvimento web, automação e QA realizados por Ivie Ximenes." />
+  <link rel="canonical" href="https://ivieximenes.cloud/projetos" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ivie Ximenes",
+    "jobTitle": "QA Engineer / Software Developer",
+    "url": "https://ivieximenes.cloud",
+    "sameAs": [
+      "https://linkedin.com/in/ivieximenes",
+      "https://github.com/ivieximenes"
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/nav.css" />
+  <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/projetos.css" />
+</head>
+<body>
+  <div id="app"></div>
+  <script src="/js/theme.js"></script>
+  <script src="/js/nav.js"></script>
+  <script src="/js/pages/home.js"></script>
+  <script src="/js/pages/sobre.js"></script>
+  <script src="/js/pages/servicos.js"></script>
+  <script src="/js/data/projetos-data.js"></script>
+  <script src="/js/pages/projetos.js"></script>
+  <script src="/js/pages/curriculo.js"></script>
+  <script src="/js/pages/contato.js"></script>
+  <script src="/js/pages/ferramentas.js"></script>
+  <script src="/js/pages/cookies.js"></script>
+  <script src="/js/router.js"></script>
+  <script src="/js/main.js"></script>
+  <!-- Web Vitals (LCP, FCP, CLS, TBT) -->
+  <script src="https://cdn.jsdelivr.net/npm/web-vitals@3.3.1/dist/web-vitals.umd.min.js"></script>
+  <script>
+    function sendToConsole(metric) {
+      console.log('[Web Vitals]', metric.name, metric.value, metric);
+    }
+    if (window.webVitals) {
+      webVitals.getCLS(sendToConsole);
+      webVitals.getFID(sendToConsole);
+      webVitals.getLCP(sendToConsole);
+      webVitals.getFCP(sendToConsole);
+      webVitals.getTTFB(sendToConsole);
+    }
+  </script>
+</body>
+</html>
